@@ -1,16 +1,39 @@
-# frontend/
+# Swarmway frontend — Phase 0 AI Studio spike (R3F 3D grid render)
 
-This directory is reserved for the Google AI Studio-generated React SPA
-(Section 0.4, Appendix G).
+This directory holds the Google AI Studio Build-mode spike exported as a ZIP,
+cleaned to the Appendix G.1 whitelist, and synced into this repo per
+PROJECT.md Section 13.5. The spike is a **throwaway proof of the
+two-workspace pipeline**: a 7×7 extruded 3D grid with two procedural agents
+gliding between cells, built with React Three Fiber.
 
-**AI Studio spike lands here (human task, Section 14 Phase 0 task 8).**
+## What it is
 
-The spike is generated in Google AI Studio Build mode using the prompt
-pack in PROJECT.md Appendix G, exported as a ZIP, and committed into this
-folder by the human. Until then this directory contains only this
-README.md; CI's frontend job skips gracefully while no `package.json` is
-present and un-skips automatically once one appears (see
-.github/workflows/ci.yml).
+- Pure client-side React + TypeScript + Vite SPA — no server, no API keys,
+  no network calls. Hardcoded demo data only.
+- 7×7 grid, 2 agents (agent1 at (1,1)→(2,1), agent2 at (5,5)→(4,5))
+  patrolling with Manhattan-distance pathfinding, hover trails, and a HUD.
+- Real traces and live solving arrive in later phases (Phase 4+); this spike
+  intentionally contains no solver or API integration.
 
-Do not hand-write a React app here — the frontend is produced in AI Studio
-and synced per Section 13.5.
+## Commands
+
+```bash
+pnpm install        # install dependencies (frozen lockfile once generated)
+pnpm run dev        # start dev server on :5173
+pnpm run build      # production build (outputs dist/)
+pnpm run typecheck  # tsc --noEmit
+pnpm run test       # tsx --test src/logic/gridNavigation.test.ts (8 tests)
+```
+
+## Known scale gaps (to fix in Phase 5)
+
+1. **Per-cell `useFrame`**: `CanvasScene` runs a `useFrame` tick that calls
+   `setA1Render`/`setA2Render` every frame — React re-renders per cell per
+   frame. Replace with instanced meshes + ref-driven updates so render cost
+   is independent of agent/cell count.
+2. **Per-frame `setState`**: telemetry and trail states are updated via
+   `useState` setters inside `useFrame`. Drive these through refs and a
+   single render pass instead.
+
+These are acceptable for a 7×7 / 2-agent spike but must be addressed before
+the frontend renders 100-agent traces at 60 fps.
