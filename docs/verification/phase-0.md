@@ -130,6 +130,82 @@ downloaded from movingai.com) rather than taking the no-network
   per Section 7.7 it is a cross-check only, not a MAPF bound; the solver
   uses 4-connected movement per ADR-0006. Noted in ADR-0006.
 
+## Spike report — Phase 0 task 8 (AI Studio spike landed)
+
+The AI Studio spike was exported as `kinetic-grid-agents.zip` and landed
+in `frontend/` following the ZIP path of ADR-0003 (proven end-to-end).
+
+Export contents (raw AI Studio ZIP): `index.html`, `package.json`,
+`tsconfig.json`, `vite.config.ts`, `README.md`, `.gitignore`, `.env.example`,
+`bun.lock`, `metadata.json`, `src/` (App.tsx, main.tsx, index.css,
+types.ts, logic/{gridNavigation.ts, gridNavigation.test.ts},
+components/{CanvasScene, ExtrudedGrid, AgentSpectra, AgentApex, AgentTrail,
+HudOverlay}.tsx), and `.aistudio/` (artifact/media storage).
+
+Stripped per G.1 whitelist: `.aistudio/` directory, `metadata.json`,
+`.env.example`, `bun.lock`. Replaced `package.json` with the runtime
+whitelist (react, react-dom, three, @react-three/fiber, @react-three/drei,
+@tailwindcss/vite, tailwindcss, @vitejs/plugin-react, tsx, typescript,
+@types/*, three-stdlib). Removed unused AI Studio injections
+(@google/genai, express, dotenv, lucide-react, motion, @types/express,
+autoprefixer). Created `pnpm-workspace.yaml`
+(`onlyBuiltDependencies: [esbuild]`). Removed the HMR/watch `server:`
+block from `vite.config.ts`. Retitled `index.html` to "Swarmway".
+Replaced `.gitignore` with the whitelist
+(`node_modules/`, `dist/`, `coverage/`, `.DS_Store`, `*.log`, `.env*`).
+Verified `src/` has no gemini/genai/firebase/express/dotenv/
+process.env/import.meta.env/fetch/URL references.
+
+Real output of the A5 build steps:
+
+```
+$ pnpm -C frontend install
+Progress: resolved 105, reused 39, downloaded 66, added 105, done
+dependencies:
++ @react-three/drei 10.7.9
++ @react-three/fiber 9.8.2
++ react 19.3.1
++ react-dom 19.3.1
++ three 0.187.0
+devDependencies:
++ @tailwindcss/vite 4.3.3
+...
++ typescript 5.9.3
++ vite 8.3.5
+Packages: +105
+(esbuild postinstall approved via `pnpm approve-builds esbuild`)
+
+$ pnpm -C frontend typecheck
+$ tsc --noEmit
+(clean, no errors)
+
+$ pnpm -C frontend test
+$ tsx --test src/logic/gridNavigation.test.ts
+✔ gridToWorld centers grid correctly
+✔ manhattanDistance calculates correct distance
+✔ isValidCell respects grid boundaries
+✔ getNeighbors returns only valid orthogonal neighbors
+✔ chooseNextCell navigates towards destination
+✔ chooseNextCell avoids occupied cells when alternative paths exist
+✔ smoothStep clamps and eases progress
+✔ interpolateAgentPosition yields smooth movement and arc
+ℹ tests 8   ℹ pass 8   ℹ fail 0   ℹ duration_ms 549.7104
+
+$ pnpm -C frontend build
+✓ 577 modules transformed.
+dist/index.html                     0.86 kB │ gzip:   0.41 kB
+dist/assets/index-B11CORXP.js   1,183.95 kB │ gzip: 323.23 kB
+✓ built in 745ms
+```
+(The `__dirname` Vite config warning is a notice, not an error, and was
+left as-is; it does not fail the build.)
+
+Two scale learnings carried into Phase 5:
+1. Per-cell `useFrame` + per-frame `setState` in `CanvasScene` re-render
+   every agent every frame → replace with instanced meshes + ref-driven
+   rendering before 100-agent traces at 60 fps.
+2. Offline-first with hardcoded demo data; real traces arrive in Phase 4+.
+
 ## Commits in this phase
 
 - f859c76 chore(repo): init uv package with ruff mypy pytest pre-commit
@@ -139,13 +215,16 @@ downloaded from movingai.com) rather than taking the no-network
 - 64b35cd feat(api): add health endpoint with cors and openapi export
 - b5f272b ci(github): add backend and frontend jobs
 - 370dc65 chore(ui): add frontend README placeholder (AI Studio spike lands here)
+- cadbb65 feat(ui): add ai studio spike frontend (3d grid render)
+- <closeout> docs(decisions): record spike report and ADR-0003, close phase 0
 
-Exit criteria met: CI gates green locally (backend job runs on push/PR);
-health endpoint answers locally (`HTTP 200`); spike frontend replaced by
-the README placeholder so CI's frontend job skips gracefully; every
-Section 4 row (A-1..A-10) is either resolved with an ADR
+Exit criteria met: CI gates green locally (backend job runs on push/PR;
+frontend job now runs for real with `frontend/package.json` present);
+health endpoint answers locally (`HTTP 200`); the AI Studio spike is
+committed, builds, and passes 8 tests; ADR-0003 closes assumption A-5;
+every Section 4 row (A-1..A-10) is either resolved with an ADR
 (ADR-0006/0007 for A-1/A-2; A-3 confirmed by census; A-4/A-5/A-6/A-7/A-8
-recorded in ADR-0002/docs; A-9/A-10 deferred to later phases per Section 4)
-or explicitly using the documented default.
+recorded in ADR-0002/docs/ADR-0003; A-9/A-10 deferred to later phases per
+Section 4) or explicitly using the documented default.
 
-Do not start Phase 1 until this gate is reviewed.
+Phase 0 closed. Do not start Phase 1 until this gate is reviewed.
