@@ -1,0 +1,59 @@
+[project]
+name = "swarmway"
+version = "0.1.0"
+description = "Interactive workbench for optimal multi-agent path finding (CBS) — pure-Python solver, FastAPI API, CLI, benchmarks"
+readme = "README.md"
+authors = [
+    { name = "Vedant-Divate", email = "divatevedant@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115",
+    "pydantic>=2",
+    "uvicorn>=0.32",
+]
+
+[project.scripts]
+swarmway = "swarmway:main"
+
+[build-system]
+requires = ["uv_build>=0.13.0,<0.14.0"]
+build-backend = "uv_build"
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "C4", "UP", "DTZ", "RUF", "SIM", "TRY"]
+ignore = ["E501", "B008"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["swarmway"]
+
+[tool.ruff.format]
+quote-style = "single"
+indent-style = "space"
+
+[tool.mypy]
+strict = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "slow: slow benchmark-scale tests excluded from the default CI run",
+]
+filterwarnings = [
+    "error",
+]
+addopts = ["-m", "not slow"]
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "hypothesis>=6.170.14",
+    "mypy>=2.4.1",
+    "pre-commit>=4.7.0",
+    "pytest>=9.2.0",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.17.3",
+]
