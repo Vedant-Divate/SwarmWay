@@ -1,4 +1,5 @@
 {
+  "version": 1,
   "maps": [
     {
       "id": "empty-16-16",
@@ -6,59 +7,9 @@
       "family": "empty",
       "width": 16,
       "height": 16,
-      "passable_cells": 256,
-      "scenario_file": "empty-16-16-even-1.scen",
-      "source": "movingai"
-    },
-    {
-      "id": "random-32-32-10",
-      "name": "Random 32x32 (density 10)",
-      "family": "random",
-      "width": 32,
-      "height": 32,
-      "passable_cells": 922,
-      "scenario_file": "random-32-32-10-even-1.scen",
-      "source": "movingai"
-    },
-    {
-      "id": "random-32-32-20",
-      "name": "Random 32x32 (density 20)",
-      "family": "random",
-      "width": 32,
-      "height": 32,
-      "passable_cells": 819,
-      "scenario_file": "random-32-32-20-even-1.scen",
-      "source": "movingai"
-    },
-    {
-      "id": "maze-32-32-2",
-      "name": "Maze 32x32",
-      "family": "maze",
-      "width": 32,
-      "height": 32,
-      "passable_cells": 666,
-      "scenario_file": "maze-32-32-2-even-1.scen",
-      "source": "movingai"
-    },
-    {
-      "id": "room-32-32-4",
-      "name": "Room 32x32",
-      "family": "room",
-      "width": 32,
-      "height": 32,
-      "passable_cells": 682,
-      "scenario_file": "room-32-32-4-even-1.scen",
-      "source": "movingai"
-    },
-    {
-      "id": "warehouse-10-20-10-2-1",
-      "name": "Warehouse 10-20-10 (2-1)",
-      "family": "warehouse",
-      "width": 161,
-      "height": 63,
-      "passable_cells": 5699,
-      "scenario_file": "warehouse-10-20-10-2-1-even-1.scen",
-      "source": "movingai"
+      "map_file": "data/maps/empty-16-16.map",
+      "scenario_file": "data/scenarios/empty-16-16-even-1.scen",
+      "scenario_count": 1
     },
     {
       "id": "ht_chantry",
@@ -66,9 +17,59 @@
       "family": "game",
       "width": 162,
       "height": 141,
-      "passable_cells": 7461,
-      "scenario_file": "ht_chantry-even-1.scen",
-      "source": "movingai"
+      "map_file": "data/maps/ht_chantry.map",
+      "scenario_file": "data/scenarios/ht_chantry-even-1.scen",
+      "scenario_count": 1
+    },
+    {
+      "id": "maze-32-32-2",
+      "name": "Maze 32x32",
+      "family": "maze",
+      "width": 32,
+      "height": 32,
+      "map_file": "data/maps/maze-32-32-2.map",
+      "scenario_file": "data/scenarios/maze-32-32-2-even-1.scen",
+      "scenario_count": 1
+    },
+    {
+      "id": "random-32-32-10",
+      "name": "Random 32x32 (density 10)",
+      "family": "random",
+      "width": 32,
+      "height": 32,
+      "map_file": "data/maps/random-32-32-10.map",
+      "scenario_file": "data/scenarios/random-32-32-10-even-1.scen",
+      "scenario_count": 1
+    },
+    {
+      "id": "random-32-32-20",
+      "name": "Random 32x32 (density 20)",
+      "family": "random",
+      "width": 32,
+      "height": 32,
+      "map_file": "data/maps/random-32-32-20.map",
+      "scenario_file": "data/scenarios/random-32-32-20-even-1.scen",
+      "scenario_count": 1
+    },
+    {
+      "id": "room-32-32-4",
+      "name": "Room 32x32",
+      "family": "room",
+      "width": 32,
+      "height": 32,
+      "map_file": "data/maps/room-32-32-4.map",
+      "scenario_file": "data/scenarios/room-32-32-4-even-1.scen",
+      "scenario_count": 1
+    },
+    {
+      "id": "warehouse-10-20-10-2-1",
+      "name": "Warehouse 10-20-10 (2-1)",
+      "family": "warehouse",
+      "width": 161,
+      "height": 63,
+      "map_file": "data/maps/warehouse-10-20-10-2-1.map",
+      "scenario_file": "data/scenarios/warehouse-10-20-10-2-1-even-1.scen",
+      "scenario_count": 1
     }
   ]
 }
