@@ -7,10 +7,11 @@ and `cli/`.
 
 import logging
 
+from swarmway.cli.main import main as cli_main
+
 logger = logging.getLogger('swarmway')
 
 
 def main() -> None:
-    """CLI entry point (skeleton; full CLI arrives in Phase 1 / Phase 4)."""
-    logging.basicConfig(level=logging.INFO)
-    logger.info('swarmway skeleton — run the API with: uv run uvicorn swarmway.api.app:app')
+    """CLI entry point: delegate to :mod:`swarmway.cli`."""
+    cli_main()
