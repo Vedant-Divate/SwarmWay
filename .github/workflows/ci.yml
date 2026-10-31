@@ -1,0 +1,36 @@
+name: CI
+on: [push, pull_request]
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync --locked
+      - run: uv run ruff check . && uv run ruff format --check .
+      - run: uv run mypy src/swarmway/domain src/swarmway/solver
+      - run: uv run pytest -q -m "not slow"
+
+  frontend:
+    runs-on: ubuntu-latest
+    # Skips gracefully while frontend/ has no package.json (i.e. before the
+    # Google AI Studio spike lands); un-skips automatically once one appears.
+    steps:
+      - uses: actions/checkout@v4
+      - id: check-frontend
+        run: |
+          if [ -f frontend/package.json ]; then
+            echo "HAS_FRONTEND=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "HAS_FRONTEND=false" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-node@v4
+        if: steps.check-frontend.outputs.HAS_FRONTEND == 'true'
+        with: { node-version: 22, cache: pnpm }
+      - uses: pnpm/action-setup@v4
+        if: steps.check-frontend.outputs.HAS_FRONTEND == 'true'
+      - run: pnpm -C frontend install --frozen-lockfile
+        if: steps.check-frontend.outputs.HAS_FRONTEND == 'true'
+      - run: pnpm -C frontend build
+        if: steps.check-frontend.outputs.HAS_FRONTEND == 'true'
