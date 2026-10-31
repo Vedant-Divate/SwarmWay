@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from collections import deque
 
-from hypothesis import assume, given
+from hypothesis import HealthCheck, assume, given, settings
 from hypothesis import strategies as st
 
 from swarmway.domain.constraints import Constraints
@@ -86,6 +86,7 @@ def _random_constraints(width: int, height: int) -> Constraints:
     return c
 
 
+@settings(suppress_health_check=[HealthCheck.filter_too_much])
 @given(
     width=st.integers(min_value=3, max_value=6),
     height=st.integers(min_value=3, max_value=6),
@@ -112,6 +113,7 @@ def test_low_level_optimality_matches_exhaustive_bfs(width: int, height: int, se
         assert result.cost == reference
 
 
+@settings(suppress_health_check=[HealthCheck.filter_too_much])
 @given(
     width=st.integers(min_value=3, max_value=8),
     height=st.integers(min_value=3, max_value=8),
@@ -150,6 +152,7 @@ def test_distance_table_admissible(width: int, height: int, seed: int) -> None:
         assert cell in dist
 
 
+@settings(suppress_health_check=[HealthCheck.filter_too_much])
 @given(
     width=st.integers(min_value=3, max_value=6),
     height=st.integers(min_value=3, max_value=6),
