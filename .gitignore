@@ -65,3 +65,8 @@ frontend/package-lock.json
 
 # OS
 *.log
+
+# Ground-truth docs stay local (never committed)
+PROJECT.md
+AGENTS.md
+Swarmway_PHASE*.md
