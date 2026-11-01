@@ -85,7 +85,11 @@ def plan(
         expansions += 1
 
         # Goal test: at goal and the goal is not blocked at or after t.
-        if pos == goal and not constraints.is_goal_blocked_at_or_after(agent, goal, t):
+        # With stay-at-goal semantics, being at the goal at a blocked time
+        # (goal-hold) is forbidden, so we neither return nor expand from it.
+        if pos == goal:
+            if constraints.is_goal_blocked_at_or_after(agent, goal, t):
+                continue
             path = _reconstruct(parent, start, goal, t)
             return LowLevelResult(
                 path=path,

@@ -27,13 +27,8 @@ class SolveOutcome:
     stats: SolveStats
 
 
-@dataclass(frozen=True)
+@dataclass
 class SolveStats:
     ct_expanded: int = 0
     ct_generated: int = 0
     low_level_expansions: int = 0
-
-    def __post_init__(self) -> None:
-        object.__setattr__(self, 'ct_expanded', self.ct_expanded)
-        object.__setattr__(self, 'ct_generated', self.ct_generated)
-        object.__setattr__(self, 'low_level_expansions', self.low_level_expansions)

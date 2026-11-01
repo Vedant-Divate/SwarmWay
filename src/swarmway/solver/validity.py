@@ -90,8 +90,14 @@ def check(solution: Solution, instance: Instance) -> str:
                     )
 
     # V-SOC: reported SoC/makespan recomputed from paths match the header.
-    recomputed_soc = sum(len(paths[i]) - 1 for i in range(n))
-    recomputed_makespan = max(len(paths[i]) - 1 for i in range(n))
+    # Each agent's cost is its arrival time (first time at its goal); paths
+    # are padded to makespan + 1 with stay-at-goal repetition, so len - 1 is
+    # not the agent's cost.
+    arrivals = []
+    for i, agent in enumerate(agents):
+        arrivals.append(paths[i].index(agent.goal))
+    recomputed_soc = sum(arrivals)
+    recomputed_makespan = max(arrivals)
     if solution.soc != recomputed_soc:
         raise ValidityError(f'V-SOC: reported soc {solution.soc} != recomputed {recomputed_soc}')
     if solution.makespan != recomputed_makespan:

@@ -23,7 +23,7 @@ from swarmway.domain.grid import Position
 from swarmway.domain.instance import Instance
 from swarmway.domain.solution import Solution, SolveOutcome, SolveStats
 from swarmway.solver.astar_space_time import plan
-from swarmway.solver.astar_static import DistanceCache, horizon_guard
+from swarmway.solver.astar_static import INF, DistanceCache, horizon_guard, true_distance
 
 # Deadline is checked at least every this many high-level node expansions
 # (Section 8.3: at least every 512 expansions in the CBS loop).
@@ -103,9 +103,15 @@ def solve(instance: Instance, budget_ms: int = 10000) -> SolveOutcome:
     grid = instance.grid
     agents = instance.agents
     cache = DistanceCache()
-    max_timesteps = horizon_guard(grid, cache, agents)
-
     stats = SolveStats()
+
+    # If any agent's goal is unreachable even unconstrained, the instance
+    # is unsat immediately (the root low level cannot plan a path).
+    for agent in agents:
+        if true_distance(grid, cache, agent.start, agent.goal) == INF:
+            return SolveOutcome(status='unsat', solution=None, stats=stats)
+
+    max_timesteps = horizon_guard(grid, cache, agents)
 
     # Root node: per-agent unconstrained shortest paths.
     root_paths: list[tuple[Position, ...]] = []
@@ -154,9 +160,14 @@ def solve(instance: Instance, budget_ms: int = 10000) -> SolveOutcome:
         conflict = find_first_conflict(instance, node.paths)
         if conflict is None:
             # Conflict-free and each low level is constrained-optimal ->
-            # minimal sum-of-costs (Section 8.2).
+            # minimal sum-of-costs (Section 8.2). Pad paths to makespan + 1
+            # with stay-at-goal repetition (Section 7.3 / Section 7.2).
             makespan = max(len(p) - 1 for p in node.paths)
-            solution = Solution(paths=node.paths, soc=node.soc, makespan=makespan)
+            padded = []
+            for path in node.paths:
+                last = path[-1]
+                padded.append(path + (last,) * (makespan + 1 - len(path)))
+            solution = Solution(paths=tuple(padded), soc=node.soc, makespan=makespan)
             return SolveOutcome(status='solved', solution=solution, stats=stats)
 
         a_i, a_j = conflict.agents

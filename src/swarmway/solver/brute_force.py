@@ -14,6 +14,8 @@ on test fixtures while keeping the enumeration bounded.
 
 from __future__ import annotations
 
+import heapq
+
 from swarmway.domain.grid import Grid, Position
 from swarmway.domain.instance import Instance
 from swarmway.solver.astar_static import INF, DistanceCache, true_distance
@@ -50,41 +52,43 @@ def _agent_paths(
     start: Position,
     goal: Position,
     max_cost: int,
-    cap: int = 4000,
+    cap: int = 50000,
 ) -> list[tuple[Position, ...]]:
     """All valid paths from start to goal with cost <= max_cost.
 
-    DFS over the time-expanded graph (wait or move each step), bounded by
-    max_cost and a path cap so enumeration stays tractable on tiny fixtures.
+    Enumerated in increasing cost order (BFS over the time-expanded graph)
+    so short paths are found first. Capped to keep enumeration tractable on
+    tiny fixtures.
     """
     if not grid.passable(start) or not grid.passable(goal):
         return []
     results: list[tuple[Position, ...]] = []
-
-    def dfs(path: tuple[Position, ...], t: int) -> None:
-        if len(results) >= cap:
-            return
+    heap: list[tuple[int, int, tuple[Position, ...]]] = [(0, 0, (start,))]
+    counter = 1
+    while heap:
+        cost, _, path = heapq.heappop(heap)
+        if cost > max_cost:
+            continue
         pos = path[-1]
         if pos == goal:
             results.append(path)
-            # Do not extend past the goal (stay-at-goal handled by padding).
-            return
-        if t >= max_cost:
-            return
+            if len(results) >= cap:
+                return results
+            continue  # stay-at-goal: do not extend past the goal
+        if cost >= max_cost:
+            continue
         x, y = pos
-        # Moves first (4-connected), so short paths are enumerated before
-        # longer wait-heavy ones.
         for nx, ny in ((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)):
             nxt = (nx, ny)
             if not grid.passable(nxt):
                 continue
             if nxt != pos and nxt in path:  # no cycles; wait-in-place allowed
                 continue
-            dfs((*path, nxt), t + 1)
+            heapq.heappush(heap, (cost + 1, counter, (*path, nxt)))
+            counter += 1
         # Wait in place, explored last so it does not crowd out short paths.
-        dfs((*path, pos), t + 1)
-
-    dfs((start,), 0)
+        heapq.heappush(heap, (cost + 1, counter, (*path, pos)))
+        counter += 1
     return results
 
 
