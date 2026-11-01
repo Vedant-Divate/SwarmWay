@@ -1,0 +1,571 @@
+{
+  "$defs": {
+    "AgentRef": {
+      "description": "One agent of an instance (Section 7.3).",
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "integer"
+        },
+        "start": {
+          "maxItems": 2,
+          "minItems": 2,
+          "prefixItems": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "integer"
+            }
+          ],
+          "title": "Start",
+          "type": "array"
+        },
+        "goal": {
+          "maxItems": 2,
+          "minItems": 2,
+          "prefixItems": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "integer"
+            }
+          ],
+          "title": "Goal",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "start",
+        "goal"
+      ],
+      "title": "AgentRef",
+      "type": "object"
+    },
+    "Conflict": {
+      "description": "A conflict payload (Section 7.3 search event).",
+      "properties": {
+        "type": {
+          "enum": [
+            "vertex",
+            "edge"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "agents": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Agents",
+          "type": "array"
+        },
+        "pos": {
+          "anyOf": [
+            {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "integer"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pos"
+        },
+        "u": {
+          "anyOf": [
+            {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "integer"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "U"
+        },
+        "v": {
+          "anyOf": [
+            {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "integer"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "V"
+        },
+        "t": {
+          "title": "T",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "type",
+        "agents",
+        "t"
+      ],
+      "title": "Conflict",
+      "type": "object"
+    },
+    "Constraint": {
+      "description": "A constraint payload (Section 7.3 search event).",
+      "properties": {
+        "agent": {
+          "title": "Agent",
+          "type": "integer"
+        },
+        "type": {
+          "enum": [
+            "vertex",
+            "edge"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "pos": {
+          "anyOf": [
+            {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "integer"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pos"
+        },
+        "u": {
+          "anyOf": [
+            {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "integer"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "U"
+        },
+        "v": {
+          "anyOf": [
+            {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "integer"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "V"
+        },
+        "t": {
+          "title": "T",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "agent",
+        "type",
+        "t"
+      ],
+      "title": "Constraint",
+      "type": "object"
+    },
+    "ExecutionBlock": {
+      "description": "``execution`` block of trace v1 (Section 7.3).",
+      "properties": {
+        "makespan": {
+          "title": "Makespan",
+          "type": "integer"
+        },
+        "paths": {
+          "items": {
+            "items": {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "integer"
+                }
+              ],
+              "type": "array"
+            },
+            "type": "array"
+          },
+          "title": "Paths",
+          "type": "array"
+        }
+      },
+      "required": [
+        "makespan",
+        "paths"
+      ],
+      "title": "ExecutionBlock",
+      "type": "object"
+    },
+    "InstanceBlock": {
+      "description": "``instance`` block of trace v1 (Section 7.3).",
+      "properties": {
+        "map": {
+          "$ref": "#/$defs/MapInfo"
+        },
+        "agents": {
+          "items": {
+            "$ref": "#/$defs/AgentRef"
+          },
+          "title": "Agents",
+          "type": "array"
+        }
+      },
+      "required": [
+        "map",
+        "agents"
+      ],
+      "title": "InstanceBlock",
+      "type": "object"
+    },
+    "MapInfo": {
+      "description": "Map identity + full grid, self-contained (Section 7.3).",
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "width": {
+          "title": "Width",
+          "type": "integer"
+        },
+        "height": {
+          "title": "Height",
+          "type": "integer"
+        },
+        "rows": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Rows",
+          "type": "array"
+        },
+        "source": {
+          "default": "movingai",
+          "title": "Source",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "width",
+        "height",
+        "rows"
+      ],
+      "title": "MapInfo",
+      "type": "object"
+    },
+    "ResultBlock": {
+      "description": "``result`` block of trace v1 (Section 7.3).",
+      "properties": {
+        "status": {
+          "enum": [
+            "solved",
+            "unsat",
+            "timeout",
+            "error"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "soc": {
+          "title": "Soc",
+          "type": "integer"
+        },
+        "makespan": {
+          "title": "Makespan",
+          "type": "integer"
+        },
+        "runtime_ms": {
+          "title": "Runtime Ms",
+          "type": "number"
+        },
+        "budget_ms": {
+          "title": "Budget Ms",
+          "type": "integer"
+        },
+        "ct_expanded": {
+          "title": "Ct Expanded",
+          "type": "integer"
+        },
+        "ct_generated": {
+          "title": "Ct Generated",
+          "type": "integer"
+        },
+        "low_level_expansions": {
+          "title": "Low Level Expansions",
+          "type": "integer"
+        },
+        "validity": {
+          "title": "Validity",
+          "type": "string"
+        },
+        "notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Notes",
+          "type": "array"
+        }
+      },
+      "required": [
+        "status",
+        "soc",
+        "makespan",
+        "runtime_ms",
+        "budget_ms",
+        "ct_expanded",
+        "ct_generated",
+        "low_level_expansions",
+        "validity"
+      ],
+      "title": "ResultBlock",
+      "type": "object"
+    },
+    "SearchEvent": {
+      "description": "One ordered search event (Section 7.3 ``search`` array).",
+      "properties": {
+        "seq": {
+          "title": "Seq",
+          "type": "integer"
+        },
+        "event": {
+          "enum": [
+            "root",
+            "expand",
+            "goal"
+          ],
+          "title": "Event",
+          "type": "string"
+        },
+        "node": {
+          "title": "Node",
+          "type": "integer"
+        },
+        "cost": {
+          "title": "Cost",
+          "type": "integer"
+        },
+        "parent": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parent"
+        },
+        "conflict": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Conflict"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "constraint": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Constraint"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "replanned_agent": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Replanned Agent"
+        },
+        "replanned_cost": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Replanned Cost"
+        }
+      },
+      "required": [
+        "seq",
+        "event",
+        "node",
+        "cost"
+      ],
+      "title": "SearchEvent",
+      "type": "object"
+    },
+    "SolverBlock": {
+      "description": "``solver`` block of trace v1 (Section 7.3).",
+      "properties": {
+        "name": {
+          "default": "cbs",
+          "enum": [
+            "cbs",
+            "pp-fixed",
+            "pp-best-of-n"
+          ],
+          "title": "Name",
+          "type": "string"
+        },
+        "options": {
+          "additionalProperties": true,
+          "title": "Options",
+          "type": "object"
+        },
+        "package_version": {
+          "default": "0.1.0",
+          "title": "Package Version",
+          "type": "string"
+        },
+        "seed": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Seed"
+        }
+      },
+      "title": "SolverBlock",
+      "type": "object"
+    }
+  },
+  "description": "Trace JSON v1 \u2014 the complete replayable artifact (Section 7.3).",
+  "properties": {
+    "trace_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Trace Version",
+      "type": "integer"
+    },
+    "solver": {
+      "$ref": "#/$defs/SolverBlock"
+    },
+    "instance": {
+      "$ref": "#/$defs/InstanceBlock"
+    },
+    "result": {
+      "$ref": "#/$defs/ResultBlock"
+    },
+    "search": {
+      "items": {
+        "$ref": "#/$defs/SearchEvent"
+      },
+      "title": "Search",
+      "type": "array"
+    },
+    "execution": {
+      "$ref": "#/$defs/ExecutionBlock"
+    }
+  },
+  "required": [
+    "solver",
+    "instance",
+    "result",
+    "execution"
+  ],
+  "title": "TraceV1",
+  "type": "object"
+}

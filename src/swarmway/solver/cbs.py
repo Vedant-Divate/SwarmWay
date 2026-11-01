@@ -24,6 +24,7 @@ from swarmway.domain.instance import Instance
 from swarmway.domain.solution import Solution, SolveOutcome, SolveStats
 from swarmway.solver.astar_space_time import plan
 from swarmway.solver.astar_static import INF, DistanceCache, horizon_guard, true_distance
+from swarmway.solver.trace import TraceRecorder
 
 # Deadline is checked at least every this many high-level node expansions
 # (Section 8.3: at least every 512 expansions in the CBS loop).
@@ -93,7 +94,11 @@ def _target_owner(instance: Instance, pos: Position, a_i: int, a_j: int) -> int 
     return None
 
 
-def solve(instance: Instance, budget_ms: int = 10000) -> SolveOutcome:
+def solve(
+    instance: Instance,
+    budget_ms: int = 10000,
+    recorder: TraceRecorder | None = None,
+) -> SolveOutcome:
     """Solve an instance with CBS.
 
     Returns a :class:`SolveOutcome` with status ``solved``, ``unsat``
@@ -140,6 +145,8 @@ def solve(instance: Instance, budget_ms: int = 10000) -> SolveOutcome:
     insertion_id += 1
     open_list: list[tuple[int, int, CTNode]] = [(root_soc, root.insertion_id, root)]
     stats.ct_generated = 1
+    if recorder is not None:
+        recorder.record_root(root.insertion_id, root_soc)
 
     ct_expanded = 0
     while open_list:
@@ -168,6 +175,8 @@ def solve(instance: Instance, budget_ms: int = 10000) -> SolveOutcome:
                 last = path[-1]
                 padded.append(path + (last,) * (makespan + 1 - len(path)))
             solution = Solution(paths=tuple(padded), soc=node.soc, makespan=makespan)
+            if recorder is not None:
+                recorder.record_goal(node.insertion_id, node.soc)
             return SolveOutcome(status='solved', solution=solution, stats=stats)
 
         a_i, a_j = conflict.agents
@@ -198,6 +207,20 @@ def solve(instance: Instance, budget_ms: int = 10000) -> SolveOutcome:
                 child_soc = sum(_path_cost(p) for p in new_paths_t)
                 child = CTNode(child_constraints, new_paths_t, child_soc, insertion_id)
                 insertion_id += 1
+                if recorder is not None:
+                    recorder.record_expand(
+                        child.insertion_id,
+                        node.insertion_id,
+                        child_soc,
+                        conflict,
+                        agent_id,
+                        conflict.pos,
+                        None,
+                        None,
+                        conflict.t,
+                        agent_id,
+                        child_soc,
+                    )
                 heapq.heappush(open_list, (child_soc, child.insertion_id, child))
                 stats.ct_generated += 1
         else:
@@ -226,6 +249,20 @@ def solve(instance: Instance, budget_ms: int = 10000) -> SolveOutcome:
                 child_soc = sum(_path_cost(p) for p in new_paths_t)
                 child = CTNode(child_constraints, new_paths_t, child_soc, insertion_id)
                 insertion_id += 1
+                if recorder is not None:
+                    recorder.record_expand(
+                        child.insertion_id,
+                        node.insertion_id,
+                        child_soc,
+                        conflict,
+                        agent_id,
+                        None,
+                        conflict.u,
+                        conflict.v,
+                        conflict.t,
+                        agent_id,
+                        child_soc,
+                    )
                 heapq.heappush(open_list, (child_soc, child.insertion_id, child))
                 stats.ct_generated += 1
 
