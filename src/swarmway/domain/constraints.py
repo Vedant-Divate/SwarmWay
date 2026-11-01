@@ -22,6 +22,14 @@ class VertexConstraint:
     agent: int
     pos: Position
     t: int
+    hold: bool = False
+    """If True, this is a goal-hold constraint <goal, t, hold=True>
+    (Section 8.2): the agent occupies its goal from timestep t onward
+    and may not arrive at or pass through it at any t' >= t. With the
+    summary-based goal test, a hold constraint on the goal cell raises
+    the same "arrival must come after the blocked time" bound as a
+    plain vertex constraint on the goal, because the agent occupies
+    its goal from arrival onward."""
 
 
 @dataclass(frozen=True)
@@ -97,11 +105,11 @@ class Constraints:
         """True if any vertex constraint blocks `pos` for agent at t' >= t."""
         return self.goal_blocked_until(agent, pos) >= t
 
-    def add_vertex(self, agent: int, pos: Position, t: int) -> Constraints:
+    def add_vertex(self, agent: int, pos: Position, t: int, hold: bool = False) -> Constraints:
         new_vertex = dict(self.vertex)
         new_vertex[agent] = tuple(
             sorted(
-                [*list(self.vertex.get(agent, ())), VertexConstraint(agent, pos, t)],
+                [*list(self.vertex.get(agent, ())), VertexConstraint(agent, pos, t, hold)],
                 key=lambda c: (c.pos, c.t),
             )
         )
