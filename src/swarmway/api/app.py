@@ -9,8 +9,9 @@ from __future__ import annotations
 
 from typing import Any
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 from swarmway.api.routes import router
 from swarmway.api.settings import load_settings
@@ -28,6 +29,17 @@ app.add_middleware(
 )
 
 app.include_router(router)
+
+
+@app.exception_handler(HTTPException)
+async def http_exception_handler(_request: Request, exc: HTTPException) -> JSONResponse:
+    """Shape errors as {error: {code, message, details?}} per Section 7.4."""
+    detail = exc.detail
+    if isinstance(detail, dict) and 'error' in detail:
+        content = detail
+    else:
+        content = {'error': {'code': 'error', 'message': str(detail)}}
+    return JSONResponse(status_code=exc.status_code, content=content)
 
 
 @app.get('/api/health')

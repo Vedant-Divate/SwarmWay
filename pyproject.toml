@@ -44,6 +44,7 @@ markers = [
 ]
 filterwarnings = [
     "error",
+    "ignore::starlette.exceptions.StarletteDeprecationWarning",
 ]
 addopts = ["-m", "not slow"]
 
