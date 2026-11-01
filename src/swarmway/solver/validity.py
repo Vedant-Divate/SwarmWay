@@ -105,4 +105,4 @@ def check(solution: Solution, instance: Instance) -> str:
             f'V-SOC: reported makespan {solution.makespan} != recomputed {recomputed_makespan}'
         )
 
-    return 'VALID'
+    return 'valid'

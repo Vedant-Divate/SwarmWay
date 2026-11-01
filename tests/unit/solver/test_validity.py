@@ -28,7 +28,7 @@ def _two_agent_valid() -> Instance:
 def test_valid_solution_passes() -> None:
     inst = _two_agent_valid()
     sol = _solution([(0, 0), (1, 0)], [(0, 2), (1, 2)], soc=2, makespan=1)
-    assert check(sol, inst) == 'VALID'
+    assert check(sol, inst) == 'valid'
 
 
 def test_v_bounds_fires() -> None:
@@ -46,7 +46,7 @@ def test_v_bounds_fires() -> None:
 def test_v_bounds_does_not_fire() -> None:
     inst = _two_agent_valid()
     sol = _solution([(0, 0), (1, 0)], [(0, 2), (1, 2)], soc=2, makespan=1)
-    assert check(sol, inst) == 'VALID'
+    assert check(sol, inst) == 'valid'
 
 
 def test_v_passable_fires() -> None:
@@ -64,7 +64,7 @@ def test_v_passable_fires() -> None:
 def test_v_passable_does_not_fire() -> None:
     inst = _two_agent_valid()
     sol = _solution([(0, 0), (1, 0)], [(0, 2), (1, 2)], soc=2, makespan=1)
-    assert check(sol, inst) == 'VALID'
+    assert check(sol, inst) == 'valid'
 
 
 def test_v_continuity_fires() -> None:
@@ -81,7 +81,7 @@ def test_v_continuity_fires() -> None:
 def test_v_continuity_does_not_fire() -> None:
     inst = _two_agent_valid()
     sol = _solution([(0, 0), (1, 0)], [(0, 2), (1, 2)], soc=2, makespan=1)
-    assert check(sol, inst) == 'VALID'
+    assert check(sol, inst) == 'valid'
 
 
 def test_v_start_fires() -> None:
@@ -101,7 +101,7 @@ def test_v_start_fires() -> None:
 def test_v_start_does_not_fire() -> None:
     inst = _two_agent_valid()
     sol = _solution([(0, 0), (1, 0)], [(0, 2), (1, 2)], soc=2, makespan=1)
-    assert check(sol, inst) == 'VALID'
+    assert check(sol, inst) == 'valid'
 
 
 def test_v_goal_fires() -> None:
@@ -121,7 +121,7 @@ def test_v_goal_fires() -> None:
 def test_v_goal_does_not_fire() -> None:
     inst = _two_agent_valid()
     sol = _solution([(0, 0), (1, 0)], [(0, 2), (1, 2)], soc=2, makespan=1)
-    assert check(sol, inst) == 'VALID'
+    assert check(sol, inst) == 'valid'
 
 
 def test_v_vertex_fires() -> None:
@@ -147,7 +147,7 @@ def test_v_vertex_fires() -> None:
 def test_v_vertex_does_not_fire() -> None:
     inst = _two_agent_valid()
     sol = _solution([(0, 0), (1, 0)], [(0, 2), (1, 2)], soc=2, makespan=1)
-    assert check(sol, inst) == 'VALID'
+    assert check(sol, inst) == 'valid'
 
 
 def test_v_edge_fires() -> None:
@@ -167,7 +167,7 @@ def test_v_edge_fires() -> None:
 def test_v_edge_does_not_fire() -> None:
     inst = _two_agent_valid()
     sol = _solution([(0, 0), (1, 0)], [(0, 2), (1, 2)], soc=2, makespan=1)
-    assert check(sol, inst) == 'VALID'
+    assert check(sol, inst) == 'valid'
 
 
 def test_v_pad_fires() -> None:
@@ -184,7 +184,7 @@ def test_v_pad_fires() -> None:
 def test_v_pad_does_not_fire() -> None:
     inst = _two_agent_valid()
     sol = _solution([(0, 0), (1, 0)], [(0, 2), (1, 2)], soc=2, makespan=1)
-    assert check(sol, inst) == 'VALID'
+    assert check(sol, inst) == 'valid'
 
 
 def test_v_soc_fires() -> None:
@@ -201,4 +201,4 @@ def test_v_soc_fires() -> None:
 def test_v_soc_does_not_fire() -> None:
     inst = _two_agent_valid()
     sol = _solution([(0, 0), (1, 0)], [(0, 2), (1, 2)], soc=2, makespan=1)
-    assert check(sol, inst) == 'VALID'
+    assert check(sol, inst) == 'valid'

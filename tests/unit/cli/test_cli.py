@@ -32,7 +32,7 @@ def test_cli_solve_valid_instance(capsys) -> None:
     assert 'status: solved' in out
     assert 'soc:' in out
     assert 'makespan:' in out
-    assert 'VALIDITY: VALID' in out
+    assert 'VALIDITY: valid' in out
     assert 'runtime_ms:' in out
     assert 'ct_expanded:' in out
 
