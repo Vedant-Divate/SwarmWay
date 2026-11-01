@@ -14,15 +14,19 @@ import json
 import sys
 import time
 from pathlib import Path
+from typing import Any, cast
 
 from swarmway.domain import (
+    Agent,
     Grid,
+    Instance,
     MapError,
     ScenError,
     build_instance_from_lines,
     parse_map,
     parse_scen,
 )
+from swarmway.domain.schemas import TraceV1
 from swarmway.solver.cbs import solve
 from swarmway.solver.validity import ValidityError, check
 
@@ -48,7 +52,7 @@ def _census(grid: Grid, map_id: str, origin: str) -> list[str]:
     return lines
 
 
-def _scen_census(lines, grid: Grid, map_id: str) -> list[str]:
+def _scen_census(lines: tuple[Any, ...], grid: Grid, map_id: str) -> list[str]:
     out: list[str] = []
     out.append(f'scenario rows: {len(lines)}')
     out.append('first 5 agent pairs:')
@@ -94,15 +98,23 @@ def run_parse(map_path: Path, scen_path: Path | None) -> int:
     return 0
 
 
-def _load_map_index() -> dict:
+def _load_map_index() -> dict[str, Any]:
     try:
-        return json.loads(MAPS_INDEX.read_text(encoding='utf-8'))
+        data = json.loads(MAPS_INDEX.read_text(encoding='utf-8'))
+        return cast(dict[str, Any], data)
     except (OSError, json.JSONDecodeError) as exc:
         print(f'error: cannot read map index {MAPS_INDEX}: {exc}', file=sys.stderr)
         sys.exit(2)
 
 
-def run_solve(map_path: Path, scenario: str, agents: int, solver: str, budget_ms: int) -> int:
+def run_solve(
+    map_path: Path,
+    scenario: str,
+    agents: int,
+    solver: str,
+    budget_ms: int,
+    emit_trace: Path | None,
+) -> int:
     if solver != 'cbs':
         print(f'error: unknown solver {solver!r}; only "cbs" is available', file=sys.stderr)
         return 2
@@ -178,6 +190,139 @@ def run_solve(map_path: Path, scenario: str, agents: int, solver: str, budget_ms
     print(f'ct_expanded: {outcome.stats.ct_expanded}')
     print(f'ct_generated: {outcome.stats.ct_generated}')
     print(f'low_level_expansions: {outcome.stats.low_level_expansions}')
+
+    if emit_trace is not None:
+        from swarmway.domain.schemas import (
+            AgentRef,
+            ExecutionBlock,
+            InstanceBlock,
+            MapInfo,
+            ResultBlock,
+            SolverBlock,
+        )
+
+        if outcome.solution is not None:
+            sol = outcome.solution
+            map_block = MapInfo(
+                id=map_id,
+                name=map_id,
+                width=instance.grid.width,
+                height=instance.grid.height,
+                rows=list(instance.grid.rows),
+                source='movingai',
+            )
+            agent_blocks = [AgentRef(id=a.id, start=a.start, goal=a.goal) for a in instance.agents]
+            instance_block = InstanceBlock(map=map_block, agents=agent_blocks)
+            result_block = ResultBlock(
+                status=outcome.status,  # type: ignore[arg-type]  # outcome.status is solved/unsat/timeout
+                soc=sol.soc,
+                makespan=sol.makespan,
+                runtime_ms=runtime_ms,
+                budget_ms=budget_ms,
+                ct_expanded=outcome.stats.ct_expanded,
+                ct_generated=outcome.stats.ct_generated,
+                low_level_expansions=outcome.stats.low_level_expansions,
+                validity='valid',
+                notes=[],
+            )
+            execution_block = ExecutionBlock(
+                makespan=sol.makespan,
+                paths=[list(p) for p in sol.paths],
+            )
+            trace = TraceV1(
+                solver=SolverBlock(
+                    name='cbs',
+                    options={},
+                    package_version='0.1.0',
+                    seed=None,
+                ),
+                instance=instance_block,
+                result=result_block,
+                search=[],
+                execution=execution_block,
+            )
+        else:
+            map_block = MapInfo(
+                id=map_id,
+                name=map_id,
+                width=instance.grid.width,
+                height=instance.grid.height,
+                rows=list(instance.grid.rows),
+                source='movingai',
+            )
+            agent_blocks = [AgentRef(id=a.id, start=a.start, goal=a.goal) for a in instance.agents]
+            instance_block = InstanceBlock(map=map_block, agents=agent_blocks)
+            result_block = ResultBlock(
+                status=outcome.status,  # type: ignore[arg-type]  # outcome.status is solved/unsat/timeout
+                soc=0,
+                makespan=0,
+                runtime_ms=runtime_ms,
+                budget_ms=budget_ms,
+                ct_expanded=outcome.stats.ct_expanded,
+                ct_generated=outcome.stats.ct_generated,
+                low_level_expansions=outcome.stats.low_level_expansions,
+                validity='valid',
+                notes=[],
+            )
+            execution_block = ExecutionBlock(makespan=0, paths=[[]])
+            trace = TraceV1(
+                solver=SolverBlock(
+                    name='cbs',
+                    options={},
+                    package_version='0.1.0',
+                    seed=None,
+                ),
+                instance=instance_block,
+                result=result_block,
+                search=[],
+                execution=execution_block,
+            )
+
+        emit_trace.write_text(trace.model_dump_json(indent=2), encoding='utf-8')
+        print(f'trace emitted: {emit_trace}')
+
+    return 0
+
+
+def run_replay(trace_path: Path, check_validity: bool) -> int:
+    text = _read_text(trace_path)
+    try:
+        trace = TraceV1.model_validate_json(text)
+    except Exception as exc:
+        print(f'error: cannot parse trace {trace_path}: {exc}', file=sys.stderr)
+        return 2
+
+    # Rebuild the Instance from the embedded map rows + agents
+    map_info = trace.instance.map
+    grid = Grid(
+        width=map_info.width,
+        height=map_info.height,
+        rows=tuple(map_info.rows),
+    )
+    agents = tuple(Agent(id=a.id, start=a.start, goal=a.goal) for a in trace.instance.agents)
+    instance = Instance(grid=grid, agents=agents)
+
+    if check_validity:
+        # Re-run the independent validity checker on execution.paths
+        from swarmway.domain.solution import Solution
+
+        solution = Solution(
+            paths=tuple(tuple(p) for p in trace.execution.paths),
+            soc=trace.result.soc,
+            makespan=trace.result.makespan,
+        )
+        try:
+            validity = check(solution, instance)
+        except ValidityError as exc:
+            print(f'VALIDITY: INVALID ({exc})', file=sys.stderr)
+            return 3
+        print(f'VALIDITY: {validity}')
+
+    print(f'trace: {trace_path}')
+    print(f'status: {trace.result.status}')
+    print(f'soc: {trace.result.soc}')
+    print(f'makespan: {trace.result.makespan}')
+    print(f'agents: {len(instance.agents)}')
     return 0
 
 
@@ -199,13 +344,29 @@ def main(argv: list[str] | None = None) -> int:
     p_solve.add_argument(
         '--budget-ms', type=int, default=10000, help='solve budget in milliseconds'
     )
+    p_solve.add_argument('--emit-trace', type=Path, help='write trace v1 JSON to this file')
+
+    p_replay = sub.add_parser('replay', help='replay and validate a trace file')
+    p_replay.add_argument('--trace', required=True, type=Path, help='path to trace JSON file')
+    p_replay.add_argument(
+        '--check', action='store_true', help='re-run the independent validity checker'
+    )
 
     args = parser.parse_args(argv)
 
     if args.command == 'parse':
         return run_parse(Path(args.map), Path(args.scen) if args.scen else None)
     if args.command == 'solve':
-        return run_solve(Path(args.map), args.scenario, args.agents, args.solver, args.budget_ms)
+        return run_solve(
+            Path(args.map),
+            args.scenario,
+            args.agents,
+            args.solver,
+            args.budget_ms,
+            args.emit_trace,
+        )
+    if args.command == 'replay':
+        return run_replay(Path(args.trace), args.check)
 
     parser.print_help(sys.stderr)
     return 2
