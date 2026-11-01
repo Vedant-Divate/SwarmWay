@@ -7,9 +7,12 @@ Phase 4. CORS origins and resource caps come from the environment
 
 from __future__ import annotations
 
+from typing import Any
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from swarmway.api.routes import router
 from swarmway.api.settings import load_settings
 
 settings = load_settings()
@@ -24,14 +27,16 @@ app.add_middleware(
     allow_headers=['*'],
 )
 
+app.include_router(router)
+
 
 @app.get('/api/health')
-def health() -> dict:
+def health() -> dict[str, Any]:
     """Liveness: version, solver list, caps. No solve, no heavy work."""
     return {
         'status': 'ok',
         'version': '0.1.0',
-        'solvers': ['cbs', 'pp-fixed', 'pp-best-of-n'],
+        'solvers': ['cbs'],
         'caps': {
             'max_agents': settings.max_agents,
             'max_grid_cells': settings.max_grid_cells,

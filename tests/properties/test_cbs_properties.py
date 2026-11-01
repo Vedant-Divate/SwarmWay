@@ -61,7 +61,7 @@ def test_property_1_validity(width, height, seed):
     outcome = solve(instance, PROPERTY_BUDGET_MS)
     if outcome.status == 'solved':
         assert outcome.solution is not None
-        assert check(outcome.solution, instance) == 'VALID'
+        assert check(outcome.solution, instance) == 'valid'
 
 
 @settings(suppress_health_check=[HealthCheck.filter_too_much], deadline=None)
