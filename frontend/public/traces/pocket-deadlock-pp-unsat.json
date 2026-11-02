@@ -1,0 +1,82 @@
+{
+  "trace_version": 1,
+  "solver": {
+    "name": "pp-fixed",
+    "options": {
+      "tie_break": "fifo"
+    },
+    "package_version": "1.0.0",
+    "seed": 1
+  },
+  "instance": {
+    "map": {
+      "id": "pocket-culdesac-8x6",
+      "name": "Cul-de-Sac Pocket 8×6",
+      "width": 8,
+      "height": 6,
+      "rows": [
+        "@@@@@@@@",
+        "@......@",
+        "@@@@.@@@",
+        "@@@@.@@@",
+        "@@@@.@@@",
+        "@@@@@@@@"
+      ],
+      "source": "Swarmway Curated Replay"
+    },
+    "agents": [
+      {
+        "id": 0,
+        "start": [
+          2,
+          1
+        ],
+        "goal": [
+          4,
+          2
+        ]
+      },
+      {
+        "id": 1,
+        "start": [
+          1,
+          1
+        ],
+        "goal": [
+          4,
+          4
+        ]
+      },
+      {
+        "id": 2,
+        "start": [
+          6,
+          1
+        ],
+        "goal": [
+          1,
+          1
+        ]
+      }
+    ]
+  },
+  "result": {
+    "status": "unsat",
+    "soc": 0,
+    "makespan": 0,
+    "runtime_ms": 1.15,
+    "budget_ms": 10000,
+    "ct_expanded": 0,
+    "ct_generated": 0,
+    "low_level_expansions": 4,
+    "validity": "unsat",
+    "notes": [
+      "Agent 1 blocked by higher-priority agents settled or moving along corridor"
+    ]
+  },
+  "search": [],
+  "execution": {
+    "makespan": 0,
+    "paths": []
+  }
+}

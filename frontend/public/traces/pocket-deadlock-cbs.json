@@ -1,0 +1,4831 @@
+{
+  "trace_version": 1,
+  "solver": {
+    "name": "cbs",
+    "options": {
+      "tie_break": "fifo"
+    },
+    "package_version": "1.0.0",
+    "seed": null
+  },
+  "instance": {
+    "map": {
+      "id": "pocket-culdesac-8x6",
+      "name": "Cul-de-Sac Pocket 8×6",
+      "width": 8,
+      "height": 6,
+      "rows": [
+        "@@@@@@@@",
+        "@......@",
+        "@@@@.@@@",
+        "@@@@.@@@",
+        "@@@@.@@@",
+        "@@@@@@@@"
+      ],
+      "source": "Swarmway Curated Replay"
+    },
+    "agents": [
+      {
+        "id": 0,
+        "start": [
+          2,
+          1
+        ],
+        "goal": [
+          4,
+          2
+        ]
+      },
+      {
+        "id": 1,
+        "start": [
+          1,
+          1
+        ],
+        "goal": [
+          4,
+          4
+        ]
+      },
+      {
+        "id": 2,
+        "start": [
+          6,
+          1
+        ],
+        "goal": [
+          1,
+          1
+        ]
+      }
+    ]
+  },
+  "result": {
+    "status": "solved",
+    "soc": 19,
+    "makespan": 8,
+    "runtime_ms": 4.84,
+    "budget_ms": 10000,
+    "ct_expanded": 80,
+    "ct_generated": 142,
+    "low_level_expansions": 1755,
+    "validity": "valid",
+    "notes": []
+  },
+  "search": [
+    {
+      "seq": 0,
+      "event": "root",
+      "node": 0,
+      "cost": 14
+    },
+    {
+      "seq": 1,
+      "event": "expand",
+      "node": 1,
+      "parent": 0,
+      "cost": 15,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          2
+        ],
+        "pos": [
+          4,
+          1
+        ],
+        "t": 2
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "vertex",
+        "pos": [
+          4,
+          1
+        ],
+        "t": 2
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 4
+    },
+    {
+      "seq": 2,
+      "event": "expand",
+      "node": 2,
+      "parent": 0,
+      "cost": 15,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          2
+        ],
+        "pos": [
+          4,
+          1
+        ],
+        "t": 2
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "vertex",
+        "pos": [
+          4,
+          1
+        ],
+        "t": 2
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 6
+    },
+    {
+      "seq": 3,
+      "event": "expand",
+      "node": 3,
+      "parent": 1,
+      "cost": 16,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          3,
+          1
+        ],
+        "t": 2
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "vertex",
+        "pos": [
+          3,
+          1
+        ],
+        "t": 2
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 5
+    },
+    {
+      "seq": 4,
+      "event": "expand",
+      "node": 4,
+      "parent": 1,
+      "cost": 16,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          3,
+          1
+        ],
+        "t": 2
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          3,
+          1
+        ],
+        "t": 2
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 7
+    },
+    {
+      "seq": 5,
+      "event": "expand",
+      "node": 5,
+      "parent": 2,
+      "cost": 16,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          2
+        ],
+        "pos": [
+          4,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          4,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 7
+    },
+    {
+      "seq": 6,
+      "event": "expand",
+      "node": 6,
+      "parent": 2,
+      "cost": 16,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          2
+        ],
+        "pos": [
+          4,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "vertex",
+        "pos": [
+          4,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 7
+    },
+    {
+      "seq": 7,
+      "event": "expand",
+      "node": 7,
+      "parent": 3,
+      "cost": 16,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          1
+        ],
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          2,
+          1
+        ],
+        "t": 1
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "edge",
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          2,
+          1
+        ],
+        "t": 1
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 5
+    },
+    {
+      "seq": 8,
+      "event": "expand",
+      "node": 8,
+      "parent": 3,
+      "cost": 17,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          1
+        ],
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          2,
+          1
+        ],
+        "t": 1
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "edge",
+        "u": [
+          2,
+          1
+        ],
+        "v": [
+          3,
+          1
+        ],
+        "t": 1
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 7
+    },
+    {
+      "seq": 9,
+      "event": "expand",
+      "node": 9,
+      "parent": 4,
+      "cost": 17,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          2
+        ],
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 2
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "edge",
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 2
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 5
+    },
+    {
+      "seq": 10,
+      "event": "expand",
+      "node": 10,
+      "parent": 4,
+      "cost": 17,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          2
+        ],
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 2
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "edge",
+        "u": [
+          4,
+          1
+        ],
+        "v": [
+          3,
+          1
+        ],
+        "t": 2
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 6
+    },
+    {
+      "seq": 11,
+      "event": "expand",
+      "node": 11,
+      "parent": 5,
+      "cost": 17,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          1,
+          2
+        ],
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "edge",
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 12,
+      "event": "expand",
+      "node": 12,
+      "parent": 5,
+      "cost": 17,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          1,
+          2
+        ],
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "edge",
+        "u": [
+          4,
+          1
+        ],
+        "v": [
+          3,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 7
+    },
+    {
+      "seq": 13,
+      "event": "expand",
+      "node": 13,
+      "parent": 6,
+      "cost": 18,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          4,
+          2
+        ],
+        "t": 4
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "vertex",
+        "pos": [
+          4,
+          2
+        ],
+        "t": 4
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 5
+    },
+    {
+      "seq": 14,
+      "event": "expand",
+      "node": 14,
+      "parent": 6,
+      "cost": 17,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          4,
+          2
+        ],
+        "t": 4
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          4,
+          2
+        ],
+        "t": 4
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 7
+    },
+    {
+      "seq": 15,
+      "event": "expand",
+      "node": 15,
+      "parent": 7,
+      "cost": 16,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          2,
+          1
+        ],
+        "t": 1
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "vertex",
+        "pos": [
+          2,
+          1
+        ],
+        "t": 1
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 5
+    },
+    {
+      "seq": 16,
+      "event": "expand",
+      "node": 16,
+      "parent": 7,
+      "cost": 17,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          2,
+          1
+        ],
+        "t": 1
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          2,
+          1
+        ],
+        "t": 1
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 7
+    },
+    {
+      "seq": 17,
+      "event": "expand",
+      "node": 17,
+      "parent": 15,
+      "cost": 17,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          1
+        ],
+        "u": [
+          2,
+          1
+        ],
+        "v": [
+          1,
+          1
+        ],
+        "t": 0
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "edge",
+        "u": [
+          1,
+          1
+        ],
+        "v": [
+          2,
+          1
+        ],
+        "t": 0
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 7
+    },
+    {
+      "seq": 18,
+      "event": "expand",
+      "node": 18,
+      "parent": 8,
+      "cost": 18,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          2,
+          1
+        ],
+        "t": 2
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "vertex",
+        "pos": [
+          2,
+          1
+        ],
+        "t": 2
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 6
+    },
+    {
+      "seq": 19,
+      "event": "expand",
+      "node": 19,
+      "parent": 8,
+      "cost": 18,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          2,
+          1
+        ],
+        "t": 2
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          2,
+          1
+        ],
+        "t": 2
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 20,
+      "event": "expand",
+      "node": 20,
+      "parent": 9,
+      "cost": 18,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          3,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "vertex",
+        "pos": [
+          3,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 6
+    },
+    {
+      "seq": 21,
+      "event": "expand",
+      "node": 21,
+      "parent": 9,
+      "cost": 18,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          3,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          3,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 22,
+      "event": "expand",
+      "node": 22,
+      "parent": 10,
+      "cost": 18,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          2
+        ],
+        "pos": [
+          4,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "vertex",
+        "pos": [
+          4,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 5
+    },
+    {
+      "seq": 23,
+      "event": "expand",
+      "node": 23,
+      "parent": 10,
+      "cost": 18,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          2
+        ],
+        "pos": [
+          4,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "vertex",
+        "pos": [
+          4,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 7
+    },
+    {
+      "seq": 24,
+      "event": "expand",
+      "node": 24,
+      "parent": 11,
+      "cost": 18,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          2
+        ],
+        "pos": [
+          3,
+          1
+        ],
+        "t": 4
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          3,
+          1
+        ],
+        "t": 4
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 9
+    },
+    {
+      "seq": 25,
+      "event": "expand",
+      "node": 25,
+      "parent": 11,
+      "cost": 18,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          2
+        ],
+        "pos": [
+          3,
+          1
+        ],
+        "t": 4
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "vertex",
+        "pos": [
+          3,
+          1
+        ],
+        "t": 4
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 7
+    },
+    {
+      "seq": 26,
+      "event": "expand",
+      "node": 26,
+      "parent": 12,
+      "cost": 18,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          2
+        ],
+        "pos": [
+          4,
+          1
+        ],
+        "t": 4
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          4,
+          1
+        ],
+        "t": 4
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 27,
+      "event": "expand",
+      "node": 27,
+      "parent": 12,
+      "cost": 18,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          2
+        ],
+        "pos": [
+          4,
+          1
+        ],
+        "t": 4
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "vertex",
+        "pos": [
+          4,
+          1
+        ],
+        "t": 4
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 28,
+      "event": "expand",
+      "node": 28,
+      "parent": 14,
+      "cost": 18,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          2
+        ],
+        "pos": [
+          4,
+          1
+        ],
+        "t": 4
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          4,
+          1
+        ],
+        "t": 4
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 29,
+      "event": "expand",
+      "node": 29,
+      "parent": 14,
+      "cost": 18,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          2
+        ],
+        "pos": [
+          4,
+          1
+        ],
+        "t": 4
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "vertex",
+        "pos": [
+          4,
+          1
+        ],
+        "t": 4
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 30,
+      "event": "expand",
+      "node": 30,
+      "parent": 16,
+      "cost": 18,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          2,
+          1
+        ],
+        "t": 2
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "vertex",
+        "pos": [
+          2,
+          1
+        ],
+        "t": 2
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 6
+    },
+    {
+      "seq": 31,
+      "event": "expand",
+      "node": 31,
+      "parent": 16,
+      "cost": 18,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          2,
+          1
+        ],
+        "t": 2
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          2,
+          1
+        ],
+        "t": 2
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 32,
+      "event": "expand",
+      "node": 32,
+      "parent": 13,
+      "cost": 18,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          1
+        ],
+        "u": [
+          4,
+          3
+        ],
+        "v": [
+          4,
+          2
+        ],
+        "t": 4
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "edge",
+        "u": [
+          4,
+          3
+        ],
+        "v": [
+          4,
+          2
+        ],
+        "t": 4
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 5
+    },
+    {
+      "seq": 33,
+      "event": "expand",
+      "node": 33,
+      "parent": 13,
+      "cost": 19,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          1
+        ],
+        "u": [
+          4,
+          3
+        ],
+        "v": [
+          4,
+          2
+        ],
+        "t": 4
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "edge",
+        "u": [
+          4,
+          2
+        ],
+        "v": [
+          4,
+          3
+        ],
+        "t": 4
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 7
+    },
+    {
+      "seq": 34,
+      "event": "expand",
+      "node": 34,
+      "parent": 18,
+      "cost": 18,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          2,
+          1
+        ],
+        "t": 1
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "vertex",
+        "pos": [
+          2,
+          1
+        ],
+        "t": 1
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 6
+    },
+    {
+      "seq": 35,
+      "event": "expand",
+      "node": 35,
+      "parent": 18,
+      "cost": 18,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          2,
+          1
+        ],
+        "t": 1
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          2,
+          1
+        ],
+        "t": 1
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 7
+    },
+    {
+      "seq": 36,
+      "event": "expand",
+      "node": 36,
+      "parent": 19,
+      "cost": 19,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          2
+        ],
+        "pos": [
+          3,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "vertex",
+        "pos": [
+          3,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 6
+    },
+    {
+      "seq": 37,
+      "event": "expand",
+      "node": 37,
+      "parent": 19,
+      "cost": 19,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          2
+        ],
+        "pos": [
+          3,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "vertex",
+        "pos": [
+          3,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 6
+    },
+    {
+      "seq": 38,
+      "event": "expand",
+      "node": 38,
+      "parent": 20,
+      "cost": 18,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          1
+        ],
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          2,
+          1
+        ],
+        "t": 2
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "edge",
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          2,
+          1
+        ],
+        "t": 2
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 6
+    },
+    {
+      "seq": 39,
+      "event": "expand",
+      "node": 39,
+      "parent": 20,
+      "cost": 19,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          1
+        ],
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          2,
+          1
+        ],
+        "t": 2
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "edge",
+        "u": [
+          2,
+          1
+        ],
+        "v": [
+          3,
+          1
+        ],
+        "t": 2
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 40,
+      "event": "expand",
+      "node": 40,
+      "parent": 21,
+      "cost": 19,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          2
+        ],
+        "pos": [
+          3,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "vertex",
+        "pos": [
+          3,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 6
+    },
+    {
+      "seq": 41,
+      "event": "expand",
+      "node": 41,
+      "parent": 21,
+      "cost": 19,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          2
+        ],
+        "pos": [
+          3,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "vertex",
+        "pos": [
+          3,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 6
+    },
+    {
+      "seq": 42,
+      "event": "expand",
+      "node": 42,
+      "parent": 22,
+      "cost": 19,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          3,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "vertex",
+        "pos": [
+          3,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 6
+    },
+    {
+      "seq": 43,
+      "event": "expand",
+      "node": 43,
+      "parent": 22,
+      "cost": 19,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          3,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          3,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 44,
+      "event": "expand",
+      "node": 44,
+      "parent": 23,
+      "cost": 19,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          2
+        ],
+        "pos": [
+          4,
+          1
+        ],
+        "t": 4
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          4,
+          1
+        ],
+        "t": 4
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 45,
+      "event": "expand",
+      "node": 45,
+      "parent": 23,
+      "cost": 19,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          2
+        ],
+        "pos": [
+          4,
+          1
+        ],
+        "t": 4
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "vertex",
+        "pos": [
+          4,
+          1
+        ],
+        "t": 4
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 46,
+      "event": "expand",
+      "node": 46,
+      "parent": 24,
+      "cost": 19,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          1,
+          2
+        ],
+        "u": [
+          2,
+          1
+        ],
+        "v": [
+          3,
+          1
+        ],
+        "t": 4
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "edge",
+        "u": [
+          2,
+          1
+        ],
+        "v": [
+          3,
+          1
+        ],
+        "t": 4
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 10
+    },
+    {
+      "seq": 47,
+      "event": "expand",
+      "node": 47,
+      "parent": 24,
+      "cost": 19,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          1,
+          2
+        ],
+        "u": [
+          2,
+          1
+        ],
+        "v": [
+          3,
+          1
+        ],
+        "t": 4
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "edge",
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          2,
+          1
+        ],
+        "t": 4
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 7
+    },
+    {
+      "seq": 48,
+      "event": "expand",
+      "node": 48,
+      "parent": 25,
+      "cost": 19,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          1,
+          2
+        ],
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 4
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "edge",
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 4
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 9
+    },
+    {
+      "seq": 49,
+      "event": "expand",
+      "node": 49,
+      "parent": 25,
+      "cost": 19,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          1,
+          2
+        ],
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 4
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "edge",
+        "u": [
+          4,
+          1
+        ],
+        "v": [
+          3,
+          1
+        ],
+        "t": 4
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 50,
+      "event": "expand",
+      "node": 50,
+      "parent": 26,
+      "cost": 19,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          1,
+          2
+        ],
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 4
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "edge",
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 4
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 9
+    },
+    {
+      "seq": 51,
+      "event": "expand",
+      "node": 51,
+      "parent": 26,
+      "cost": 19,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          1,
+          2
+        ],
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 4
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "edge",
+        "u": [
+          4,
+          1
+        ],
+        "v": [
+          3,
+          1
+        ],
+        "t": 4
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 52,
+      "event": "expand",
+      "node": 52,
+      "parent": 27,
+      "cost": 21,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          4,
+          2
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "vertex",
+        "pos": [
+          4,
+          2
+        ],
+        "t": 5
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 6
+    },
+    {
+      "seq": 53,
+      "event": "expand",
+      "node": 53,
+      "parent": 27,
+      "cost": 19,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          4,
+          2
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          4,
+          2
+        ],
+        "t": 5
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 54,
+      "event": "expand",
+      "node": 54,
+      "parent": 28,
+      "cost": 18,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          1,
+          2
+        ],
+        "u": [
+          4,
+          1
+        ],
+        "v": [
+          5,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "edge",
+        "u": [
+          4,
+          1
+        ],
+        "v": [
+          5,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 55,
+      "event": "expand",
+      "node": 55,
+      "parent": 28,
+      "cost": 19,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          1,
+          2
+        ],
+        "u": [
+          4,
+          1
+        ],
+        "v": [
+          5,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "edge",
+        "u": [
+          5,
+          1
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 56,
+      "event": "expand",
+      "node": 56,
+      "parent": 29,
+      "cost": 21,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          4,
+          2
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "vertex",
+        "pos": [
+          4,
+          2
+        ],
+        "t": 5
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 6
+    },
+    {
+      "seq": 57,
+      "event": "expand",
+      "node": 57,
+      "parent": 29,
+      "cost": 19,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          4,
+          2
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          4,
+          2
+        ],
+        "t": 5
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 58,
+      "event": "expand",
+      "node": 58,
+      "parent": 30,
+      "cost": 18,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          1
+        ],
+        "u": [
+          2,
+          1
+        ],
+        "v": [
+          1,
+          1
+        ],
+        "t": 1
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "edge",
+        "u": [
+          2,
+          1
+        ],
+        "v": [
+          1,
+          1
+        ],
+        "t": 1
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 6
+    },
+    {
+      "seq": 59,
+      "event": "expand",
+      "node": 59,
+      "parent": 30,
+      "cost": 19,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          1
+        ],
+        "u": [
+          2,
+          1
+        ],
+        "v": [
+          1,
+          1
+        ],
+        "t": 1
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "edge",
+        "u": [
+          1,
+          1
+        ],
+        "v": [
+          2,
+          1
+        ],
+        "t": 1
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 60,
+      "event": "expand",
+      "node": 60,
+      "parent": 31,
+      "cost": 19,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          2
+        ],
+        "pos": [
+          3,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "vertex",
+        "pos": [
+          3,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 6
+    },
+    {
+      "seq": 61,
+      "event": "expand",
+      "node": 61,
+      "parent": 31,
+      "cost": 19,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          2
+        ],
+        "pos": [
+          3,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "vertex",
+        "pos": [
+          3,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 6
+    },
+    {
+      "seq": 62,
+      "event": "expand",
+      "node": 62,
+      "parent": 32,
+      "cost": 18,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          1
+        ],
+        "u": [
+          4,
+          2
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "edge",
+        "u": [
+          4,
+          2
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 5
+    },
+    {
+      "seq": 63,
+      "event": "expand",
+      "node": 63,
+      "parent": 32,
+      "cost": 19,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          1
+        ],
+        "u": [
+          4,
+          2
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "edge",
+        "u": [
+          4,
+          1
+        ],
+        "v": [
+          4,
+          2
+        ],
+        "t": 3
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 7
+    },
+    {
+      "seq": 64,
+      "event": "expand",
+      "node": 64,
+      "parent": 34,
+      "cost": 18,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          1
+        ],
+        "u": [
+          2,
+          1
+        ],
+        "v": [
+          1,
+          1
+        ],
+        "t": 0
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "edge",
+        "u": [
+          1,
+          1
+        ],
+        "v": [
+          2,
+          1
+        ],
+        "t": 0
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 7
+    },
+    {
+      "seq": 65,
+      "event": "expand",
+      "node": 65,
+      "parent": 35,
+      "cost": 18,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          1
+        ],
+        "u": [
+          2,
+          1
+        ],
+        "v": [
+          1,
+          1
+        ],
+        "t": 1
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "edge",
+        "u": [
+          2,
+          1
+        ],
+        "v": [
+          1,
+          1
+        ],
+        "t": 1
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 6
+    },
+    {
+      "seq": 66,
+      "event": "expand",
+      "node": 66,
+      "parent": 35,
+      "cost": 19,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          1
+        ],
+        "u": [
+          2,
+          1
+        ],
+        "v": [
+          1,
+          1
+        ],
+        "t": 1
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "edge",
+        "u": [
+          1,
+          1
+        ],
+        "v": [
+          2,
+          1
+        ],
+        "t": 1
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 67,
+      "event": "expand",
+      "node": 67,
+      "parent": 38,
+      "cost": 18,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          2,
+          1
+        ],
+        "t": 2
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "vertex",
+        "pos": [
+          2,
+          1
+        ],
+        "t": 2
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 6
+    },
+    {
+      "seq": 68,
+      "event": "expand",
+      "node": 68,
+      "parent": 38,
+      "cost": 19,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          2,
+          1
+        ],
+        "t": 2
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          2,
+          1
+        ],
+        "t": 2
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 69,
+      "event": "expand",
+      "node": 69,
+      "parent": 54,
+      "cost": 19,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          1,
+          2
+        ],
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 4
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "edge",
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 4
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 9
+    },
+    {
+      "seq": 70,
+      "event": "expand",
+      "node": 70,
+      "parent": 54,
+      "cost": 19,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          1,
+          2
+        ],
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 4
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "edge",
+        "u": [
+          4,
+          1
+        ],
+        "v": [
+          3,
+          1
+        ],
+        "t": 4
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 71,
+      "event": "expand",
+      "node": 71,
+      "parent": 62,
+      "cost": 18,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          4,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "vertex",
+        "pos": [
+          4,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 5
+    },
+    {
+      "seq": 72,
+      "event": "expand",
+      "node": 72,
+      "parent": 62,
+      "cost": 19,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          4,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          4,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 7
+    },
+    {
+      "seq": 73,
+      "event": "expand",
+      "node": 73,
+      "parent": 67,
+      "cost": 18,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          2,
+          1
+        ],
+        "t": 1
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "vertex",
+        "pos": [
+          2,
+          1
+        ],
+        "t": 1
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 6
+    },
+    {
+      "seq": 74,
+      "event": "expand",
+      "node": 74,
+      "parent": 67,
+      "cost": 18,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          2,
+          1
+        ],
+        "t": 1
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          2,
+          1
+        ],
+        "t": 1
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 7
+    },
+    {
+      "seq": 75,
+      "event": "expand",
+      "node": 75,
+      "parent": 71,
+      "cost": 18,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          2
+        ],
+        "pos": [
+          5,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "vertex",
+        "pos": [
+          5,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 5
+    },
+    {
+      "seq": 76,
+      "event": "expand",
+      "node": 76,
+      "parent": 71,
+      "cost": 19,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          2
+        ],
+        "pos": [
+          5,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "vertex",
+        "pos": [
+          5,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 77,
+      "event": "expand",
+      "node": 77,
+      "parent": 73,
+      "cost": 18,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          1
+        ],
+        "u": [
+          2,
+          1
+        ],
+        "v": [
+          1,
+          1
+        ],
+        "t": 0
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "edge",
+        "u": [
+          1,
+          1
+        ],
+        "v": [
+          2,
+          1
+        ],
+        "t": 0
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 7
+    },
+    {
+      "seq": 78,
+      "event": "expand",
+      "node": 78,
+      "parent": 74,
+      "cost": 18,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          1
+        ],
+        "u": [
+          2,
+          1
+        ],
+        "v": [
+          1,
+          1
+        ],
+        "t": 1
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "edge",
+        "u": [
+          2,
+          1
+        ],
+        "v": [
+          1,
+          1
+        ],
+        "t": 1
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 6
+    },
+    {
+      "seq": 79,
+      "event": "expand",
+      "node": 79,
+      "parent": 74,
+      "cost": 19,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          1
+        ],
+        "u": [
+          2,
+          1
+        ],
+        "v": [
+          1,
+          1
+        ],
+        "t": 1
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "edge",
+        "u": [
+          1,
+          1
+        ],
+        "v": [
+          2,
+          1
+        ],
+        "t": 1
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 80,
+      "event": "expand",
+      "node": 80,
+      "parent": 75,
+      "cost": 18,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          1
+        ],
+        "u": [
+          4,
+          1
+        ],
+        "v": [
+          3,
+          1
+        ],
+        "t": 2
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "edge",
+        "u": [
+          4,
+          1
+        ],
+        "v": [
+          3,
+          1
+        ],
+        "t": 2
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 5
+    },
+    {
+      "seq": 81,
+      "event": "expand",
+      "node": 81,
+      "parent": 75,
+      "cost": 19,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          1
+        ],
+        "u": [
+          4,
+          1
+        ],
+        "v": [
+          3,
+          1
+        ],
+        "t": 2
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "edge",
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 2
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 7
+    },
+    {
+      "seq": 82,
+      "event": "expand",
+      "node": 82,
+      "parent": 80,
+      "cost": 18,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          3,
+          1
+        ],
+        "t": 2
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "vertex",
+        "pos": [
+          3,
+          1
+        ],
+        "t": 2
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 5
+    },
+    {
+      "seq": 83,
+      "event": "expand",
+      "node": 83,
+      "parent": 80,
+      "cost": 19,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          3,
+          1
+        ],
+        "t": 2
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          3,
+          1
+        ],
+        "t": 2
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 7
+    },
+    {
+      "seq": 84,
+      "event": "expand",
+      "node": 84,
+      "parent": 82,
+      "cost": 18,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          1
+        ],
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          2,
+          1
+        ],
+        "t": 1
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "edge",
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          2,
+          1
+        ],
+        "t": 1
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 5
+    },
+    {
+      "seq": 85,
+      "event": "expand",
+      "node": 85,
+      "parent": 82,
+      "cost": 19,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          1
+        ],
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          2,
+          1
+        ],
+        "t": 1
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "edge",
+        "u": [
+          2,
+          1
+        ],
+        "v": [
+          3,
+          1
+        ],
+        "t": 1
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 7
+    },
+    {
+      "seq": 86,
+      "event": "expand",
+      "node": 86,
+      "parent": 84,
+      "cost": 18,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          2,
+          1
+        ],
+        "t": 1
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "vertex",
+        "pos": [
+          2,
+          1
+        ],
+        "t": 1
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 5
+    },
+    {
+      "seq": 87,
+      "event": "expand",
+      "node": 87,
+      "parent": 84,
+      "cost": 19,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          2,
+          1
+        ],
+        "t": 1
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          2,
+          1
+        ],
+        "t": 1
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 7
+    },
+    {
+      "seq": 88,
+      "event": "expand",
+      "node": 88,
+      "parent": 86,
+      "cost": 19,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          1
+        ],
+        "u": [
+          2,
+          1
+        ],
+        "v": [
+          1,
+          1
+        ],
+        "t": 0
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "edge",
+        "u": [
+          2,
+          1
+        ],
+        "v": [
+          1,
+          1
+        ],
+        "t": 0
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 6
+    },
+    {
+      "seq": 89,
+      "event": "expand",
+      "node": 89,
+      "parent": 86,
+      "cost": 19,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          1
+        ],
+        "u": [
+          2,
+          1
+        ],
+        "v": [
+          1,
+          1
+        ],
+        "t": 0
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "edge",
+        "u": [
+          1,
+          1
+        ],
+        "v": [
+          2,
+          1
+        ],
+        "t": 0
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 7
+    },
+    {
+      "seq": 90,
+      "event": "expand",
+      "node": 90,
+      "parent": 33,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          4,
+          2
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "vertex",
+        "pos": [
+          4,
+          2
+        ],
+        "t": 5
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 6
+    },
+    {
+      "seq": 91,
+      "event": "expand",
+      "node": 91,
+      "parent": 33,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          4,
+          2
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          4,
+          2
+        ],
+        "t": 5
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 92,
+      "event": "expand",
+      "node": 92,
+      "parent": 36,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          2,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "vertex",
+        "pos": [
+          2,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 7
+    },
+    {
+      "seq": 93,
+      "event": "expand",
+      "node": 93,
+      "parent": 36,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          2,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          2,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 9
+    },
+    {
+      "seq": 94,
+      "event": "expand",
+      "node": 94,
+      "parent": 37,
+      "cost": 20,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          2
+        ],
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "edge",
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 6
+    },
+    {
+      "seq": 95,
+      "event": "expand",
+      "node": 95,
+      "parent": 37,
+      "cost": 20,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          2
+        ],
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "edge",
+        "u": [
+          4,
+          1
+        ],
+        "v": [
+          3,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 7
+    },
+    {
+      "seq": 96,
+      "event": "expand",
+      "node": 96,
+      "parent": 39,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          2,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "vertex",
+        "pos": [
+          2,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 7
+    },
+    {
+      "seq": 97,
+      "event": "expand",
+      "node": 97,
+      "parent": 39,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          2,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          2,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 9
+    },
+    {
+      "seq": 98,
+      "event": "expand",
+      "node": 98,
+      "parent": 40,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          2,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "vertex",
+        "pos": [
+          2,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 7
+    },
+    {
+      "seq": 99,
+      "event": "expand",
+      "node": 99,
+      "parent": 40,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          2,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          2,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 9
+    },
+    {
+      "seq": 100,
+      "event": "expand",
+      "node": 100,
+      "parent": 41,
+      "cost": 20,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          2
+        ],
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "edge",
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 6
+    },
+    {
+      "seq": 101,
+      "event": "expand",
+      "node": 101,
+      "parent": 41,
+      "cost": 20,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          2
+        ],
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "edge",
+        "u": [
+          4,
+          1
+        ],
+        "v": [
+          3,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 7
+    },
+    {
+      "seq": 102,
+      "event": "expand",
+      "node": 102,
+      "parent": 42,
+      "cost": 19,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          1
+        ],
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          2,
+          1
+        ],
+        "t": 2
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "edge",
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          2,
+          1
+        ],
+        "t": 2
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 6
+    },
+    {
+      "seq": 103,
+      "event": "expand",
+      "node": 103,
+      "parent": 42,
+      "cost": 20,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          1
+        ],
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          2,
+          1
+        ],
+        "t": 2
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "edge",
+        "u": [
+          2,
+          1
+        ],
+        "v": [
+          3,
+          1
+        ],
+        "t": 2
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 104,
+      "event": "expand",
+      "node": 104,
+      "parent": 43,
+      "cost": 20,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          2
+        ],
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "edge",
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 6
+    },
+    {
+      "seq": 105,
+      "event": "expand",
+      "node": 105,
+      "parent": 43,
+      "cost": 20,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          2
+        ],
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "edge",
+        "u": [
+          4,
+          1
+        ],
+        "v": [
+          3,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 7
+    },
+    {
+      "seq": 106,
+      "event": "expand",
+      "node": 106,
+      "parent": 44,
+      "cost": 20,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          1,
+          2
+        ],
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 4
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "edge",
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 4
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 9
+    },
+    {
+      "seq": 107,
+      "event": "expand",
+      "node": 107,
+      "parent": 44,
+      "cost": 20,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          1,
+          2
+        ],
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 4
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "edge",
+        "u": [
+          4,
+          1
+        ],
+        "v": [
+          3,
+          1
+        ],
+        "t": 4
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 108,
+      "event": "expand",
+      "node": 108,
+      "parent": 45,
+      "cost": 21,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          4,
+          2
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "vertex",
+        "pos": [
+          4,
+          2
+        ],
+        "t": 5
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 6
+    },
+    {
+      "seq": 109,
+      "event": "expand",
+      "node": 109,
+      "parent": 45,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          4,
+          2
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          4,
+          2
+        ],
+        "t": 5
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 110,
+      "event": "expand",
+      "node": 110,
+      "parent": 46,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          2
+        ],
+        "pos": [
+          2,
+          1
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          2,
+          1
+        ],
+        "t": 5
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 11
+    },
+    {
+      "seq": 111,
+      "event": "expand",
+      "node": 111,
+      "parent": 46,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          2
+        ],
+        "pos": [
+          2,
+          1
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "vertex",
+        "pos": [
+          2,
+          1
+        ],
+        "t": 5
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 7
+    },
+    {
+      "seq": 112,
+      "event": "expand",
+      "node": 112,
+      "parent": 47,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          2
+        ],
+        "pos": [
+          3,
+          1
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          3,
+          1
+        ],
+        "t": 5
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 10
+    },
+    {
+      "seq": 113,
+      "event": "expand",
+      "node": 113,
+      "parent": 47,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          2
+        ],
+        "pos": [
+          3,
+          1
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "vertex",
+        "pos": [
+          3,
+          1
+        ],
+        "t": 5
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 114,
+      "event": "expand",
+      "node": 114,
+      "parent": 48,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          2
+        ],
+        "pos": [
+          3,
+          1
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          3,
+          1
+        ],
+        "t": 5
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 10
+    },
+    {
+      "seq": 115,
+      "event": "expand",
+      "node": 115,
+      "parent": 48,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          2
+        ],
+        "pos": [
+          3,
+          1
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "vertex",
+        "pos": [
+          3,
+          1
+        ],
+        "t": 5
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 116,
+      "event": "expand",
+      "node": 116,
+      "parent": 49,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          2
+        ],
+        "pos": [
+          4,
+          1
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          4,
+          1
+        ],
+        "t": 5
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 9
+    },
+    {
+      "seq": 117,
+      "event": "expand",
+      "node": 117,
+      "parent": 49,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          2
+        ],
+        "pos": [
+          4,
+          1
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "vertex",
+        "pos": [
+          4,
+          1
+        ],
+        "t": 5
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 9
+    },
+    {
+      "seq": 118,
+      "event": "expand",
+      "node": 118,
+      "parent": 50,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          2
+        ],
+        "pos": [
+          3,
+          1
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          3,
+          1
+        ],
+        "t": 5
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 10
+    },
+    {
+      "seq": 119,
+      "event": "expand",
+      "node": 119,
+      "parent": 50,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          2
+        ],
+        "pos": [
+          3,
+          1
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "vertex",
+        "pos": [
+          3,
+          1
+        ],
+        "t": 5
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 120,
+      "event": "expand",
+      "node": 120,
+      "parent": 51,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          2
+        ],
+        "pos": [
+          4,
+          1
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          4,
+          1
+        ],
+        "t": 5
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 9
+    },
+    {
+      "seq": 121,
+      "event": "expand",
+      "node": 121,
+      "parent": 51,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          2
+        ],
+        "pos": [
+          4,
+          1
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "vertex",
+        "pos": [
+          4,
+          1
+        ],
+        "t": 5
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 9
+    },
+    {
+      "seq": 122,
+      "event": "expand",
+      "node": 122,
+      "parent": 53,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          2
+        ],
+        "pos": [
+          4,
+          1
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          4,
+          1
+        ],
+        "t": 5
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 9
+    },
+    {
+      "seq": 123,
+      "event": "expand",
+      "node": 123,
+      "parent": 53,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          2
+        ],
+        "pos": [
+          4,
+          1
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "vertex",
+        "pos": [
+          4,
+          1
+        ],
+        "t": 5
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 9
+    },
+    {
+      "seq": 124,
+      "event": "expand",
+      "node": 124,
+      "parent": 55,
+      "cost": 19,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          2
+        ],
+        "pos": [
+          5,
+          1
+        ],
+        "t": 4
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          5,
+          1
+        ],
+        "t": 4
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 125,
+      "event": "expand",
+      "node": 125,
+      "parent": 55,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          2
+        ],
+        "pos": [
+          5,
+          1
+        ],
+        "t": 4
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "vertex",
+        "pos": [
+          5,
+          1
+        ],
+        "t": 4
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 9
+    },
+    {
+      "seq": 126,
+      "event": "expand",
+      "node": 126,
+      "parent": 57,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          2
+        ],
+        "pos": [
+          4,
+          1
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          4,
+          1
+        ],
+        "t": 5
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 9
+    },
+    {
+      "seq": 127,
+      "event": "expand",
+      "node": 127,
+      "parent": 57,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          2
+        ],
+        "pos": [
+          4,
+          1
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "vertex",
+        "pos": [
+          4,
+          1
+        ],
+        "t": 5
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 9
+    },
+    {
+      "seq": 128,
+      "event": "expand",
+      "node": 128,
+      "parent": 60,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          2,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "vertex",
+        "pos": [
+          2,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 7
+    },
+    {
+      "seq": 129,
+      "event": "expand",
+      "node": 129,
+      "parent": 60,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          2,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          2,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 9
+    },
+    {
+      "seq": 130,
+      "event": "expand",
+      "node": 130,
+      "parent": 61,
+      "cost": 20,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          2
+        ],
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "edge",
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 6
+    },
+    {
+      "seq": 131,
+      "event": "expand",
+      "node": 131,
+      "parent": 61,
+      "cost": 20,
+      "conflict": {
+        "type": "edge",
+        "agents": [
+          0,
+          2
+        ],
+        "u": [
+          3,
+          1
+        ],
+        "v": [
+          4,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "edge",
+        "u": [
+          4,
+          1
+        ],
+        "v": [
+          3,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 7
+    },
+    {
+      "seq": 132,
+      "event": "expand",
+      "node": 132,
+      "parent": 63,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          4,
+          1
+        ],
+        "t": 4
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "vertex",
+        "pos": [
+          4,
+          1
+        ],
+        "t": 4
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 6
+    },
+    {
+      "seq": 133,
+      "event": "expand",
+      "node": 133,
+      "parent": 63,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          4,
+          1
+        ],
+        "t": 4
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          4,
+          1
+        ],
+        "t": 4
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 134,
+      "event": "expand",
+      "node": 134,
+      "parent": 68,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          2,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "vertex",
+        "pos": [
+          2,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 7
+    },
+    {
+      "seq": 135,
+      "event": "expand",
+      "node": 135,
+      "parent": 68,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          2,
+          1
+        ],
+        "t": 3
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          2,
+          1
+        ],
+        "t": 3
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 9
+    },
+    {
+      "seq": 136,
+      "event": "expand",
+      "node": 136,
+      "parent": 69,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          2
+        ],
+        "pos": [
+          3,
+          1
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          3,
+          1
+        ],
+        "t": 5
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 10
+    },
+    {
+      "seq": 137,
+      "event": "expand",
+      "node": 137,
+      "parent": 69,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          2
+        ],
+        "pos": [
+          3,
+          1
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "vertex",
+        "pos": [
+          3,
+          1
+        ],
+        "t": 5
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 138,
+      "event": "expand",
+      "node": 138,
+      "parent": 70,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          2
+        ],
+        "pos": [
+          4,
+          1
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          4,
+          1
+        ],
+        "t": 5
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 9
+    },
+    {
+      "seq": 139,
+      "event": "expand",
+      "node": 139,
+      "parent": 70,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          2
+        ],
+        "pos": [
+          4,
+          1
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "vertex",
+        "pos": [
+          4,
+          1
+        ],
+        "t": 5
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 9
+    },
+    {
+      "seq": 140,
+      "event": "expand",
+      "node": 140,
+      "parent": 72,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          4,
+          1
+        ],
+        "t": 4
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "vertex",
+        "pos": [
+          4,
+          1
+        ],
+        "t": 4
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 6
+    },
+    {
+      "seq": 141,
+      "event": "expand",
+      "node": 141,
+      "parent": 72,
+      "cost": 20,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          1
+        ],
+        "pos": [
+          4,
+          1
+        ],
+        "t": 4
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          4,
+          1
+        ],
+        "t": 4
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 8
+    },
+    {
+      "seq": 142,
+      "event": "goal",
+      "node": 76,
+      "parent": 71,
+      "cost": 19
+    }
+  ],
+  "execution": {
+    "makespan": 8,
+    "paths": [
+      [
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          4,
+          2
+        ]
+      ],
+      [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          4,
+          4
+        ]
+      ],
+      [
+        [
+          6,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    ]
+  }
+}

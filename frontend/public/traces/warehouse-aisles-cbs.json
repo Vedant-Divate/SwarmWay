@@ -1,0 +1,3462 @@
+{
+  "trace_version": 1,
+  "solver": {
+    "name": "cbs",
+    "options": {
+      "tie_break": "fifo"
+    },
+    "package_version": "1.0.0",
+    "seed": null
+  },
+  "instance": {
+    "map": {
+      "id": "warehouse-14x10",
+      "name": "Fulfillment Aisles 14×10",
+      "width": 14,
+      "height": 10,
+      "rows": [
+        "..............",
+        "..............",
+        "..@@@....@@@..",
+        "..@@@....@@@..",
+        "..............",
+        "..............",
+        "..@@@....@@@..",
+        "..@@@....@@@..",
+        "..............",
+        ".............."
+      ],
+      "source": "Swarmway Curated Replay"
+    },
+    "agents": [
+      {
+        "id": 0,
+        "start": [
+          0,
+          1
+        ],
+        "goal": [
+          13,
+          1
+        ]
+      },
+      {
+        "id": 1,
+        "start": [
+          13,
+          4
+        ],
+        "goal": [
+          0,
+          4
+        ]
+      },
+      {
+        "id": 2,
+        "start": [
+          0,
+          5
+        ],
+        "goal": [
+          13,
+          5
+        ]
+      },
+      {
+        "id": 3,
+        "start": [
+          13,
+          8
+        ],
+        "goal": [
+          0,
+          8
+        ]
+      },
+      {
+        "id": 4,
+        "start": [
+          6,
+          0
+        ],
+        "goal": [
+          6,
+          9
+        ]
+      },
+      {
+        "id": 5,
+        "start": [
+          8,
+          9
+        ],
+        "goal": [
+          8,
+          0
+        ]
+      },
+      {
+        "id": 6,
+        "start": [
+          1,
+          0
+        ],
+        "goal": [
+          1,
+          9
+        ]
+      },
+      {
+        "id": 7,
+        "start": [
+          12,
+          9
+        ],
+        "goal": [
+          12,
+          0
+        ]
+      },
+      {
+        "id": 8,
+        "start": [
+          5,
+          0
+        ],
+        "goal": [
+          5,
+          9
+        ]
+      },
+      {
+        "id": 9,
+        "start": [
+          9,
+          9
+        ],
+        "goal": [
+          9,
+          0
+        ]
+      },
+      {
+        "id": 10,
+        "start": [
+          0,
+          9
+        ],
+        "goal": [
+          13,
+          9
+        ]
+      },
+      {
+        "id": 11,
+        "start": [
+          13,
+          0
+        ],
+        "goal": [
+          0,
+          0
+        ]
+      }
+    ]
+  },
+  "result": {
+    "status": "solved",
+    "soc": 139,
+    "makespan": 14,
+    "runtime_ms": 15.86,
+    "budget_ms": 10000,
+    "ct_expanded": 42,
+    "ct_generated": 85,
+    "low_level_expansions": 2333,
+    "validity": "valid",
+    "notes": []
+  },
+  "search": [
+    {
+      "seq": 0,
+      "event": "root",
+      "node": 0,
+      "cost": 134
+    },
+    {
+      "seq": 1,
+      "event": "expand",
+      "node": 1,
+      "parent": 0,
+      "cost": 135,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          6
+        ],
+        "pos": [
+          1,
+          1
+        ],
+        "t": 1
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "vertex",
+        "pos": [
+          1,
+          1
+        ],
+        "t": 1
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 14
+    },
+    {
+      "seq": 2,
+      "event": "expand",
+      "node": 2,
+      "parent": 0,
+      "cost": 135,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          6
+        ],
+        "pos": [
+          1,
+          1
+        ],
+        "t": 1
+      },
+      "constraint": {
+        "agent": 6,
+        "type": "vertex",
+        "pos": [
+          1,
+          1
+        ],
+        "t": 1
+      },
+      "replanned_agent": 6,
+      "replanned_cost": 10
+    },
+    {
+      "seq": 3,
+      "event": "expand",
+      "node": 3,
+      "parent": 1,
+      "cost": 136,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          3,
+          7
+        ],
+        "pos": [
+          12,
+          8
+        ],
+        "t": 1
+      },
+      "constraint": {
+        "agent": 3,
+        "type": "vertex",
+        "pos": [
+          12,
+          8
+        ],
+        "t": 1
+      },
+      "replanned_agent": 3,
+      "replanned_cost": 14
+    },
+    {
+      "seq": 4,
+      "event": "expand",
+      "node": 4,
+      "parent": 1,
+      "cost": 136,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          3,
+          7
+        ],
+        "pos": [
+          12,
+          8
+        ],
+        "t": 1
+      },
+      "constraint": {
+        "agent": 7,
+        "type": "vertex",
+        "pos": [
+          12,
+          8
+        ],
+        "t": 1
+      },
+      "replanned_agent": 7,
+      "replanned_cost": 10
+    },
+    {
+      "seq": 5,
+      "event": "expand",
+      "node": 5,
+      "parent": 2,
+      "cost": 136,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          3,
+          7
+        ],
+        "pos": [
+          12,
+          8
+        ],
+        "t": 1
+      },
+      "constraint": {
+        "agent": 3,
+        "type": "vertex",
+        "pos": [
+          12,
+          8
+        ],
+        "t": 1
+      },
+      "replanned_agent": 3,
+      "replanned_cost": 14
+    },
+    {
+      "seq": 6,
+      "event": "expand",
+      "node": 6,
+      "parent": 2,
+      "cost": 136,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          3,
+          7
+        ],
+        "pos": [
+          12,
+          8
+        ],
+        "t": 1
+      },
+      "constraint": {
+        "agent": 7,
+        "type": "vertex",
+        "pos": [
+          12,
+          8
+        ],
+        "t": 1
+      },
+      "replanned_agent": 7,
+      "replanned_cost": 10
+    },
+    {
+      "seq": 7,
+      "event": "expand",
+      "node": 7,
+      "parent": 3,
+      "cost": 137,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          5
+        ],
+        "pos": [
+          8,
+          4
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          8,
+          4
+        ],
+        "t": 5
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 14
+    },
+    {
+      "seq": 8,
+      "event": "expand",
+      "node": 8,
+      "parent": 3,
+      "cost": 137,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          5
+        ],
+        "pos": [
+          8,
+          4
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 5,
+        "type": "vertex",
+        "pos": [
+          8,
+          4
+        ],
+        "t": 5
+      },
+      "replanned_agent": 5,
+      "replanned_cost": 10
+    },
+    {
+      "seq": 9,
+      "event": "expand",
+      "node": 9,
+      "parent": 4,
+      "cost": 137,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          5
+        ],
+        "pos": [
+          8,
+          4
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          8,
+          4
+        ],
+        "t": 5
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 14
+    },
+    {
+      "seq": 10,
+      "event": "expand",
+      "node": 10,
+      "parent": 4,
+      "cost": 137,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          5
+        ],
+        "pos": [
+          8,
+          4
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 5,
+        "type": "vertex",
+        "pos": [
+          8,
+          4
+        ],
+        "t": 5
+      },
+      "replanned_agent": 5,
+      "replanned_cost": 10
+    },
+    {
+      "seq": 11,
+      "event": "expand",
+      "node": 11,
+      "parent": 5,
+      "cost": 137,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          5
+        ],
+        "pos": [
+          8,
+          4
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          8,
+          4
+        ],
+        "t": 5
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 14
+    },
+    {
+      "seq": 12,
+      "event": "expand",
+      "node": 12,
+      "parent": 5,
+      "cost": 137,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          5
+        ],
+        "pos": [
+          8,
+          4
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 5,
+        "type": "vertex",
+        "pos": [
+          8,
+          4
+        ],
+        "t": 5
+      },
+      "replanned_agent": 5,
+      "replanned_cost": 10
+    },
+    {
+      "seq": 13,
+      "event": "expand",
+      "node": 13,
+      "parent": 6,
+      "cost": 137,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          5
+        ],
+        "pos": [
+          8,
+          4
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          8,
+          4
+        ],
+        "t": 5
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 14
+    },
+    {
+      "seq": 14,
+      "event": "expand",
+      "node": 14,
+      "parent": 6,
+      "cost": 137,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          5
+        ],
+        "pos": [
+          8,
+          4
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 5,
+        "type": "vertex",
+        "pos": [
+          8,
+          4
+        ],
+        "t": 5
+      },
+      "replanned_agent": 5,
+      "replanned_cost": 10
+    },
+    {
+      "seq": 15,
+      "event": "expand",
+      "node": 15,
+      "parent": 7,
+      "cost": 138,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          2,
+          8
+        ],
+        "pos": [
+          5,
+          5
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "vertex",
+        "pos": [
+          5,
+          5
+        ],
+        "t": 5
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 14
+    },
+    {
+      "seq": 16,
+      "event": "expand",
+      "node": 16,
+      "parent": 7,
+      "cost": 138,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          2,
+          8
+        ],
+        "pos": [
+          5,
+          5
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 8,
+        "type": "vertex",
+        "pos": [
+          5,
+          5
+        ],
+        "t": 5
+      },
+      "replanned_agent": 8,
+      "replanned_cost": 10
+    },
+    {
+      "seq": 17,
+      "event": "expand",
+      "node": 17,
+      "parent": 8,
+      "cost": 138,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          2,
+          8
+        ],
+        "pos": [
+          5,
+          5
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "vertex",
+        "pos": [
+          5,
+          5
+        ],
+        "t": 5
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 14
+    },
+    {
+      "seq": 18,
+      "event": "expand",
+      "node": 18,
+      "parent": 8,
+      "cost": 138,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          2,
+          8
+        ],
+        "pos": [
+          5,
+          5
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 8,
+        "type": "vertex",
+        "pos": [
+          5,
+          5
+        ],
+        "t": 5
+      },
+      "replanned_agent": 8,
+      "replanned_cost": 10
+    },
+    {
+      "seq": 19,
+      "event": "expand",
+      "node": 19,
+      "parent": 9,
+      "cost": 138,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          2,
+          8
+        ],
+        "pos": [
+          5,
+          5
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "vertex",
+        "pos": [
+          5,
+          5
+        ],
+        "t": 5
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 14
+    },
+    {
+      "seq": 20,
+      "event": "expand",
+      "node": 20,
+      "parent": 9,
+      "cost": 138,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          2,
+          8
+        ],
+        "pos": [
+          5,
+          5
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 8,
+        "type": "vertex",
+        "pos": [
+          5,
+          5
+        ],
+        "t": 5
+      },
+      "replanned_agent": 8,
+      "replanned_cost": 10
+    },
+    {
+      "seq": 21,
+      "event": "expand",
+      "node": 21,
+      "parent": 10,
+      "cost": 138,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          2,
+          8
+        ],
+        "pos": [
+          5,
+          5
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "vertex",
+        "pos": [
+          5,
+          5
+        ],
+        "t": 5
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 14
+    },
+    {
+      "seq": 22,
+      "event": "expand",
+      "node": 22,
+      "parent": 10,
+      "cost": 138,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          2,
+          8
+        ],
+        "pos": [
+          5,
+          5
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 8,
+        "type": "vertex",
+        "pos": [
+          5,
+          5
+        ],
+        "t": 5
+      },
+      "replanned_agent": 8,
+      "replanned_cost": 10
+    },
+    {
+      "seq": 23,
+      "event": "expand",
+      "node": 23,
+      "parent": 11,
+      "cost": 138,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          2,
+          8
+        ],
+        "pos": [
+          5,
+          5
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "vertex",
+        "pos": [
+          5,
+          5
+        ],
+        "t": 5
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 14
+    },
+    {
+      "seq": 24,
+      "event": "expand",
+      "node": 24,
+      "parent": 11,
+      "cost": 138,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          2,
+          8
+        ],
+        "pos": [
+          5,
+          5
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 8,
+        "type": "vertex",
+        "pos": [
+          5,
+          5
+        ],
+        "t": 5
+      },
+      "replanned_agent": 8,
+      "replanned_cost": 10
+    },
+    {
+      "seq": 25,
+      "event": "expand",
+      "node": 25,
+      "parent": 12,
+      "cost": 138,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          2,
+          8
+        ],
+        "pos": [
+          5,
+          5
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "vertex",
+        "pos": [
+          5,
+          5
+        ],
+        "t": 5
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 14
+    },
+    {
+      "seq": 26,
+      "event": "expand",
+      "node": 26,
+      "parent": 12,
+      "cost": 138,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          2,
+          8
+        ],
+        "pos": [
+          5,
+          5
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 8,
+        "type": "vertex",
+        "pos": [
+          5,
+          5
+        ],
+        "t": 5
+      },
+      "replanned_agent": 8,
+      "replanned_cost": 10
+    },
+    {
+      "seq": 27,
+      "event": "expand",
+      "node": 27,
+      "parent": 13,
+      "cost": 138,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          2,
+          8
+        ],
+        "pos": [
+          5,
+          5
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "vertex",
+        "pos": [
+          5,
+          5
+        ],
+        "t": 5
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 14
+    },
+    {
+      "seq": 28,
+      "event": "expand",
+      "node": 28,
+      "parent": 13,
+      "cost": 138,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          2,
+          8
+        ],
+        "pos": [
+          5,
+          5
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 8,
+        "type": "vertex",
+        "pos": [
+          5,
+          5
+        ],
+        "t": 5
+      },
+      "replanned_agent": 8,
+      "replanned_cost": 10
+    },
+    {
+      "seq": 29,
+      "event": "expand",
+      "node": 29,
+      "parent": 14,
+      "cost": 138,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          2,
+          8
+        ],
+        "pos": [
+          5,
+          5
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 2,
+        "type": "vertex",
+        "pos": [
+          5,
+          5
+        ],
+        "t": 5
+      },
+      "replanned_agent": 2,
+      "replanned_cost": 14
+    },
+    {
+      "seq": 30,
+      "event": "expand",
+      "node": 30,
+      "parent": 14,
+      "cost": 138,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          2,
+          8
+        ],
+        "pos": [
+          5,
+          5
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 8,
+        "type": "vertex",
+        "pos": [
+          5,
+          5
+        ],
+        "t": 5
+      },
+      "replanned_agent": 8,
+      "replanned_cost": 10
+    },
+    {
+      "seq": 31,
+      "event": "expand",
+      "node": 31,
+      "parent": 15,
+      "cost": 139,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          9
+        ],
+        "pos": [
+          8,
+          4
+        ],
+        "t": 6
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          8,
+          4
+        ],
+        "t": 6
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 15
+    },
+    {
+      "seq": 32,
+      "event": "expand",
+      "node": 32,
+      "parent": 15,
+      "cost": 139,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          9
+        ],
+        "pos": [
+          8,
+          4
+        ],
+        "t": 6
+      },
+      "constraint": {
+        "agent": 9,
+        "type": "vertex",
+        "pos": [
+          8,
+          4
+        ],
+        "t": 6
+      },
+      "replanned_agent": 9,
+      "replanned_cost": 12
+    },
+    {
+      "seq": 33,
+      "event": "expand",
+      "node": 33,
+      "parent": 16,
+      "cost": 139,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          9
+        ],
+        "pos": [
+          8,
+          4
+        ],
+        "t": 6
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          8,
+          4
+        ],
+        "t": 6
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 15
+    },
+    {
+      "seq": 34,
+      "event": "expand",
+      "node": 34,
+      "parent": 16,
+      "cost": 139,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          9
+        ],
+        "pos": [
+          8,
+          4
+        ],
+        "t": 6
+      },
+      "constraint": {
+        "agent": 9,
+        "type": "vertex",
+        "pos": [
+          8,
+          4
+        ],
+        "t": 6
+      },
+      "replanned_agent": 9,
+      "replanned_cost": 12
+    },
+    {
+      "seq": 35,
+      "event": "expand",
+      "node": 35,
+      "parent": 17,
+      "cost": 139,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          5,
+          9
+        ],
+        "pos": [
+          8,
+          5
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 5,
+        "type": "vertex",
+        "pos": [
+          8,
+          5
+        ],
+        "t": 5
+      },
+      "replanned_agent": 5,
+      "replanned_cost": 11
+    },
+    {
+      "seq": 36,
+      "event": "expand",
+      "node": 36,
+      "parent": 17,
+      "cost": 139,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          5,
+          9
+        ],
+        "pos": [
+          8,
+          5
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 9,
+        "type": "vertex",
+        "pos": [
+          8,
+          5
+        ],
+        "t": 5
+      },
+      "replanned_agent": 9,
+      "replanned_cost": 12
+    },
+    {
+      "seq": 37,
+      "event": "expand",
+      "node": 37,
+      "parent": 18,
+      "cost": 139,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          5,
+          9
+        ],
+        "pos": [
+          8,
+          5
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 5,
+        "type": "vertex",
+        "pos": [
+          8,
+          5
+        ],
+        "t": 5
+      },
+      "replanned_agent": 5,
+      "replanned_cost": 11
+    },
+    {
+      "seq": 38,
+      "event": "expand",
+      "node": 38,
+      "parent": 18,
+      "cost": 139,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          5,
+          9
+        ],
+        "pos": [
+          8,
+          5
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 9,
+        "type": "vertex",
+        "pos": [
+          8,
+          5
+        ],
+        "t": 5
+      },
+      "replanned_agent": 9,
+      "replanned_cost": 12
+    },
+    {
+      "seq": 39,
+      "event": "expand",
+      "node": 39,
+      "parent": 19,
+      "cost": 139,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          9
+        ],
+        "pos": [
+          8,
+          4
+        ],
+        "t": 6
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          8,
+          4
+        ],
+        "t": 6
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 15
+    },
+    {
+      "seq": 40,
+      "event": "expand",
+      "node": 40,
+      "parent": 19,
+      "cost": 139,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          9
+        ],
+        "pos": [
+          8,
+          4
+        ],
+        "t": 6
+      },
+      "constraint": {
+        "agent": 9,
+        "type": "vertex",
+        "pos": [
+          8,
+          4
+        ],
+        "t": 6
+      },
+      "replanned_agent": 9,
+      "replanned_cost": 12
+    },
+    {
+      "seq": 41,
+      "event": "expand",
+      "node": 41,
+      "parent": 20,
+      "cost": 139,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          9
+        ],
+        "pos": [
+          8,
+          4
+        ],
+        "t": 6
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          8,
+          4
+        ],
+        "t": 6
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 15
+    },
+    {
+      "seq": 42,
+      "event": "expand",
+      "node": 42,
+      "parent": 20,
+      "cost": 139,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          9
+        ],
+        "pos": [
+          8,
+          4
+        ],
+        "t": 6
+      },
+      "constraint": {
+        "agent": 9,
+        "type": "vertex",
+        "pos": [
+          8,
+          4
+        ],
+        "t": 6
+      },
+      "replanned_agent": 9,
+      "replanned_cost": 12
+    },
+    {
+      "seq": 43,
+      "event": "expand",
+      "node": 43,
+      "parent": 21,
+      "cost": 139,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          5,
+          9
+        ],
+        "pos": [
+          8,
+          5
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 5,
+        "type": "vertex",
+        "pos": [
+          8,
+          5
+        ],
+        "t": 5
+      },
+      "replanned_agent": 5,
+      "replanned_cost": 11
+    },
+    {
+      "seq": 44,
+      "event": "expand",
+      "node": 44,
+      "parent": 21,
+      "cost": 139,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          5,
+          9
+        ],
+        "pos": [
+          8,
+          5
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 9,
+        "type": "vertex",
+        "pos": [
+          8,
+          5
+        ],
+        "t": 5
+      },
+      "replanned_agent": 9,
+      "replanned_cost": 12
+    },
+    {
+      "seq": 45,
+      "event": "expand",
+      "node": 45,
+      "parent": 22,
+      "cost": 139,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          5,
+          9
+        ],
+        "pos": [
+          8,
+          5
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 5,
+        "type": "vertex",
+        "pos": [
+          8,
+          5
+        ],
+        "t": 5
+      },
+      "replanned_agent": 5,
+      "replanned_cost": 11
+    },
+    {
+      "seq": 46,
+      "event": "expand",
+      "node": 46,
+      "parent": 22,
+      "cost": 139,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          5,
+          9
+        ],
+        "pos": [
+          8,
+          5
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 9,
+        "type": "vertex",
+        "pos": [
+          8,
+          5
+        ],
+        "t": 5
+      },
+      "replanned_agent": 9,
+      "replanned_cost": 12
+    },
+    {
+      "seq": 47,
+      "event": "expand",
+      "node": 47,
+      "parent": 23,
+      "cost": 139,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          9
+        ],
+        "pos": [
+          8,
+          4
+        ],
+        "t": 6
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          8,
+          4
+        ],
+        "t": 6
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 15
+    },
+    {
+      "seq": 48,
+      "event": "expand",
+      "node": 48,
+      "parent": 23,
+      "cost": 139,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          9
+        ],
+        "pos": [
+          8,
+          4
+        ],
+        "t": 6
+      },
+      "constraint": {
+        "agent": 9,
+        "type": "vertex",
+        "pos": [
+          8,
+          4
+        ],
+        "t": 6
+      },
+      "replanned_agent": 9,
+      "replanned_cost": 12
+    },
+    {
+      "seq": 49,
+      "event": "expand",
+      "node": 49,
+      "parent": 24,
+      "cost": 139,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          9
+        ],
+        "pos": [
+          8,
+          4
+        ],
+        "t": 6
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          8,
+          4
+        ],
+        "t": 6
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 15
+    },
+    {
+      "seq": 50,
+      "event": "expand",
+      "node": 50,
+      "parent": 24,
+      "cost": 139,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          9
+        ],
+        "pos": [
+          8,
+          4
+        ],
+        "t": 6
+      },
+      "constraint": {
+        "agent": 9,
+        "type": "vertex",
+        "pos": [
+          8,
+          4
+        ],
+        "t": 6
+      },
+      "replanned_agent": 9,
+      "replanned_cost": 12
+    },
+    {
+      "seq": 51,
+      "event": "expand",
+      "node": 51,
+      "parent": 25,
+      "cost": 139,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          5,
+          9
+        ],
+        "pos": [
+          8,
+          5
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 5,
+        "type": "vertex",
+        "pos": [
+          8,
+          5
+        ],
+        "t": 5
+      },
+      "replanned_agent": 5,
+      "replanned_cost": 11
+    },
+    {
+      "seq": 52,
+      "event": "expand",
+      "node": 52,
+      "parent": 25,
+      "cost": 139,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          5,
+          9
+        ],
+        "pos": [
+          8,
+          5
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 9,
+        "type": "vertex",
+        "pos": [
+          8,
+          5
+        ],
+        "t": 5
+      },
+      "replanned_agent": 9,
+      "replanned_cost": 12
+    },
+    {
+      "seq": 53,
+      "event": "expand",
+      "node": 53,
+      "parent": 26,
+      "cost": 139,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          5,
+          9
+        ],
+        "pos": [
+          8,
+          5
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 5,
+        "type": "vertex",
+        "pos": [
+          8,
+          5
+        ],
+        "t": 5
+      },
+      "replanned_agent": 5,
+      "replanned_cost": 11
+    },
+    {
+      "seq": 54,
+      "event": "expand",
+      "node": 54,
+      "parent": 26,
+      "cost": 139,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          5,
+          9
+        ],
+        "pos": [
+          8,
+          5
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 9,
+        "type": "vertex",
+        "pos": [
+          8,
+          5
+        ],
+        "t": 5
+      },
+      "replanned_agent": 9,
+      "replanned_cost": 12
+    },
+    {
+      "seq": 55,
+      "event": "expand",
+      "node": 55,
+      "parent": 27,
+      "cost": 139,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          9
+        ],
+        "pos": [
+          8,
+          4
+        ],
+        "t": 6
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          8,
+          4
+        ],
+        "t": 6
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 15
+    },
+    {
+      "seq": 56,
+      "event": "expand",
+      "node": 56,
+      "parent": 27,
+      "cost": 139,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          9
+        ],
+        "pos": [
+          8,
+          4
+        ],
+        "t": 6
+      },
+      "constraint": {
+        "agent": 9,
+        "type": "vertex",
+        "pos": [
+          8,
+          4
+        ],
+        "t": 6
+      },
+      "replanned_agent": 9,
+      "replanned_cost": 12
+    },
+    {
+      "seq": 57,
+      "event": "expand",
+      "node": 57,
+      "parent": 28,
+      "cost": 139,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          9
+        ],
+        "pos": [
+          8,
+          4
+        ],
+        "t": 6
+      },
+      "constraint": {
+        "agent": 1,
+        "type": "vertex",
+        "pos": [
+          8,
+          4
+        ],
+        "t": 6
+      },
+      "replanned_agent": 1,
+      "replanned_cost": 15
+    },
+    {
+      "seq": 58,
+      "event": "expand",
+      "node": 58,
+      "parent": 28,
+      "cost": 139,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          1,
+          9
+        ],
+        "pos": [
+          8,
+          4
+        ],
+        "t": 6
+      },
+      "constraint": {
+        "agent": 9,
+        "type": "vertex",
+        "pos": [
+          8,
+          4
+        ],
+        "t": 6
+      },
+      "replanned_agent": 9,
+      "replanned_cost": 12
+    },
+    {
+      "seq": 59,
+      "event": "expand",
+      "node": 59,
+      "parent": 29,
+      "cost": 139,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          5,
+          9
+        ],
+        "pos": [
+          8,
+          5
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 5,
+        "type": "vertex",
+        "pos": [
+          8,
+          5
+        ],
+        "t": 5
+      },
+      "replanned_agent": 5,
+      "replanned_cost": 11
+    },
+    {
+      "seq": 60,
+      "event": "expand",
+      "node": 60,
+      "parent": 29,
+      "cost": 139,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          5,
+          9
+        ],
+        "pos": [
+          8,
+          5
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 9,
+        "type": "vertex",
+        "pos": [
+          8,
+          5
+        ],
+        "t": 5
+      },
+      "replanned_agent": 9,
+      "replanned_cost": 12
+    },
+    {
+      "seq": 61,
+      "event": "expand",
+      "node": 61,
+      "parent": 30,
+      "cost": 139,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          5,
+          9
+        ],
+        "pos": [
+          8,
+          5
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 5,
+        "type": "vertex",
+        "pos": [
+          8,
+          5
+        ],
+        "t": 5
+      },
+      "replanned_agent": 5,
+      "replanned_cost": 11
+    },
+    {
+      "seq": 62,
+      "event": "expand",
+      "node": 62,
+      "parent": 30,
+      "cost": 139,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          5,
+          9
+        ],
+        "pos": [
+          8,
+          5
+        ],
+        "t": 5
+      },
+      "constraint": {
+        "agent": 9,
+        "type": "vertex",
+        "pos": [
+          8,
+          5
+        ],
+        "t": 5
+      },
+      "replanned_agent": 9,
+      "replanned_cost": 12
+    },
+    {
+      "seq": 63,
+      "event": "expand",
+      "node": 63,
+      "parent": 31,
+      "cost": 140,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          3,
+          4
+        ],
+        "pos": [
+          6,
+          8
+        ],
+        "t": 8
+      },
+      "constraint": {
+        "agent": 3,
+        "type": "vertex",
+        "pos": [
+          6,
+          8
+        ],
+        "t": 8
+      },
+      "replanned_agent": 3,
+      "replanned_cost": 15
+    },
+    {
+      "seq": 64,
+      "event": "expand",
+      "node": 64,
+      "parent": 31,
+      "cost": 140,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          3,
+          4
+        ],
+        "pos": [
+          6,
+          8
+        ],
+        "t": 8
+      },
+      "constraint": {
+        "agent": 4,
+        "type": "vertex",
+        "pos": [
+          6,
+          8
+        ],
+        "t": 8
+      },
+      "replanned_agent": 4,
+      "replanned_cost": 10
+    },
+    {
+      "seq": 65,
+      "event": "expand",
+      "node": 65,
+      "parent": 32,
+      "cost": 140,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          3,
+          4
+        ],
+        "pos": [
+          6,
+          8
+        ],
+        "t": 8
+      },
+      "constraint": {
+        "agent": 3,
+        "type": "vertex",
+        "pos": [
+          6,
+          8
+        ],
+        "t": 8
+      },
+      "replanned_agent": 3,
+      "replanned_cost": 15
+    },
+    {
+      "seq": 66,
+      "event": "expand",
+      "node": 66,
+      "parent": 32,
+      "cost": 140,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          3,
+          4
+        ],
+        "pos": [
+          6,
+          8
+        ],
+        "t": 8
+      },
+      "constraint": {
+        "agent": 4,
+        "type": "vertex",
+        "pos": [
+          6,
+          8
+        ],
+        "t": 8
+      },
+      "replanned_agent": 4,
+      "replanned_cost": 10
+    },
+    {
+      "seq": 67,
+      "event": "expand",
+      "node": 67,
+      "parent": 33,
+      "cost": 140,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          3,
+          4
+        ],
+        "pos": [
+          6,
+          8
+        ],
+        "t": 8
+      },
+      "constraint": {
+        "agent": 3,
+        "type": "vertex",
+        "pos": [
+          6,
+          8
+        ],
+        "t": 8
+      },
+      "replanned_agent": 3,
+      "replanned_cost": 15
+    },
+    {
+      "seq": 68,
+      "event": "expand",
+      "node": 68,
+      "parent": 33,
+      "cost": 140,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          3,
+          4
+        ],
+        "pos": [
+          6,
+          8
+        ],
+        "t": 8
+      },
+      "constraint": {
+        "agent": 4,
+        "type": "vertex",
+        "pos": [
+          6,
+          8
+        ],
+        "t": 8
+      },
+      "replanned_agent": 4,
+      "replanned_cost": 10
+    },
+    {
+      "seq": 69,
+      "event": "expand",
+      "node": 69,
+      "parent": 34,
+      "cost": 140,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          3,
+          4
+        ],
+        "pos": [
+          6,
+          8
+        ],
+        "t": 8
+      },
+      "constraint": {
+        "agent": 3,
+        "type": "vertex",
+        "pos": [
+          6,
+          8
+        ],
+        "t": 8
+      },
+      "replanned_agent": 3,
+      "replanned_cost": 15
+    },
+    {
+      "seq": 70,
+      "event": "expand",
+      "node": 70,
+      "parent": 34,
+      "cost": 140,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          3,
+          4
+        ],
+        "pos": [
+          6,
+          8
+        ],
+        "t": 8
+      },
+      "constraint": {
+        "agent": 4,
+        "type": "vertex",
+        "pos": [
+          6,
+          8
+        ],
+        "t": 8
+      },
+      "replanned_agent": 4,
+      "replanned_cost": 10
+    },
+    {
+      "seq": 71,
+      "event": "expand",
+      "node": 71,
+      "parent": 35,
+      "cost": 140,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          3,
+          4
+        ],
+        "pos": [
+          6,
+          8
+        ],
+        "t": 8
+      },
+      "constraint": {
+        "agent": 3,
+        "type": "vertex",
+        "pos": [
+          6,
+          8
+        ],
+        "t": 8
+      },
+      "replanned_agent": 3,
+      "replanned_cost": 15
+    },
+    {
+      "seq": 72,
+      "event": "expand",
+      "node": 72,
+      "parent": 35,
+      "cost": 140,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          3,
+          4
+        ],
+        "pos": [
+          6,
+          8
+        ],
+        "t": 8
+      },
+      "constraint": {
+        "agent": 4,
+        "type": "vertex",
+        "pos": [
+          6,
+          8
+        ],
+        "t": 8
+      },
+      "replanned_agent": 4,
+      "replanned_cost": 10
+    },
+    {
+      "seq": 73,
+      "event": "expand",
+      "node": 73,
+      "parent": 36,
+      "cost": 140,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          3,
+          4
+        ],
+        "pos": [
+          6,
+          8
+        ],
+        "t": 8
+      },
+      "constraint": {
+        "agent": 3,
+        "type": "vertex",
+        "pos": [
+          6,
+          8
+        ],
+        "t": 8
+      },
+      "replanned_agent": 3,
+      "replanned_cost": 15
+    },
+    {
+      "seq": 74,
+      "event": "expand",
+      "node": 74,
+      "parent": 36,
+      "cost": 140,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          3,
+          4
+        ],
+        "pos": [
+          6,
+          8
+        ],
+        "t": 8
+      },
+      "constraint": {
+        "agent": 4,
+        "type": "vertex",
+        "pos": [
+          6,
+          8
+        ],
+        "t": 8
+      },
+      "replanned_agent": 4,
+      "replanned_cost": 10
+    },
+    {
+      "seq": 75,
+      "event": "expand",
+      "node": 75,
+      "parent": 37,
+      "cost": 140,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          3,
+          4
+        ],
+        "pos": [
+          6,
+          8
+        ],
+        "t": 8
+      },
+      "constraint": {
+        "agent": 3,
+        "type": "vertex",
+        "pos": [
+          6,
+          8
+        ],
+        "t": 8
+      },
+      "replanned_agent": 3,
+      "replanned_cost": 15
+    },
+    {
+      "seq": 76,
+      "event": "expand",
+      "node": 76,
+      "parent": 37,
+      "cost": 140,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          3,
+          4
+        ],
+        "pos": [
+          6,
+          8
+        ],
+        "t": 8
+      },
+      "constraint": {
+        "agent": 4,
+        "type": "vertex",
+        "pos": [
+          6,
+          8
+        ],
+        "t": 8
+      },
+      "replanned_agent": 4,
+      "replanned_cost": 10
+    },
+    {
+      "seq": 77,
+      "event": "expand",
+      "node": 77,
+      "parent": 38,
+      "cost": 140,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          3,
+          4
+        ],
+        "pos": [
+          6,
+          8
+        ],
+        "t": 8
+      },
+      "constraint": {
+        "agent": 3,
+        "type": "vertex",
+        "pos": [
+          6,
+          8
+        ],
+        "t": 8
+      },
+      "replanned_agent": 3,
+      "replanned_cost": 15
+    },
+    {
+      "seq": 78,
+      "event": "expand",
+      "node": 78,
+      "parent": 38,
+      "cost": 140,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          3,
+          4
+        ],
+        "pos": [
+          6,
+          8
+        ],
+        "t": 8
+      },
+      "constraint": {
+        "agent": 4,
+        "type": "vertex",
+        "pos": [
+          6,
+          8
+        ],
+        "t": 8
+      },
+      "replanned_agent": 4,
+      "replanned_cost": 10
+    },
+    {
+      "seq": 79,
+      "event": "expand",
+      "node": 79,
+      "parent": 39,
+      "cost": 140,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          3,
+          8
+        ],
+        "pos": [
+          5,
+          8
+        ],
+        "t": 8
+      },
+      "constraint": {
+        "agent": 3,
+        "type": "vertex",
+        "pos": [
+          5,
+          8
+        ],
+        "t": 8
+      },
+      "replanned_agent": 3,
+      "replanned_cost": 14
+    },
+    {
+      "seq": 80,
+      "event": "expand",
+      "node": 80,
+      "parent": 39,
+      "cost": 140,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          3,
+          8
+        ],
+        "pos": [
+          5,
+          8
+        ],
+        "t": 8
+      },
+      "constraint": {
+        "agent": 8,
+        "type": "vertex",
+        "pos": [
+          5,
+          8
+        ],
+        "t": 8
+      },
+      "replanned_agent": 8,
+      "replanned_cost": 10
+    },
+    {
+      "seq": 81,
+      "event": "expand",
+      "node": 81,
+      "parent": 40,
+      "cost": 140,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          3,
+          8
+        ],
+        "pos": [
+          5,
+          8
+        ],
+        "t": 8
+      },
+      "constraint": {
+        "agent": 3,
+        "type": "vertex",
+        "pos": [
+          5,
+          8
+        ],
+        "t": 8
+      },
+      "replanned_agent": 3,
+      "replanned_cost": 14
+    },
+    {
+      "seq": 82,
+      "event": "expand",
+      "node": 82,
+      "parent": 40,
+      "cost": 140,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          3,
+          8
+        ],
+        "pos": [
+          5,
+          8
+        ],
+        "t": 8
+      },
+      "constraint": {
+        "agent": 8,
+        "type": "vertex",
+        "pos": [
+          5,
+          8
+        ],
+        "t": 8
+      },
+      "replanned_agent": 8,
+      "replanned_cost": 10
+    },
+    {
+      "seq": 83,
+      "event": "expand",
+      "node": 83,
+      "parent": 41,
+      "cost": 140,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          9
+        ],
+        "pos": [
+          8,
+          1
+        ],
+        "t": 9
+      },
+      "constraint": {
+        "agent": 0,
+        "type": "vertex",
+        "pos": [
+          8,
+          1
+        ],
+        "t": 9
+      },
+      "replanned_agent": 0,
+      "replanned_cost": 15
+    },
+    {
+      "seq": 84,
+      "event": "expand",
+      "node": 84,
+      "parent": 41,
+      "cost": 140,
+      "conflict": {
+        "type": "vertex",
+        "agents": [
+          0,
+          9
+        ],
+        "pos": [
+          8,
+          1
+        ],
+        "t": 9
+      },
+      "constraint": {
+        "agent": 9,
+        "type": "vertex",
+        "pos": [
+          8,
+          1
+        ],
+        "t": 9
+      },
+      "replanned_agent": 9,
+      "replanned_cost": 12
+    },
+    {
+      "seq": 85,
+      "event": "goal",
+      "node": 42,
+      "parent": 20,
+      "cost": 139
+    }
+  ],
+  "execution": {
+    "makespan": 14,
+    "paths": [
+      [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          9,
+          1
+        ],
+        [
+          10,
+          1
+        ],
+        [
+          11,
+          1
+        ],
+        [
+          12,
+          1
+        ],
+        [
+          13,
+          1
+        ]
+      ],
+      [
+        [
+          13,
+          4
+        ],
+        [
+          12,
+          4
+        ],
+        [
+          11,
+          4
+        ],
+        [
+          10,
+          4
+        ],
+        [
+          9,
+          4
+        ],
+        [
+          9,
+          4
+        ],
+        [
+          8,
+          4
+        ],
+        [
+          7,
+          4
+        ],
+        [
+          6,
+          4
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          0,
+          4
+        ]
+      ],
+      [
+        [
+          0,
+          5
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          6,
+          5
+        ],
+        [
+          7,
+          5
+        ],
+        [
+          8,
+          5
+        ],
+        [
+          9,
+          5
+        ],
+        [
+          10,
+          5
+        ],
+        [
+          11,
+          5
+        ],
+        [
+          12,
+          5
+        ],
+        [
+          13,
+          5
+        ],
+        [
+          13,
+          5
+        ]
+      ],
+      [
+        [
+          13,
+          8
+        ],
+        [
+          12,
+          8
+        ],
+        [
+          11,
+          8
+        ],
+        [
+          10,
+          8
+        ],
+        [
+          9,
+          8
+        ],
+        [
+          8,
+          8
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          6,
+          8
+        ],
+        [
+          5,
+          8
+        ],
+        [
+          4,
+          8
+        ],
+        [
+          3,
+          8
+        ],
+        [
+          2,
+          8
+        ],
+        [
+          1,
+          8
+        ],
+        [
+          0,
+          8
+        ],
+        [
+          0,
+          8
+        ]
+      ],
+      [
+        [
+          6,
+          0
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          6,
+          2
+        ],
+        [
+          6,
+          3
+        ],
+        [
+          6,
+          4
+        ],
+        [
+          6,
+          5
+        ],
+        [
+          6,
+          6
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          6,
+          8
+        ],
+        [
+          6,
+          9
+        ],
+        [
+          6,
+          9
+        ],
+        [
+          6,
+          9
+        ],
+        [
+          6,
+          9
+        ],
+        [
+          6,
+          9
+        ],
+        [
+          6,
+          9
+        ]
+      ],
+      [
+        [
+          8,
+          9
+        ],
+        [
+          8,
+          8
+        ],
+        [
+          8,
+          7
+        ],
+        [
+          8,
+          6
+        ],
+        [
+          8,
+          5
+        ],
+        [
+          8,
+          4
+        ],
+        [
+          8,
+          3
+        ],
+        [
+          8,
+          2
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          8,
+          0
+        ],
+        [
+          8,
+          0
+        ],
+        [
+          8,
+          0
+        ],
+        [
+          8,
+          0
+        ],
+        [
+          8,
+          0
+        ],
+        [
+          8,
+          0
+        ]
+      ],
+      [
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          1,
+          7
+        ],
+        [
+          1,
+          8
+        ],
+        [
+          1,
+          9
+        ],
+        [
+          1,
+          9
+        ],
+        [
+          1,
+          9
+        ],
+        [
+          1,
+          9
+        ],
+        [
+          1,
+          9
+        ],
+        [
+          1,
+          9
+        ]
+      ],
+      [
+        [
+          12,
+          9
+        ],
+        [
+          12,
+          9
+        ],
+        [
+          12,
+          8
+        ],
+        [
+          12,
+          7
+        ],
+        [
+          12,
+          6
+        ],
+        [
+          12,
+          5
+        ],
+        [
+          12,
+          4
+        ],
+        [
+          12,
+          3
+        ],
+        [
+          12,
+          2
+        ],
+        [
+          12,
+          1
+        ],
+        [
+          12,
+          0
+        ],
+        [
+          12,
+          0
+        ],
+        [
+          12,
+          0
+        ],
+        [
+          12,
+          0
+        ],
+        [
+          12,
+          0
+        ]
+      ],
+      [
+        [
+          5,
+          0
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          5,
+          3
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          5,
+          7
+        ],
+        [
+          5,
+          8
+        ],
+        [
+          5,
+          9
+        ],
+        [
+          5,
+          9
+        ],
+        [
+          5,
+          9
+        ],
+        [
+          5,
+          9
+        ],
+        [
+          5,
+          9
+        ]
+      ],
+      [
+        [
+          9,
+          9
+        ],
+        [
+          9,
+          8
+        ],
+        [
+          8,
+          8
+        ],
+        [
+          8,
+          7
+        ],
+        [
+          8,
+          6
+        ],
+        [
+          8,
+          5
+        ],
+        [
+          8,
+          5
+        ],
+        [
+          8,
+          4
+        ],
+        [
+          8,
+          3
+        ],
+        [
+          8,
+          2
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          9,
+          1
+        ],
+        [
+          9,
+          0
+        ],
+        [
+          9,
+          0
+        ],
+        [
+          9,
+          0
+        ]
+      ],
+      [
+        [
+          0,
+          9
+        ],
+        [
+          1,
+          9
+        ],
+        [
+          2,
+          9
+        ],
+        [
+          3,
+          9
+        ],
+        [
+          4,
+          9
+        ],
+        [
+          5,
+          9
+        ],
+        [
+          6,
+          9
+        ],
+        [
+          7,
+          9
+        ],
+        [
+          8,
+          9
+        ],
+        [
+          9,
+          9
+        ],
+        [
+          10,
+          9
+        ],
+        [
+          11,
+          9
+        ],
+        [
+          12,
+          9
+        ],
+        [
+          13,
+          9
+        ],
+        [
+          13,
+          9
+        ]
+      ],
+      [
+        [
+          13,
+          0
+        ],
+        [
+          12,
+          0
+        ],
+        [
+          11,
+          0
+        ],
+        [
+          10,
+          0
+        ],
+        [
+          9,
+          0
+        ],
+        [
+          8,
+          0
+        ],
+        [
+          7,
+          0
+        ],
+        [
+          6,
+          0
+        ],
+        [
+          5,
+          0
+        ],
+        [
+          4,
+          0
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    ]
+  }
+}

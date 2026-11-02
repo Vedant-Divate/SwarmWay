@@ -1,117 +1,100 @@
-import { useState, useEffect, useCallback } from 'react';
-import { CanvasScene } from './components/CanvasScene';
-import { HudOverlay } from './components/HudOverlay';
-import { THEMES, ThemeMode, CameraPreset } from './types';
-import { CellCoord } from './logic/gridNavigation';
+import { useCallback, useEffect, useState } from 'react';
+import { checkSolverHealth } from './api/client';
+import { TopNav } from './components/TopNav';
+import { AboutScreen } from './screens/AboutScreen';
+import { BenchmarksScreen } from './screens/BenchmarksScreen';
+import { LandingScreen } from './screens/LandingScreen';
+import { ReplaysScreen } from './screens/ReplaysScreen';
+import { WorkspaceScreen } from './screens/WorkspaceScreen';
+import type { BundledReplayMeta, RoutePath } from './types';
+import { normalizeRoutePath } from './utils/mapf';
+import { useReducedMotion } from './utils/prefs';
 
 export default function App() {
-  const [themeMode, setThemeMode] = useState<ThemeMode>('obsidian');
-  const [speed, setSpeed] = useState<number>(1);
-  const [isPaused, setIsPaused] = useState<boolean>(false);
-  const [cameraPreset, setCameraPreset] = useState<CameraPreset>('isometric');
-  const [showTrails, setShowTrails] = useState<boolean>(true);
-  const [interactiveDestination, setInteractiveDestination] = useState<CellCoord | null>(null);
-
-  const [agent1Telemetry, setAgent1Telemetry] = useState<{
-    cell: CellCoord;
-    pos: [number, number, number];
-    status: string;
-  }>({
-    cell: { x: 1, z: 1 },
-    pos: [0, 0, 0],
-    status: 'Gliding',
+  const [route, setRoute] = useState<RoutePath>(() => {
+    if (typeof window === 'undefined') return '/';
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('autostart') === '1') {
+      return '/workspace';
+    }
+    return normalizeRoutePath(window.location.pathname);
   });
 
-  const [agent2Telemetry, setAgent2Telemetry] = useState<{
-    cell: CellCoord;
-    pos: [number, number, number];
-    status: string;
-  }>({
-    cell: { x: 5, z: 5 },
-    pos: [0, 0, 0],
-    status: 'Gliding',
-  });
+  const [checkingHealth, setCheckingHealth] = useState<boolean>(true);
+  const [isOffline, setIsOffline] = useState<boolean>(true);
+  const [selectedReplayMeta, setSelectedReplayMeta] = useState<BundledReplayMeta | null>(null);
 
-  const handleUpdateTelemetry = useCallback(
-    (
-      a1: { cell: CellCoord; pos: [number, number, number]; status: string },
-      a2: { cell: CellCoord; pos: [number, number, number]; status: string }
-    ) => {
-      setAgent1Telemetry(a1);
-      setAgent2Telemetry(a2);
+  const reducedMotion = useReducedMotion();
+
+  useEffect(() => {
+    let active = true;
+    checkSolverHealth()
+      .then((res) => {
+        if (!active) return;
+        setIsOffline(res === null);
+      })
+      .finally(() => {
+        if (active) setCheckingHealth(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    const onPopState = () => {
+      setRoute(normalizeRoutePath(window.location.pathname));
+    };
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []);
+
+  const navigate = useCallback((nextRoute: RoutePath) => {
+    if (window.location.pathname !== nextRoute) {
+      window.history.pushState(null, '', nextRoute);
+    }
+    setRoute(nextRoute);
+    window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
+  }, []);
+
+  const handleSelectReplay = useCallback(
+    (meta: BundledReplayMeta) => {
+      setSelectedReplayMeta(meta);
+      navigate('/workspace');
     },
-    []
+    [navigate]
   );
 
-  const handleSelectCellFrom3D = useCallback((cell: CellCoord) => {
-    setInteractiveDestination(cell);
-  }, []);
-
-  const handleClearDestination = useCallback(() => {
-    setInteractiveDestination(null);
-  }, []);
-
-  // Keyboard controls for power users
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
-        return;
-      }
-      if (e.code === 'Space') {
-        e.preventDefault();
-        setIsPaused((p) => !p);
-      } else if (e.key === 't' || e.key === 'T') {
-        setShowTrails((t) => !t);
-      } else if (e.key === '1') {
-        setSpeed(0.5);
-      } else if (e.key === '2') {
-        setSpeed(1);
-      } else if (e.key === '3') {
-        setSpeed(2);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
-
-  const currentTheme = THEMES[themeMode];
-
   return (
-    <main
-      className="relative w-screen h-screen overflow-hidden select-none"
-      style={{ backgroundColor: currentTheme.bg }}
-    >
-      {/* 3D WebGL Canvas Layer */}
-      <CanvasScene
-        theme={currentTheme}
-        speedMultiplier={speed}
-        isPaused={isPaused}
-        cameraPreset={cameraPreset}
-        showTrails={showTrails}
-        onUpdateAgentTelemetry={handleUpdateTelemetry}
-        interactiveDestination={interactiveDestination}
-        onClearDestination={handleClearDestination}
-        onSelectCellFrom3D={handleSelectCellFrom3D}
-      />
+    <div className="min-h-screen flex flex-col bg-[#F6F5F1] text-[#171614]">
+      <TopNav currentRoute={route} onNavigate={navigate} />
 
-      {/* Ergonomic Non-Obstructive UI Layer */}
-      <HudOverlay
-        themeMode={themeMode}
-        onSelectTheme={setThemeMode}
-        speed={speed}
-        onSetSpeed={setSpeed}
-        isPaused={isPaused}
-        onTogglePause={() => setIsPaused((p) => !p)}
-        cameraPreset={cameraPreset}
-        onSelectCameraPreset={setCameraPreset}
-        showTrails={showTrails}
-        onToggleTrails={() => setShowTrails((t) => !t)}
-        agent1Telemetry={agent1Telemetry}
-        agent2Telemetry={agent2Telemetry}
-        interactiveDestination={interactiveDestination}
-        onClearDestination={handleClearDestination}
-      />
-    </main>
+      <div className="flex-1">
+        {route === '/' && (
+          <LandingScreen
+            isOffline={isOffline}
+            checkingHealth={checkingHealth}
+            reducedMotion={reducedMotion}
+            onNavigate={navigate}
+            onPlayReplay={handleSelectReplay}
+          />
+        )}
+        {route === '/workspace' && (
+          <WorkspaceScreen
+            isOffline={isOffline}
+            reducedMotion={reducedMotion}
+            initialReplayMeta={selectedReplayMeta}
+            onNavigate={navigate}
+          />
+        )}
+        {route === '/replays' && (
+          <ReplaysScreen isOffline={isOffline} onSelectReplay={handleSelectReplay} />
+        )}
+        {route === '/benchmarks' && (
+          <BenchmarksScreen isOffline={isOffline} onNavigate={navigate} />
+        )}
+        {route === '/about' && <AboutScreen isOffline={isOffline} />}
+      </div>
+    </div>
   );
 }
