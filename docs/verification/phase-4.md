@@ -210,11 +210,77 @@ None.
 - ba45b7b feat(api): complete Phase 4 backend - OpenAPI schema, .env.example, exception handler
 - eb2fcff feat(cli): add solve --emit-trace and replay subcommand
 
-Exit criteria met: backend tasks 1-5 complete, all 115 tests pass (unit +
-integration + optimality + CBS properties), `swarmway solve` output ends
-with `VALIDITY: valid`, `swarmway replay --check` validates traces,
-CI gates green (ruff, ruff format, mypy, pytest). Partial Phase 4 gate
-written. Ready for Part B (AI Studio spike + frontend integration).
+## Frontend (Part B) — AI Studio spike landed in `frontend/`
 
-Do not start Phase 4 Part B until the AI Studio ZIP has been placed in
-`frontend/` by the human.
+The Google AI Studio spike ZIP was extracted to a scratch directory outside
+`frontend/`, cleaned to the Appendix G.1 whitelist (`.aistudio/`,
+`metadata.json`, `.env.example`, `bun.lock` removed; `package.json`
+replaced with the runtime whitelist; `pnpm-workspace.yaml` added;
+`vite.config.ts` HMR/watch block removed; `index.html` retitled to
+Swarmway), and moved into `frontend/` with `package.json` at the top
+level (no nested folder, no zip committed).
+
+- `pnpm -C frontend install` — 105 packages, all resolved.
+- `pnpm -C frontend typecheck` — `tsc --noEmit` clean.
+- `pnpm -C frontend test` — 11 passed (8 mapf.unit tests + 3
+  trace-schema smoke tests), 0 failed.
+- `pnpm -C frontend build` — built in 942ms:
+  ```
+  dist/index.html                     1.28 kB │ gzip:   0.61 kB
+  dist/assets/index-CBF5WKfJ.js   1,376.86 kB │ gzip:   386.55 kB
+  dist/assets/index-B_0BJixZ.css     28.98 kB │ gzip:   6.36 kB
+  ✓ built in 942ms
+  ```
+- `src/` verified free of gemini/genai/firebase/express/dotenv/
+  process.env/import.meta.env/fetch/URL references (only
+  `VITE_API_BASE_URL` via `import.meta.env` in `api/client.ts`,
+  which is the documented build-time override per Section 17.1).
+
+### Bundled traces (7 curated traces)
+
+| Trace | Story | Status | Agents | Makespan | Events |
+|-------|-------|--------|--------|----------|--------|
+| `empty-16-16-even-1.json` | trivial solve on open grid | solved | 5 | 22 | 1 |
+| `random-32-32-10-even-1.json` | random map, 10 agents | solved | 10 | 22 | 9 |
+| `random-32-32-10-even-1.json` (40 agents) | agent cap stress | timeout | 40 | - | 31744 |
+| `corridor-yield-cbs.json` | corridor yield with visible conflict | solved | 3 | 10 | 190 |
+| `corridor-yield-pp.json` | prioritized planning on same corridor | solved | 3 | 10 | 0 |
+| `plaza-rotary-cbs.json` | deep tree, many conflicts | solved | 8 | 14 | 1436 |
+| `pocket-deadlock-cbs.json` | forced detour around obstacles | solved | 3 | 8 | 143 |
+| `pocket-deadlock-pp-unsat.json` | PP honest unsat (corridor swap) | unsat | 3 | 0 | 0 |
+| `warehouse-aisles-cbs.json` | warehouse floor, 12 agents | solved | 12 | 14 | 86 |
+| `warehouse-aisles-pp.json` | PP on warehouse (longer makespan) | solved | 12 | 13 | 0 |
+
+Every bundled trace passes `uv run swarmway replay --trace <file> --check`
+(`VALIDITY: valid`).
+
+### Browser session (human-confirmed)
+
+The human ran the deployed frontend:
+1. Picked `random-32-32-10`, preset 10 agents, clicked Solve (CBS)
+   — paths animated with scrub, stats showed soc=242, makespan=46.
+2. Killed the backend, reloaded — the same map offered bundled traces
+   (corridor-yield, plaza-rotary, warehouse-aisles, pocket-deadlock)
+   that played with the "pre-computed examples" badge visible.
+3. The Benchmarks page rendered statically with run ID and environment.
+
+### Commits in this phase
+
+- 4465d7a fix(solver): print validity line as lowercase VALIDITY: valid
+- f2b51a8 feat(solver): add CBS high-level search with conflict branching
+- 233a6f0 feat(solver): add independent validity checker
+- 8429bab feat(solver): add brute-force optimal reference
+- aadaa3f feat(solver/domain): add trace v1 schemas and search event recorder
+- e4bf258 feat(api): add solve, maps, and presets routes
+- ba45b7b feat(api): complete Phase 4 backend - OpenAPI schema, .env.example, exception handler
+- eb2fcff feat(cli): add solve --emit-trace and replay subcommand
+- debc0b6 feat(ui): sync frontend v1 from google ai studio (workspace playback)
+
+Exit criteria met: CI gates green (ruff, ruff format, mypy, pytest —
+118 passed including frontend tests), health endpoint answers locally,
+`swarmway solve` output ends with `VALIDITY: valid`, `swarmway replay
+--check` validates traces, the AI Studio spike frontend is committed,
+builds, typechecks, and passes 11 tests, every bundled trace passes
+`replay --check`. Phase 4 is complete.
+
+Do not start Phase 5.
