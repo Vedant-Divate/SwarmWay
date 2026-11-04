@@ -100,9 +100,15 @@ def _arm_options(arm: ArmSpec) -> dict[str, Any]:
     options = dict(arm.options)
     if arm.name == 'pp-best-of-n':
         options.setdefault('orderings', 8)
-        if arm.seed is not None:
-            options['seed'] = arm.seed
     return options
+
+
+def _arm_seed(arm: ArmSpec) -> int | None:
+    """Seed is passed separately to run_solver (never in options) for
+    pp-best-of-n; other arms take no seed."""
+    if arm.name == 'pp-best-of-n':
+        return arm.seed
+    return None
 
 
 def run_cell(
@@ -121,7 +127,7 @@ def run_cell(
     for arm in arms:
         solver_name = arm.name
         options = _arm_options(arm)
-        seed = arm.seed
+        seed = _arm_seed(arm)
         sink(f'  {solver_name} ... ')
         t0 = time.perf_counter()
         try:
