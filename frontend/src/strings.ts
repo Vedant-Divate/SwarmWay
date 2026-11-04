@@ -87,6 +87,13 @@ export const STRINGS = {
     solveCompare: 'Compare both',
     solvingLabel: 'Solving…',
 
+    tieBreakLabel: 'Tie-break order (CBS)',
+    tieBreakHint:
+      'Only reorders equal-cost CBS nodes; sum-of-costs optimality is unchanged. Prioritized baseline ignores it.',
+    tieBreakFifo: 'FIFO (insertion order)',
+    tieBreakConflicts: 'Conflicts first',
+    tieBreakDepth: 'Depth first',
+
     tabs: {
       paths: 'Paths',
       search: 'Search',

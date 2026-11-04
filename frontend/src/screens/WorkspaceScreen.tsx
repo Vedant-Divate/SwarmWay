@@ -91,6 +91,7 @@ export function WorkspaceScreen({
   const [pendingStartCell, setPendingStartCell] = useState<GridPoint | null>(null);
   const [solving, setSolving] = useState(false);
   const [apiErrorMessage, setApiErrorMessage] = useState<string | null>(null);
+  const [tieBreak, setTieBreak] = useState<'fifo' | 'conflicts' | 'depth'>('fifo');
 
   // Playback & 3D interaction state (React state holds integer timestep only)
   const [playbackStep, setPlaybackStep] = useState<number>(0);
@@ -630,7 +631,7 @@ export function WorkspaceScreen({
         const trace = await postSolve({
           instance,
           solver: 'cbs',
-          options: { tie_break: 'fifo' },
+          options: { tie_break: tieBreak },
           budget_ms: 10000,
         });
         setComparisonPair(null);
@@ -639,7 +640,7 @@ export function WorkspaceScreen({
         const trace = await postSolve({
           instance,
           solver: 'pp-fixed',
-          options: { tie_break: 'fifo' },
+          options: {},
           budget_ms: 10000,
         });
         setComparisonPair(null);
@@ -649,13 +650,13 @@ export function WorkspaceScreen({
           postSolve({
             instance,
             solver: 'cbs',
-            options: { tie_break: 'fifo' },
+            options: { tie_break: tieBreak },
             budget_ms: 10000,
           }),
           postSolve({
             instance,
             solver: 'pp-fixed',
-            options: { tie_break: 'fifo' },
+            options: {},
             budget_ms: 10000,
           }),
         ]);
@@ -730,10 +731,24 @@ export function WorkspaceScreen({
   const handleSelectSearchEvent = useCallback(
     (seq: number) => {
       setActiveSearchSeq(seq);
-      const conflict = activeTrace?.search.find((ev) => ev.seq === seq)?.conflict;
-      if (conflict && typeof conflict.t === 'number') {
+      const event = activeTrace?.search.find((ev) => ev.seq === seq) ?? null;
+      setIsPlaying(false);
+      if (!event) return;
+      // Highlight the replanned agent's path and dim the others so the
+      // constraint being added / the conflict being resolved is visible.
+      const focusAgent =
+        event.constraint?.agent ??
+        event.conflict?.agents[0] ??
+        event.replanned_agent ??
+        null;
+      setSelectedAgentId(focusAgent);
+      if (event.event === 'goal') {
+        // Winning leaf reached: show the final state of all paths.
+        const makespan = activeTrace?.execution.makespan ?? 0;
+        seekToTime(makespan);
+      } else if (event.conflict && typeof event.conflict.t === 'number') {
         setIsPlaying(false);
-        seekToTime(conflict.t);
+        seekToTime(event.conflict.t);
       }
     },
     [activeTrace, seekToTime]
@@ -1062,6 +1077,32 @@ export function WorkspaceScreen({
                 <h2 className="text-sm font-semibold text-[#171614]">
                   {STRINGS.workspace.solveSectionTitle}
                 </h2>
+
+                {/* Tie-break order applies only to CBS; prioritized ignores it. */}
+                <div className="flex flex-col gap-1.5">
+                  <label
+                    htmlFor="tie-break-select"
+                    className="block text-xs font-medium text-[#44413C]"
+                  >
+                    {STRINGS.workspace.tieBreakLabel}
+                  </label>
+                  <select
+                    id="tie-break-select"
+                    value={tieBreak}
+                    onChange={(e) =>
+                      setTieBreak(e.target.value as 'fifo' | 'conflicts' | 'depth')
+                    }
+                    className="w-[170px] px-3 py-1.5 text-xs bg-white border border-[#D4CFC5] rounded-lg"
+                  >
+                    <option value="fifo">{STRINGS.workspace.tieBreakFifo}</option>
+                    <option value="conflicts">{STRINGS.workspace.tieBreakConflicts}</option>
+                    <option value="depth">{STRINGS.workspace.tieBreakDepth}</option>
+                  </select>
+                  <p className="text-[11px] text-[#524F49] italic">
+                    {STRINGS.workspace.tieBreakHint}
+                  </p>
+                </div>
+
                 <button
                   type="button"
                   disabled={
