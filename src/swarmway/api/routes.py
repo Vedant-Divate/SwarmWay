@@ -29,7 +29,7 @@ from swarmway.domain.schemas import (
     TraceV1,
 )
 from swarmway.domain.solution import Solution
-from swarmway.solver.cbs import solve as cbs_solve
+from swarmway.solver import SolverError, run_solver, solver_names
 from swarmway.solver.validity import ValidityError, check
 
 settings = load_settings()
@@ -182,8 +182,12 @@ def _build_instance_from_dict(grid: Grid, inst: dict[str, Any], map_id: str | No
 @router.post('/api/solve')
 def solve_route(request: SolveRequest) -> dict[str, Any]:
     """Solve and return a trace v1."""
-    if request.solver != 'cbs':
-        raise _error('invalid_solver', f'solver {request.solver!r} not supported')
+    if request.solver not in solver_names():
+        raise _error(
+            'invalid_solver',
+            f'solver {request.solver!r} not supported',
+            {'available': solver_names()},
+        )
     budget = max(100, min(request.budget_ms or settings.solve_budget_ms, settings.solve_budget_ms))
 
     inst = request.instance
@@ -240,7 +244,11 @@ def solve_route(request: SolveRequest) -> dict[str, Any]:
             )
         domain_instance = _build_instance_from_dict(grid, inst, map_id)
 
-    outcome = cbs_solve(domain_instance, budget)
+    try:
+        run = run_solver(request.solver, domain_instance, budget, options=request.options)
+    except SolverError as exc:
+        raise _error('invalid_options', str(exc)) from exc
+    outcome = run.outcome
 
     if outcome.status == 'solved' and outcome.solution is not None:
         sol: Solution = outcome.solution
@@ -266,7 +274,7 @@ def solve_route(request: SolveRequest) -> dict[str, Any]:
             ct_generated=outcome.stats.ct_generated,
             low_level_expansions=outcome.stats.low_level_expansions,
             validity='valid',
-            notes=[],
+            notes=list(run.notes),
         )
         execution_block = ExecutionBlock(
             makespan=sol.makespan,
@@ -274,10 +282,10 @@ def solve_route(request: SolveRequest) -> dict[str, Any]:
         )
         trace = TraceV1(
             solver=SolverBlock(
-                name='cbs',
-                options=request.options,
+                name=request.solver,
+                options=run.options,
                 package_version='0.1.0',
-                seed=None,
+                seed=run.seed,
             ),
             instance=instance_block,
             result=result_block,
@@ -313,15 +321,15 @@ def solve_route(request: SolveRequest) -> dict[str, Any]:
         ct_generated=outcome.stats.ct_generated,
         low_level_expansions=outcome.stats.low_level_expansions,
         validity='valid',
-        notes=[],
+        notes=list(run.notes),
     )
     execution_block = ExecutionBlock(makespan=0, paths=[[]])
     trace = TraceV1(
         solver=SolverBlock(
-            name='cbs',
-            options=request.options,
+            name=request.solver,
+            options=run.options,
             package_version='0.1.0',
-            seed=None,
+            seed=run.seed,
         ),
         instance=instance_block,
         result=result_block,

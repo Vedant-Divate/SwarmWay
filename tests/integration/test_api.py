@@ -29,7 +29,7 @@ def test_health_shape() -> None:
     body = r.json()
     assert body['status'] == 'ok'
     assert body['version'] == '0.1.0'
-    assert body['solvers'] == ['cbs']
+    assert body['solvers'] == ['cbs', 'pp-best-of-n', 'pp-fixed']
     caps = body['caps']
     assert caps['max_agents'] == 60
     assert caps['max_grid_cells'] == 262144
@@ -226,6 +226,58 @@ def test_solve_unknown_solver() -> None:
     r = client.post('/api/solve', json=body)
     assert r.status_code == 422
     assert r.json()['error']['code'] == 'invalid_solver'
+
+
+def test_solve_pp_best_of_n_returns_valid_trace() -> None:
+    """POST /api/solve with pp-best-of-n returns a trace v1 (Section 8.6).
+
+    The response validates against the trace v1 Pydantic models, the
+    search block is empty (PP has no constraint tree) and the solver
+    block records the name, options and seed.
+    """
+    body = {
+        'instance': {
+            'map_id': 'empty-16-16',
+            'scenario': 'even',
+            'agents': 5,
+        },
+        'solver': 'pp-best-of-n',
+        'options': {'orderings': 4, 'seed': 42},
+        'budget_ms': 10000,
+    }
+    r = client.post('/api/solve', json=body)
+    assert r.status_code == 200
+    trace = TraceV1.model_validate(r.json())
+    assert trace.solver.name == 'pp-best-of-n'
+    assert trace.solver.options == {'orderings': 4}
+    assert trace.solver.seed == 42
+    assert trace.search == []
+    assert trace.result.status == 'solved'
+    assert trace.result.validity == 'valid'
+    assert trace.result.soc > 0
+    # Ordering evidence is in the notes (Section 8.6).
+    assert any('orderings tried' in note for note in trace.result.notes)
+    # Execution paths are padded to makespan + 1 (Section 7.3).
+    assert trace.execution.makespan == trace.result.makespan
+    for path in trace.execution.paths:
+        assert len(path) == trace.execution.makespan + 1
+
+
+def test_solve_pp_best_of_n_invalid_orderings() -> None:
+    """POST /api/solve with an out-of-range ordering count -> 422."""
+    body = {
+        'instance': {
+            'map_id': 'empty-16-16',
+            'scenario': 'even',
+            'agents': 5,
+        },
+        'solver': 'pp-best-of-n',
+        'options': {'orderings': 0},
+        'budget_ms': 10000,
+    }
+    r = client.post('/api/solve', json=body)
+    assert r.status_code == 422
+    assert r.json()['error']['code'] == 'invalid_options'
 
 
 def test_solve_custom_grid_over_cap() -> None:

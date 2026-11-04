@@ -15,6 +15,7 @@ from fastapi.responses import JSONResponse
 
 from swarmway.api.routes import router
 from swarmway.api.settings import load_settings
+from swarmway.solver import solver_names
 
 settings = load_settings()
 
@@ -48,7 +49,7 @@ def health() -> dict[str, Any]:
     return {
         'status': 'ok',
         'version': '0.1.0',
-        'solvers': ['cbs'],
+        'solvers': solver_names(),
         'caps': {
             'max_agents': settings.max_agents,
             'max_grid_cells': settings.max_grid_cells,

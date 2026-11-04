@@ -27,10 +27,11 @@ from swarmway.domain import (
     parse_scen,
 )
 from swarmway.domain.schemas import TraceV1
-from swarmway.solver.cbs import solve
+from swarmway.solver import SolverError, run_solver, solver_names
 from swarmway.solver.validity import ValidityError, check
 
 MAPS_INDEX = Path('data/maps/maps.index.json')
+DEFAULT_PP_ORDERINGS = 8
 
 
 def _read_text(path: Path) -> str:
@@ -114,9 +115,14 @@ def run_solve(
     solver: str,
     budget_ms: int,
     emit_trace: Path | None,
+    orderings: int = DEFAULT_PP_ORDERINGS,
+    seed: int | None = None,
 ) -> int:
-    if solver != 'cbs':
-        print(f'error: unknown solver {solver!r}; only "cbs" is available', file=sys.stderr)
+    if solver not in solver_names():
+        print(
+            f'error: unknown solver {solver!r}; available: {", ".join(solver_names())}',
+            file=sys.stderr,
+        )
         return 2
     if scenario != 'even':
         print(f'error: unknown scenario {scenario!r}; only "even" is available', file=sys.stderr)
@@ -168,8 +174,16 @@ def run_solve(
         return 2
     assert instance is not None
 
+    options: dict[str, Any] = {}
+    if solver == 'pp-best-of-n':
+        options = {'orderings': orderings}
     t0 = time.perf_counter()
-    outcome = solve(instance, budget_ms)
+    try:
+        run = run_solver(solver, instance, budget_ms, options=options, seed=seed)
+    except SolverError as exc:
+        print(f'error: {exc}', file=sys.stderr)
+        return 2
+    outcome = run.outcome
     runtime_ms = (time.perf_counter() - t0) * 1000.0
 
     print(f'status: {outcome.status}')
@@ -223,7 +237,7 @@ def run_solve(
                 ct_generated=outcome.stats.ct_generated,
                 low_level_expansions=outcome.stats.low_level_expansions,
                 validity='valid',
-                notes=[],
+                notes=list(run.notes),
             )
             execution_block = ExecutionBlock(
                 makespan=sol.makespan,
@@ -231,10 +245,10 @@ def run_solve(
             )
             trace = TraceV1(
                 solver=SolverBlock(
-                    name='cbs',
-                    options={},
+                    name=solver,
+                    options=run.options,
                     package_version='0.1.0',
-                    seed=None,
+                    seed=run.seed,
                 ),
                 instance=instance_block,
                 result=result_block,
@@ -262,15 +276,15 @@ def run_solve(
                 ct_generated=outcome.stats.ct_generated,
                 low_level_expansions=outcome.stats.low_level_expansions,
                 validity='valid',
-                notes=[],
+                notes=list(run.notes),
             )
             execution_block = ExecutionBlock(makespan=0, paths=[[]])
             trace = TraceV1(
                 solver=SolverBlock(
-                    name='cbs',
-                    options={},
+                    name=solver,
+                    options=run.options,
                     package_version='0.1.0',
-                    seed=None,
+                    seed=run.seed,
                 ),
                 instance=instance_block,
                 result=result_block,
@@ -334,17 +348,33 @@ def main(argv: list[str] | None = None) -> int:
     p_parse.add_argument('--map', required=True, help='path to a .map file')
     p_parse.add_argument('--scen', help='optional path to a .scen file')
 
-    p_solve = sub.add_parser('solve', help='solve a map instance with CBS')
+    p_solve = sub.add_parser('solve', help='solve a map instance with CBS or prioritized planning')
     p_solve.add_argument('--map', required=True, help='path to a .map file')
     p_solve.add_argument('--scenario', default='even', help='scenario family (only "even")')
     p_solve.add_argument(
         '--agents', required=True, type=int, help='number of agents (first k from scenario)'
     )
-    p_solve.add_argument('--solver', default='cbs', help='solver to use (only "cbs")')
+    p_solve.add_argument(
+        '--solver',
+        default='cbs',
+        help='solver to use (cbs, pp-fixed, pp-best-of-n)',
+    )
     p_solve.add_argument(
         '--budget-ms', type=int, default=10000, help='solve budget in milliseconds'
     )
     p_solve.add_argument('--emit-trace', type=Path, help='write trace v1 JSON to this file')
+    p_solve.add_argument(
+        '--orderings',
+        type=int,
+        default=DEFAULT_PP_ORDERINGS,
+        help='number of seeded orderings for pp-best-of-n (1..64)',
+    )
+    p_solve.add_argument(
+        '--seed',
+        type=int,
+        default=None,
+        help='seed for pp-best-of-n orderings (default 42)',
+    )
 
     p_replay = sub.add_parser('replay', help='replay and validate a trace file')
     p_replay.add_argument('--trace', required=True, type=Path, help='path to trace JSON file')
@@ -364,6 +394,8 @@ def main(argv: list[str] | None = None) -> int:
             args.solver,
             args.budget_ms,
             args.emit_trace,
+            orderings=args.orderings,
+            seed=args.seed,
         )
     if args.command == 'replay':
         return run_replay(Path(args.trace), args.check)
