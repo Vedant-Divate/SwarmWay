@@ -65,8 +65,16 @@ def _run_cbs(
 ) -> SolverRun:
     if seed is not None:
         raise SolverError('cbs does not take a seed')
-    outcome = cbs_solve(instance, budget_ms)
-    return SolverRun(outcome=outcome, notes=(), seed=None, options=dict(options))
+    unknown = sorted(set(options) - {'tie_break'})
+    if unknown:
+        raise SolverError(f'cbs: unknown option(s) {unknown}')
+    tie_break = options.get('tie_break', 'fifo')
+    if not isinstance(tie_break, str) or tie_break not in ('fifo', 'conflicts', 'depth'):
+        raise SolverError(
+            f"cbs: tie_break must be one of 'fifo', 'conflicts', 'depth', got {tie_break!r}"
+        )
+    outcome = cbs_solve(instance, budget_ms, tie_break=tie_break)
+    return SolverRun(outcome=outcome, notes=(), seed=None, options={'tie_break': tie_break})
 
 
 def _run_pp_fixed(

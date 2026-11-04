@@ -117,6 +117,7 @@ def run_solve(
     emit_trace: Path | None,
     orderings: int = DEFAULT_PP_ORDERINGS,
     seed: int | None = None,
+    tie_break: str = 'fifo',
 ) -> int:
     if solver not in solver_names():
         print(
@@ -126,6 +127,18 @@ def run_solve(
         return 2
     if scenario != 'even':
         print(f'error: unknown scenario {scenario!r}; only "even" is available', file=sys.stderr)
+        return 2
+    if tie_break not in ('fifo', 'conflicts', 'depth'):
+        print(
+            f'error: tie-break {tie_break!r} must be one of fifo, conflicts, depth',
+            file=sys.stderr,
+        )
+        return 2
+    if solver != 'cbs' and tie_break != 'fifo':
+        print(
+            'error: --tie-break only applies to the cbs solver',
+            file=sys.stderr,
+        )
         return 2
 
     map_id = map_path.stem
@@ -175,7 +188,9 @@ def run_solve(
     assert instance is not None
 
     options: dict[str, Any] = {}
-    if solver == 'pp-best-of-n':
+    if solver == 'cbs':
+        options = {'tie_break': tie_break}
+    elif solver == 'pp-best-of-n':
         options = {'orderings': orderings}
     t0 = time.perf_counter()
     try:
@@ -375,6 +390,11 @@ def main(argv: list[str] | None = None) -> int:
         default=None,
         help='seed for pp-best-of-n orderings (default 42)',
     )
+    p_solve.add_argument(
+        '--tie-break',
+        default='fifo',
+        help='CBS tie-break order for equal-cost nodes: fifo, conflicts, depth',
+    )
 
     p_replay = sub.add_parser('replay', help='replay and validate a trace file')
     p_replay.add_argument('--trace', required=True, type=Path, help='path to trace JSON file')
@@ -396,6 +416,7 @@ def main(argv: list[str] | None = None) -> int:
             args.emit_trace,
             orderings=args.orderings,
             seed=args.seed,
+            tie_break=args.tie_break,
         )
     if args.command == 'replay':
         return run_replay(Path(args.trace), args.check)

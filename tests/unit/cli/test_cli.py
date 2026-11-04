@@ -69,6 +69,50 @@ def test_cli_solve_agent_count_out_of_range_exit_2(capsys) -> None:
     assert code == 2
 
 
+def test_cli_solve_tie_break_conflicts(capsys) -> None:
+    """CBS with --tie-break conflicts solves and stays valid."""
+    code = _run(
+        [
+            'solve',
+            '--map',
+            'data/maps/empty-16-16.map',
+            '--scenario',
+            'even',
+            '--agents',
+            '5',
+            '--budget-ms',
+            '10000',
+            '--solver',
+            'cbs',
+            '--tie-break',
+            'conflicts',
+        ]
+    )
+    assert code == 0
+    out = capsys.readouterr().out
+    assert 'status: solved' in out
+    assert 'VALIDITY: valid' in out
+
+
+def test_cli_solve_tie_break_invalid_exit_2(capsys) -> None:
+    code = _run(
+        [
+            'solve',
+            '--map',
+            'data/maps/empty-16-16.map',
+            '--scenario',
+            'even',
+            '--agents',
+            '5',
+            '--solver',
+            'cbs',
+            '--tie-break',
+            'bogus',
+        ]
+    )
+    assert code == 2
+
+
 def test_cli_parse_unchanged(capsys) -> None:
     code = _run(
         [

@@ -14,6 +14,7 @@ from swarmway.solver.brute_force import brute_force_soc
 from swarmway.solver.cbs import solve
 
 AGENT_LIMIT_BUDGET_MS = 10000
+_TIE_BREAKS = ('fifo', 'conflicts', 'depth')
 
 
 def _inst(rows, pairs):
@@ -86,3 +87,33 @@ def test_case5_obstacle_forced_detour() -> None:
     assert outcome.solution.soc == 6
     assert outcome.solution.makespan == 4
     assert brute_force_soc(instance) == 6
+
+
+def test_determinism_per_tie_break() -> None:
+    """Same (instance, options) twice => identical paths/stats except
+    runtime_ms, for every tie-break option."""
+    instance = _inst(['...', '...', '...'], [((0, 0), (2, 2)), ((2, 0), (0, 2))])
+    for tie_break in _TIE_BREAKS:
+        r1 = solve(instance, AGENT_LIMIT_BUDGET_MS, tie_break=tie_break)
+        r2 = solve(instance, AGENT_LIMIT_BUDGET_MS, tie_break=tie_break)
+        assert r1.status == r2.status == 'solved'
+        assert r1.solution is not None and r2.solution is not None
+        assert r1.solution.paths == r2.solution.paths
+        assert r1.solution.soc == r2.solution.soc
+        assert r1.solution.makespan == r2.solution.makespan
+        assert r1.stats.ct_expanded == r2.stats.ct_expanded
+        assert r1.stats.ct_generated == r2.stats.ct_generated
+        assert r1.stats.low_level_expansions == r2.stats.low_level_expansions
+
+
+def test_soc_identical_across_tie_breaks() -> None:
+    """Final SoC is identical across tie-break options (optimality
+    untouched); only expansion count may differ."""
+    instance = _inst(['...', '...', '...'], [((1, 1), (1, 0)), ((0, 0), (2, 0))])
+    sos = set()
+    for tie_break in _TIE_BREAKS:
+        outcome = solve(instance, AGENT_LIMIT_BUDGET_MS, tie_break=tie_break)
+        assert outcome.status == 'solved'
+        assert outcome.solution is not None
+        sos.add(outcome.solution.soc)
+    assert sos == {4}

@@ -280,6 +280,79 @@ def test_solve_pp_best_of_n_invalid_orderings() -> None:
     assert r.json()['error']['code'] == 'invalid_options'
 
 
+def test_solve_cbs_tie_break_recorded() -> None:
+    """POST /api/solve with cbs tie_break records it in the solver block."""
+    body = {
+        'instance': {
+            'map_id': 'empty-16-16',
+            'scenario': 'even',
+            'agents': 5,
+        },
+        'solver': 'cbs',
+        'options': {'tie_break': 'conflicts'},
+        'budget_ms': 10000,
+    }
+    r = client.post('/api/solve', json=body)
+    assert r.status_code == 200
+    trace = TraceV1.model_validate(r.json())
+    assert trace.solver.name == 'cbs'
+    assert trace.solver.options == {'tie_break': 'conflicts'}
+    assert trace.solver.seed is None
+    assert trace.result.status == 'solved'
+    assert trace.result.validity == 'valid'
+
+
+def test_solve_cbs_tie_break_unknown() -> None:
+    """POST /api/solve with unknown tie_break -> 422."""
+    body = {
+        'instance': {
+            'map_id': 'empty-16-16',
+            'scenario': 'even',
+            'agents': 5,
+        },
+        'solver': 'cbs',
+        'options': {'tie_break': 'bogus'},
+        'budget_ms': 10000,
+    }
+    r = client.post('/api/solve', json=body)
+    assert r.status_code == 422
+    assert r.json()['error']['code'] == 'invalid_options'
+
+
+def test_solve_cbs_tie_break_unknown_option() -> None:
+    """POST /api/solve with an unknown cbs option -> 422."""
+    body = {
+        'instance': {
+            'map_id': 'empty-16-16',
+            'scenario': 'even',
+            'agents': 5,
+        },
+        'solver': 'cbs',
+        'options': {'bogus': 1},
+        'budget_ms': 10000,
+    }
+    r = client.post('/api/solve', json=body)
+    assert r.status_code == 422
+    assert r.json()['error']['code'] == 'invalid_options'
+
+
+def test_solve_cbs_seed_in_options_rejected() -> None:
+    """cbs takes no seed, even via options."""
+    body = {
+        'instance': {
+            'map_id': 'empty-16-16',
+            'scenario': 'even',
+            'agents': 5,
+        },
+        'solver': 'cbs',
+        'options': {'tie_break': 'fifo', 'seed': 7},
+        'budget_ms': 10000,
+    }
+    r = client.post('/api/solve', json=body)
+    assert r.status_code == 422
+    assert r.json()['error']['code'] == 'invalid_options'
+
+
 def test_solve_custom_grid_over_cap() -> None:
     """POST /api/solve with custom grid over cell cap -> 422."""
     big_row = '.' * 1000

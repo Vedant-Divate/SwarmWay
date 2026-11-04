@@ -16,6 +16,7 @@ from __future__ import annotations
 import heapq
 import time
 from dataclasses import dataclass
+from typing import Any
 
 from swarmway.domain.conflicts import EdgeConflict, VertexConflict
 from swarmway.domain.constraints import Constraints
@@ -37,18 +38,56 @@ class CTNode:
 
     ``paths[i]`` is agent i's constrained-optimal path under
     ``constraints``; ``soc`` is the sum of path costs. Nodes are ordered
-    by (soc, insertion_id) so the open list is a min-heap on SoC with
-    FIFO tie-breaking (this phase; tie-break options arrive in Phase 6).
+    by (soc, <tie-break key>, insertion_id) so the open list is a
+    min-heap on SoC with a deterministic secondary key (FIFO by default;
+    tie-break options arrive in Phase 6). The secondary key only
+    reorders equal-cost nodes — optimality is untouched.
     """
 
     constraints: Constraints
     paths: tuple[tuple[Position, ...], ...]
     soc: int
     insertion_id: int
+    depth: int = 0
+    conflict_count: int = 0
 
 
 def _path_cost(path: tuple[Position, ...]) -> int:
     return len(path) - 1
+
+
+def _conflict_count(instance: Instance, paths: tuple[tuple[Position, ...], ...]) -> int:
+    """Total vertex + edge conflicts in ``paths`` (tie-break heuristic)."""
+    makespan = max(len(p) - 1 for p in paths)
+    count = 0
+    for t in range(makespan + 1):
+        for i in range(len(paths)):
+            for j in range(i + 1, len(paths)):
+                if _padded_position(paths[i], t) == _padded_position(paths[j], t):
+                    count += 1
+    for t in range(makespan):
+        for i in range(len(paths)):
+            for j in range(i + 1, len(paths)):
+                if _padded_position(paths[i], t) == _padded_position(
+                    paths[j], t + 1
+                ) and _padded_position(paths[i], t + 1) == _padded_position(paths[j], t):
+                    count += 1
+    return count
+
+
+def _open_key(node: CTNode, tie_break: str) -> tuple[int, ...]:
+    """Heap key for a CT node under the given tie-break.
+
+    Only equal-SoC nodes are reordered; insertion_id keeps every key
+    unique so nodes are never compared against each other.
+    """
+    if tie_break == 'fifo':
+        return (node.soc, node.insertion_id)
+    if tie_break == 'conflicts':
+        # Prefer nodes whose paths contain more conflicts.
+        return (node.soc, -node.conflict_count, node.insertion_id)
+    # tie_break == 'depth': prefer deeper nodes.
+    return (node.soc, -node.depth, node.insertion_id)
 
 
 def _padded_position(path: tuple[Position, ...], t: int) -> Position:
@@ -98,13 +137,18 @@ def solve(
     instance: Instance,
     budget_ms: int = 10000,
     recorder: TraceRecorder | None = None,
+    tie_break: str = 'fifo',
 ) -> SolveOutcome:
     """Solve an instance with CBS.
 
-    Returns a :class:`SolveOutcome` with status ``solved``, ``unsat``
-    (open list exhausted), or ``timeout`` (budget expired). An invalid
-    solution is never returned — CBS validates its own outcome.
+    ``tie_break`` selects the deterministic secondary key used to order
+    equal-SoC nodes in the open list (Section 8.5): ``fifo`` (insertion
+    order), ``conflicts`` (more conflicts first), or ``depth`` (deeper
+    nodes first). It only reorders equal-cost nodes, so optimality is
+    untouched.
     """
+    if tie_break not in ('fifo', 'conflicts', 'depth'):
+        raise ValueError(f'unknown tie_break {tie_break!r}')
     grid = instance.grid
     agents = instance.agents
     cache = DistanceCache()
@@ -141,16 +185,23 @@ def solve(
     deadline = time.monotonic() + budget_ms / 1000.0
 
     insertion_id = 0
-    root = CTNode(Constraints.empty(), root_paths_t, root_soc, insertion_id)
+    root = CTNode(
+        Constraints.empty(),
+        root_paths_t,
+        root_soc,
+        insertion_id,
+        depth=0,
+        conflict_count=_conflict_count(instance, root_paths_t),
+    )
     insertion_id += 1
-    open_list: list[tuple[int, int, CTNode]] = [(root_soc, root.insertion_id, root)]
+    open_list: list[Any] = [(*_open_key(root, tie_break), root)]
     stats.ct_generated = 1
     if recorder is not None:
         recorder.record_root(root.insertion_id, root_soc)
 
     ct_expanded = 0
     while open_list:
-        node = heapq.heappop(open_list)[2]
+        node = heapq.heappop(open_list)[-1]
         ct_expanded += 1
         stats.ct_expanded = ct_expanded
 
@@ -205,7 +256,14 @@ def solve(
                 new_paths[agent_id] = result.path
                 new_paths_t = tuple(new_paths)
                 child_soc = sum(_path_cost(p) for p in new_paths_t)
-                child = CTNode(child_constraints, new_paths_t, child_soc, insertion_id)
+                child = CTNode(
+                    child_constraints,
+                    new_paths_t,
+                    child_soc,
+                    insertion_id,
+                    depth=node.depth + 1,
+                    conflict_count=_conflict_count(instance, new_paths_t),
+                )
                 insertion_id += 1
                 if recorder is not None:
                     recorder.record_expand(
@@ -221,7 +279,7 @@ def solve(
                         agent_id,
                         child_soc,
                     )
-                heapq.heappush(open_list, (child_soc, child.insertion_id, child))
+                heapq.heappush(open_list, (*_open_key(child, tie_break), child))
                 stats.ct_generated += 1
         else:
             # Edge conflict: constrain each agent from traversing u->v
@@ -247,7 +305,14 @@ def solve(
                 new_paths[agent_id] = result.path
                 new_paths_t = tuple(new_paths)
                 child_soc = sum(_path_cost(p) for p in new_paths_t)
-                child = CTNode(child_constraints, new_paths_t, child_soc, insertion_id)
+                child = CTNode(
+                    child_constraints,
+                    new_paths_t,
+                    child_soc,
+                    insertion_id,
+                    depth=node.depth + 1,
+                    conflict_count=_conflict_count(instance, new_paths_t),
+                )
                 insertion_id += 1
                 if recorder is not None:
                     recorder.record_expand(
@@ -263,7 +328,7 @@ def solve(
                         agent_id,
                         child_soc,
                     )
-                heapq.heappush(open_list, (child_soc, child.insertion_id, child))
+                heapq.heappush(open_list, (*_open_key(child, tie_break), child))
                 stats.ct_generated += 1
 
     # Open list exhausted -> UNSAT, with node counts as exhaustion evidence.
