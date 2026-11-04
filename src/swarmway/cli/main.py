@@ -16,6 +16,9 @@ import time
 from pathlib import Path
 from typing import Any, cast
 
+from swarmway.bench.artifacts import environment_record, load_config, run_id_from, write_run
+from swarmway.bench.metrics import diff_csv
+from swarmway.bench.runner import run_config
 from swarmway.domain import (
     Agent,
     Grid,
@@ -32,6 +35,8 @@ from swarmway.solver.validity import ValidityError, check
 
 MAPS_INDEX = Path('data/maps/maps.index.json')
 DEFAULT_PP_ORDERINGS = 8
+DEFAULT_BENCH_CONFIG = Path('bench/default.yaml')
+RESULTS_DIR = Path('data/results')
 
 
 def _read_text(path: Path) -> str:
@@ -357,6 +362,56 @@ def run_replay(trace_path: Path, check_validity: bool) -> int:
     return 0
 
 
+def run_bench(
+    config_path: Path,
+    label: str | None,
+    diff: tuple[str, str] | None,
+) -> int:
+    """``swarmway bench``: config-driven benchmark harness (Section 10).
+
+    Runs every (cell, arm) in the config cell by cell, writing
+    data/results/<run-id>/ with config.yaml, environment.json,
+    results.csv, summary.json and table.md. Supports ``--diff`` to compare
+    two results.csv files ignoring runtime_ms and run-id (Section 10.3).
+    """
+    if diff is not None:
+        identical, messages = diff_csv(diff[0], diff[1])
+        print(f'diff {diff[0]} vs {diff[1]}:')
+        if identical:
+            print('  identical (statuses/SoCs match; runtime_ms may differ)')
+        else:
+            for msg in messages:
+                print(f'  {msg}')
+        return 0 if identical else 1
+
+    if not config_path.exists():
+        print(f'error: config {config_path} not found', file=sys.stderr)
+        return 2
+    config = load_config(config_path)
+    if label is not None:
+        config['label'] = label
+
+    def sink(line: str) -> None:
+        print(line)
+
+    run_result = run_config(config, sink=sink)
+
+    run_label = config.get('label', 'run')
+    rid = run_id_from(run_label)
+    run_dir = RESULTS_DIR / rid
+    environment = environment_record(' '.join(sys.argv))
+    write_run(run_dir, config, environment, run_result)
+
+    table_path = run_dir / 'table.md'
+    print(f'run id: {rid}')
+    print(f'artifacts: {run_dir}')
+    print(f'table: {table_path}')
+    if run_result.aborted:
+        print('NOTE: run aborted (invalid solution detected — harness bug).', file=sys.stderr)
+        return 3
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog='swarmway')
     sub = parser.add_subparsers(dest='command', required=True)
@@ -398,6 +453,24 @@ def main(argv: list[str] | None = None) -> int:
         help='CBS tie-break order for equal-cost nodes: fifo, conflicts, depth',
     )
 
+    p_bench = sub.add_parser('bench', help='run a config-driven benchmark harness')
+    p_bench.add_argument(
+        '--config',
+        type=Path,
+        default=DEFAULT_BENCH_CONFIG,
+        help='bench config YAML (default bench/default.yaml)',
+    )
+    p_bench.add_argument(
+        '--label',
+        help='run label (overrides config label)',
+    )
+    p_bench.add_argument(
+        '--diff',
+        nargs=2,
+        metavar=('A', 'B'),
+        help='compare two results.csv files ignoring runtime_ms and run-id',
+    )
+
     p_replay = sub.add_parser('replay', help='replay and validate a trace file')
     p_replay.add_argument('--trace', required=True, type=Path, help='path to trace JSON file')
     p_replay.add_argument(
@@ -422,6 +495,12 @@ def main(argv: list[str] | None = None) -> int:
         )
     if args.command == 'replay':
         return run_replay(Path(args.trace), args.check)
+    if args.command == 'bench':
+        return run_bench(
+            Path(args.config),
+            args.label,
+            tuple(args.diff) if args.diff is not None else None,
+        )
 
     parser.print_help(sys.stderr)
     return 2

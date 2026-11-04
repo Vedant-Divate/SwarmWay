@@ -1,0 +1,55 @@
+# Section 10.1 full benchmark set (all vendored maps, even + random,
+# agents up to instance limits). COMMITTED but NEVER RUN this phase;
+# run only locally, on demand, with its own run ID.
+label: full
+budget_ms: 60000
+scenario: even
+arms:
+  - name: cbs
+    options:
+      tie_break: fifo
+    seed: null
+  - name: pp-fixed
+    options: {}
+    seed: null
+  - name: pp-best-of-n
+    options:
+      orderings: 8
+    seed: 42
+cells:
+  - map: empty-16-16
+    agents: [5, 10, 20, 40, 80, 120]
+  - map: random-32-32-10
+    agents: [5, 10, 20, 40, 80]
+  - map: random-32-32-20
+    agents: [5, 10, 20, 40, 80]
+  - map: maze-32-32-2
+    agents: [5, 10, 20, 40, 80]
+  - map: room-32-32-4
+    agents: [5, 10, 20, 40, 80]
+  - map: warehouse-10-20-10-2-1
+    agents: [5, 10, 20, 40, 80, 120, 160, 200]
+  - map: ht_chantry
+    agents: [5, 10, 20, 40, 80, 160, 320]
+  # Random scenario files are not vendored; these rows are explicit skips.
+  - map: empty-16-16
+    scenario: random
+    agents: [5, 10, 20, 40]
+  - map: random-32-32-10
+    scenario: random
+    agents: [5, 10, 20, 40]
+  - map: random-32-32-20
+    scenario: random
+    agents: [5, 10, 20, 40]
+  - map: maze-32-32-2
+    scenario: random
+    agents: [5, 10, 20, 40]
+  - map: room-32-32-4
+    scenario: random
+    agents: [5, 10, 20, 40]
+  - map: warehouse-10-20-10-2-1
+    scenario: random
+    agents: [5, 10, 20, 40]
+  - map: ht_chantry
+    scenario: random
+    agents: [5, 10, 20, 40]
