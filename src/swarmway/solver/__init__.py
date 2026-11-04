@@ -34,6 +34,7 @@ from swarmway.solver.prioritized import (
     solve_pp,
     solve_pp_best_of_n,
 )
+from swarmway.solver.trace import TraceRecorder
 
 
 class SolverError(Exception):
@@ -54,7 +55,9 @@ class SolverRun:
     options: dict[str, Any] = field(default_factory=dict)
 
 
-SolverRunner = Callable[[Instance, int, dict[str, Any], int | None], SolverRun]
+SolverRunner = Callable[
+    [Instance, int, dict[str, Any], int | None, TraceRecorder | None], SolverRun
+]
 
 
 def _run_cbs(
@@ -62,6 +65,7 @@ def _run_cbs(
     budget_ms: int,
     options: dict[str, Any],
     seed: int | None,
+    recorder: TraceRecorder | None = None,
 ) -> SolverRun:
     if seed is not None:
         raise SolverError('cbs does not take a seed')
@@ -73,7 +77,7 @@ def _run_cbs(
         raise SolverError(
             f"cbs: tie_break must be one of 'fifo', 'conflicts', 'depth', got {tie_break!r}"
         )
-    outcome = cbs_solve(instance, budget_ms, tie_break=tie_break)
+    outcome = cbs_solve(instance, budget_ms, tie_break=tie_break, recorder=recorder)
     return SolverRun(outcome=outcome, notes=(), seed=None, options={'tie_break': tie_break})
 
 
@@ -82,6 +86,7 @@ def _run_pp_fixed(
     budget_ms: int,
     options: dict[str, Any],
     seed: int | None,
+    recorder: TraceRecorder | None = None,
 ) -> SolverRun:
     if options:
         raise SolverError('pp-fixed takes no options')
@@ -97,8 +102,11 @@ def _run_pp_best_of_n(
     budget_ms: int,
     options: dict[str, Any],
     seed: int | None,
+    recorder: TraceRecorder | None = None,
 ) -> SolverRun:
     unknown = sorted(set(options) - {'orderings', 'n'})
+    if unknown:
+        raise SolverError(f'pp-best-of-n: unknown option(s) {unknown}')
     if unknown:
         raise SolverError(f'pp-best-of-n: unknown option(s) {unknown}')
     # "n" is the PROJECT.md 7.4 spelling, "orderings" the Phase 5 one;
@@ -146,12 +154,14 @@ def run_solver(
     budget_ms: int,
     options: dict[str, Any] | None = None,
     seed: int | None = None,
+    recorder: TraceRecorder | None = None,
 ) -> SolverRun:
     """Run a registered solver and return its outcome plus trace metadata.
 
     ``seed`` may be passed directly or as an ``options['seed']`` entry
     (the HTTP request body has no separate seed field); passing both is
-    an error.
+    an error. ``recorder``, if given, records the CBS search events
+    (Section 8.10); PP solvers ignore it and keep ``search: []``.
     """
     runner = _SOLVERS.get(name)
     if runner is None:
@@ -163,7 +173,7 @@ def run_solver(
         seed = effective_options.pop('seed')
     if seed is not None and not isinstance(seed, int):
         raise SolverError('seed must be an integer')
-    return runner(instance, budget_ms, effective_options, seed)
+    return runner(instance, budget_ms, effective_options, seed, recorder)
 
 
 __all__ = [

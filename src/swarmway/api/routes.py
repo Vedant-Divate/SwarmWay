@@ -29,7 +29,7 @@ from swarmway.domain.schemas import (
     TraceV1,
 )
 from swarmway.domain.solution import Solution
-from swarmway.solver import SolverError, run_solver, solver_names
+from swarmway.solver import SolverError, TraceRecorder, run_solver, solver_names
 from swarmway.solver.validity import ValidityError, check
 
 settings = load_settings()
@@ -244,11 +244,19 @@ def solve_route(request: SolveRequest) -> dict[str, Any]:
             )
         domain_instance = _build_instance_from_dict(grid, inst, map_id)
 
+    recorder = TraceRecorder()
     try:
-        run = run_solver(request.solver, domain_instance, budget, options=request.options)
+        run = run_solver(
+            request.solver,
+            domain_instance,
+            budget,
+            options=request.options,
+            recorder=recorder,
+        )
     except SolverError as exc:
         raise _error('invalid_options', str(exc)) from exc
     outcome = run.outcome
+    search = recorder.finish()
 
     if outcome.status == 'solved' and outcome.solution is not None:
         sol: Solution = outcome.solution
@@ -289,7 +297,7 @@ def solve_route(request: SolveRequest) -> dict[str, Any]:
             ),
             instance=instance_block,
             result=result_block,
-            search=[],
+            search=search,
             execution=execution_block,
         )
         # Independent validity check — an invalid solution is a bug.

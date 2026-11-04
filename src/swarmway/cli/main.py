@@ -27,7 +27,7 @@ from swarmway.domain import (
     parse_scen,
 )
 from swarmway.domain.schemas import TraceV1
-from swarmway.solver import SolverError, run_solver, solver_names
+from swarmway.solver import SolverError, TraceRecorder, run_solver, solver_names
 from swarmway.solver.validity import ValidityError, check
 
 MAPS_INDEX = Path('data/maps/maps.index.json')
@@ -192,14 +192,16 @@ def run_solve(
         options = {'tie_break': tie_break}
     elif solver == 'pp-best-of-n':
         options = {'orderings': orderings}
+    recorder = TraceRecorder() if emit_trace is not None else None
     t0 = time.perf_counter()
     try:
-        run = run_solver(solver, instance, budget_ms, options=options, seed=seed)
+        run = run_solver(solver, instance, budget_ms, options=options, seed=seed, recorder=recorder)
     except SolverError as exc:
         print(f'error: {exc}', file=sys.stderr)
         return 2
     outcome = run.outcome
     runtime_ms = (time.perf_counter() - t0) * 1000.0
+    search = recorder.finish() if recorder is not None else []
 
     print(f'status: {outcome.status}')
     print(f'agents: {len(instance.agents)}')
@@ -267,7 +269,7 @@ def run_solve(
                 ),
                 instance=instance_block,
                 result=result_block,
-                search=[],
+                search=search,
                 execution=execution_block,
             )
         else:
@@ -303,7 +305,7 @@ def run_solve(
                 ),
                 instance=instance_block,
                 result=result_block,
-                search=[],
+                search=search,
                 execution=execution_block,
             )
 
