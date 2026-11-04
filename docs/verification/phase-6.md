@@ -132,8 +132,118 @@ tokens exhausted), committed as `8fae4b4`.
 - `f10dab2 feat(solver): add deterministic tie-break options`
 - `d60ba75 feat(scripts): add search-story curated traces`
 
-## Stopped here
+## Part B — frontend v2 (Sections 14 tasks 1 + 3, built directly per ADR-0009)
 
-Part A is complete and pushed. Frontend work (Part B: Search tab tree explorer,
-compare panel, tie-break selector, contract tests, phone-width check) is NOT
-started, per the Part A instruction to stop after the partial gate.
+### Contract tests (B4)
+
+Added `ajv` (^8.17.1) as a dev-only dependency — never imported by app code.
+Rewrote `frontend/src/logic/traceSchema.test.ts` to validate *fully* against the frozen
+`docs/contracts/trace-v1.schema.json` via ajv (`allErrors: true, strict: false`; the
+schema uses no `format` keywords, so validation covers every required field, type, and
+enum — no spot checks). The schema and the timeout fixture live outside `frontend/`
+and are read via repo-root-relative paths (`../docs/contracts/trace-v1.schema.json`,
+`../tests/fixtures/timeout-trace.json`), which tsx resolves with cwd=frontend/.
+
+```
+$ pnpm run test
+$ tsx --test src/utils/mapf.test.ts src/logic/traceSchema.test.ts
+✔ trace schema contract: every bundled trace validates fully against trace-v1.schema.json
+✔ trace schema contract: timeout fixture validates fully against trace-v1.schema.json
+✔ parseGridRows classifies MovingAI passable and blocked characters accurately
+✔ getAgentIdentity gives distinct non-color-only archetypes and badges
+✔ easeStepProgress respects prefers-reduced-motion jump vs smooth cubic curve
+✔ sampleAgentPose interpolates cleanly and marks settledAtGoal accurately
+✔ sampleTrailPoints generates monotonically increasing fade samples
+✔ HERO_LANDING_TRACE is strictly 4-connected, unit-step, and collision-free
+✔ All bundled JSON traces in public/traces conform to Trace v1 schema and are
+   collision-free when solved
+✔ normalizeRoutePath maps valid and fallback SPA routes
+✔ getPlaybackDisplayStep and getScrubberProgress gate integer steps...
+ℹ tests 11   ℹ pass 11   ℹ fail 0
+```
+
+The existing CI frontend test step (`"test": "tsx --test ..."` in
+`frontend/package.json`) already runs these; no new workflow was created.
+
+### Tie-break selector (B3)
+
+Workspace solve controls gain a `Tie-break order (CBS)` dropdown
+(`fifo` / `conflicts` / `depth`, default `fifo`), sent as
+`options.tie_break` on live CBS solves. It only applies to CBS (prioritized ignores
+it — the backend rejects unknown options with 422, so prioritized/compare arms send
+`options: {}`). In offline mode the whole solve control deck (including the selector)
+is hidden; bundled traces are fixed, so there's nothing to tune — an honest note is
+shown via the offline notice instead of a disabled/meaningless control.
+
+### Compare panel (B2)
+
+Already present (`ComparePanel`): side-by-side CBS vs Prioritized stats for the same
+instance (status, SoC, makespan, runtime, CT expanded, low-level A*), each number
+labelled with the run that produced it (`CBS (Optimal)` vs `Prioritized (Baseline)`),
+per-agent arrival-step breakdown, `Load onto 3D stage` buttons per arm, and the
+mandatory honesty copy verbatim from `strings.ts`:
+
+- CBS: `"Optimal for sum-of-costs under 4-connected unit-time movement with wait actions and stay-at-goal semantics."`
+- Prioritized: `"Incomplete baseline: faster, sometimes fails, usually costlier."`
+
+Solve buttons: `CBS`, `Prioritized`, `Compare both`. Live mode POSTs to `/api/solve`
+per arm and reuses an existing result for the same instance+solver (no re-solve).
+Offline mode pairs bundled CBS+PP traces via `comparisonFile`; `plaza-rotary` has no
+bundled PP trace and shows an honest "no bundled PP trace for this map" rather than
+fake data.
+
+### Search tab — tree explorer (B1)
+
+`SearchExplorer` evolved from a flat event list to the G.4 spec:
+
+- **Tree layout**: events rendered in chronological (topological) order, indented by
+  Constraint Tree depth (root left, children right), with `├─`/`└─` branch glyphs and
+  `│` vertical connectors showing the parent→child relationship.
+- **Node cards**: each event shows `#seq · EVENT node N · cost C`, plus the conflict
+  it resolved (type, agents, position, timestep) and the constraint that created it
+  (agent, type, vertex/edge target, timestep) via the established deep-red conflict
+  and amber constraint encodings (`ConflictEncodingTag` / `ConstraintEncodingTag`).
+- **Seq scrubber + step buttons**: `◀ Step` / `Step ▶` plus a range scrubber
+  `1 / N` walk events in order. Selecting an event notifies WorkspaceScreen, which
+  seeks the 3D board to the conflict timestep (conflict cell pulses in the 3D stage;
+  the added constraint is outlined; the replanned agent's path highlights; others are
+  dimmed). The goal event seeks to makespan and shows the final state of all paths.
+- **Truncation badge**: when the event stream was capped (`search_truncated`), an
+  honest "Trace truncated — every k-th event kept; last 50 + goal event retained."
+  badge is shown.
+- **Accessibility**: every row is a keyboard-Tab-reachable `<button>` with an
+  `aria-label` summarizing seq/event/node/cost/conflict; a synchronized textual event
+  log panel lists one line per event (seq, event, node, cost, conflict/constraint
+  summary) as the non-visual path; colors are never the only signal (glyphs + labels
+  carry meaning). `prefers-reduced-motion` is respected by the stage/agents.
+
+### Phone-width (B5)
+
+Layout uses a single-column stack below the `lg` breakpoint
+(`grid-cols-1 lg:grid-cols-[...]`), the playback dock is `w-[min(94%,760px)]`, the
+compare table scrolls (`overflow-x-auto`), and the tie-break select is `w-[170px]`
+(fits a ~390px viewport with the main `px-4` padding). **Visual confirmation at a
+phone (~390 px) viewport is the human's to perform** — the agent cannot screenshot.
+The human should confirm: the workspace, tree explorer, and compare panel are usable
+at phone width (stage-first grid collapses to a single column; the tree may yield to
+the textual event log on narrow viewports — that is the accessible path anyway).
+
+### Scope sanity
+
+- No benchmark page, no instance editor, no `bench/`.
+- `ajv` appears only under `devDependencies`; zero new runtime dependencies.
+- No `frontend/` source was modified in Part A; Part B touches only `frontend/`.
+
+## Deviations from PROJECT.md
+
+None beyond ADR-0009 (frontend v2 built directly by the coding agent; AI Studio
+tokens exhausted), committed as `8fae4b4`.
+
+## Commits in this phase
+
+- `8fae4b4 docs(decisions): frontend v2 built by coding agent (ai studio unavailable)`
+- `f10dab2 feat(solver): add deterministic tie-break options`
+- `d60ba75 feat(scripts): add search-story curated traces`
+- `<feat(ui) commit>` feat(ui): build search tree explorer and compare panel (frontend v2)
+- `<test(ui) commit>` test(ui): add trace schema contract tests to ci
+
