@@ -6,7 +6,7 @@ import { defineConfig, loadEnv } from 'vite';
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), 'VITE_');
   return {
-    base: env.VITE_BASE_PATH ?? process.env.VITE_BASE_PATH ?? '/',
+    base: env.VITE_BASE_PATH || process.env.VITE_BASE_PATH || (process.env.CI === 'true' ? '/SwarmWay/' : '/'),
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
