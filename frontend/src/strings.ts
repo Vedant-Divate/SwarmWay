@@ -232,6 +232,44 @@ export const STRINGS = {
     placeholderBody:
       'This view will aggregate success rates, sum-of-costs optimality gaps, and runtime scaling curves across standard MovingAI grid families for CBS and prioritized baselines.',
     exploreReplaysCta: 'Explore pre-computed replays',
+
+    // Honesty copy shown under every table (Section 1.6 / 10.6).
+    honestyTimeouts:
+      'Timeouts are failures and stay in the success-rate denominators — never dropped.',
+    honestyMedians:
+      'Medians are computed over solved runs only, with the solved-count shown next to each median.',
+    honestyComparable:
+      'Artifacts are not comparable across machines — per-environment tables only (Section 10.4).',
+    honestyCaveat:
+      'Every number on this page cites the committed run ID below; no figure is hand-typed (Section 10.7).',
+
+    runId: 'Run ID',
+    environment: 'Environment',
+    reproduceCommand: 'Reproduce command',
+    reproduceHint:
+      'Regenerate these artifacts with: uv run swarmway bench --config bench/default.yaml',
+    tableHeading: 'Benchmark results — {runId}',
+    noResultsHeading: 'No benchmark results yet',
+    noResultsBody:
+      'Run the headline benchmark to generate results: uv run swarmway bench --config bench/default.yaml',
+    noResultsDetail:
+      'Once a run is committed under data/results/<run-id>/, run scripts/sync-results.py to copy its summary.json and environment.json into frontend/public/benchmarks/.',
+    colMap: 'Map',
+    colAgents: 'Agents',
+    colArm: 'Arm',
+    colStatus: 'Status',
+    colSoc: 'Sum of costs',
+    colMakespan: 'Makespan',
+    colRuntime: 'Runtime (ms)',
+    colSuccessRate: 'Success rate',
+    colMedianSoc: 'Median SoC',
+    colMedianRuntime: 'Median runtime (ms)',
+    solved: 'solved',
+    unsat: 'unsat',
+    timeout: 'timeout',
+    error: 'error',
+    skipped: 'skipped',
+    aborted: 'aborted',
   },
 
   about: {

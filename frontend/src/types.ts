@@ -177,3 +177,52 @@ export type RoutePath = '/' | '/workspace' | '/replays' | '/benchmarks' | '/abou
 export type WorkspaceTab = 'paths' | 'search';
 
 export type AgentSetupMode = 'preset' | 'custom';
+
+// ---------------------------------------------------------------------------
+// Benchmarks page: summary.json + environment.json shapes (Section 10.5).
+// These mirror swarmway/bench/artifacts.py and swarmway/bench/metrics.py.
+// Every figure on the Benchmarks page is read from bundled summary.json —
+// nothing is hand-typed (Section 10.7).
+// ---------------------------------------------------------------------------
+
+export interface ArmAggregate {
+  status_counts: Record<string, number>;
+  solved: number;
+  unsat: number;
+  timeout: number;
+  error: number;
+  skipped: number;
+  aborted: number;
+  total: number;
+  success_rate: number;
+  median_soc: number | null;
+  median_soc_solved_count: number;
+  median_runtime_ms: number | null;
+  median_runtime_solved_count: number;
+}
+
+export interface CellAggregate {
+  map: string;
+  agents: number;
+  arms: Record<string, ArmAggregate>;
+}
+
+export interface BenchmarkEnvironment {
+  python_implementation: string;
+  python_version: string;
+  platform: string;
+  cpu: string;
+  ram_gb: string;
+  git_describe: string;
+  date_utc: string;
+  command_line: string;
+}
+
+export interface SummaryJson {
+  run_id: string;
+  label: string;
+  aborted: boolean;
+  config: Record<string, unknown>;
+  environment: BenchmarkEnvironment;
+  cells: CellAggregate[];
+}
