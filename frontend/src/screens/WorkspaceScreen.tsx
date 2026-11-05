@@ -4,11 +4,14 @@ import {
   fetchMapDetail,
   fetchMapPresets,
   fetchMaps,
+  checkSolverHealth,
   postSolve,
   SolverApiError,
 } from '../api/client';
 import { AccessibleInspector } from '../components/AccessibleInspector';
+import { Tooltip } from '../components/Tooltip';
 import { ComparePanel } from '../components/ComparePanel';
+import { GridEditor } from '../components/GridEditor';
 import { type CameraViewRequest, DioramaStage } from '../components/DioramaStage';
 import { SearchExplorer } from '../components/SearchExplorer';
 import { AgentIdentityBadge, EncodingLegendStrip } from '../components/VisualEncodings';
@@ -59,6 +62,150 @@ interface AgentActivityRow {
 const SPEED_OPTIONS: ReadonlyArray<number> = [0.5, 1, 2, 4, 8];
 const MAX_ACTIVITY_STRIP_AGENTS = 16;
 
+// --- Custom grid share-link codec (rows RLE + base64url, size bounded) ---
+const SHARE_VERSION = 1;
+const SHARE_MAX_CHARS = 2000;
+
+function base64urlEncode(text: string): string {
+  return btoa(text)
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/, '');
+}
+
+function base64urlDecode(text: string): string | null {
+  try {
+    const pad = '='.repeat((4 - (text.length % 4)) % 4);
+    return atob(text.replace(/-/g, '+').replace(/_/g, '/') + pad);
+  } catch {
+    return null;
+  }
+}
+
+function rleEncode(text: string): string {
+  let out = '';
+  let i = 0;
+  while (i < text.length) {
+    const ch = text[i];
+    let run = 1;
+    while (i + run < text.length && text[i + run] === ch && run < 99) run++;
+    out += String(run) + ch;
+    i += run;
+  }
+  return out;
+}
+
+function rleDecode(encoded: string): string | null {
+  let out = '';
+  let i = 0;
+  while (i < encoded.length) {
+    let num = '';
+    while (i < encoded.length && encoded[i] >= '0' && encoded[i] <= '9') {
+      num += encoded[i];
+      i++;
+    }
+    if (num === '' || i >= encoded.length) return null;
+    out += encoded[i].repeat(Number(num));
+    i++;
+  }
+  return out;
+}
+
+function encodeShareLink(instance: {
+  width: number;
+  height: number;
+  rows: string[];
+  agents: Array<{ start: GridPoint; goal: GridPoint }>;
+}): string {
+  const head = JSON.stringify({
+    v: SHARE_VERSION,
+    w: instance.width,
+    h: instance.height,
+    a: instance.agents.map((a) => [a.start, a.goal]),
+  });
+  return base64urlEncode(head + '|' + rleEncode(instance.rows.join('\n')));
+}
+
+function decodeShareLink(encoded: string): {
+  width: number;
+  height: number;
+  rows: string[];
+  agents: AgentSpec[];
+} | null {
+  const text = base64urlDecode(encoded);
+  if (text === null) return null;
+  const sep = text.lastIndexOf('|');
+  if (sep < 0) return null;
+  let head: { v: number; w: number; h: number; a: Array<[GridPoint, GridPoint]> };
+  try {
+    head = JSON.parse(text.slice(0, sep)) as {
+      v: number;
+      w: number;
+      h: number;
+      a: Array<[GridPoint, GridPoint]>;
+    };
+  } catch {
+    return null;
+  }
+  const rowsText = rleDecode(text.slice(sep + 1));
+  if (rowsText === null) return null;
+  return {
+    width: head.w,
+    height: head.h,
+    rows: rowsText.split('\n'),
+    agents: head.a.map(([start, goal], i) => ({ id: i, start, goal })),
+  };
+}
+
+function validateCustomInstance(
+  instance: { width: number; height: number; rows: string[]; agents: AgentSpec[] },
+  caps: { maxGridCells: number; maxAgents: number; budgetMs: number } | null,
+): { ok: true } | { ok: false; reason: string } {
+  const maxCells = caps?.maxGridCells ?? 262144;
+  const maxAgents = caps?.maxAgents ?? 60;
+  if (!instance.width || !instance.height || instance.width > 512 || instance.height > 512) {
+    return { ok: false, reason: 'grid size out of range' };
+  }
+  if (instance.width * instance.height > maxCells) {
+    return { ok: false, reason: 'grid over cell cap' };
+  }
+  if (instance.agents.length === 0 || instance.agents.length > maxAgents) {
+    return { ok: false, reason: 'agent count invalid' };
+  }
+  if (instance.rows.length !== instance.height) {
+    return { ok: false, reason: 'row count mismatch' };
+  }
+  for (const row of instance.rows) {
+    if (row.length !== instance.width) return { ok: false, reason: 'row width mismatch' };
+    for (const ch of row) {
+      if (ch !== '.' && ch !== '@') return { ok: false, reason: 'bad cell character' };
+    }
+  }
+  const starts = new Set<string>();
+  const goals = new Set<string>();
+  for (const a of instance.agents) {
+    const [sx, sy] = a.start;
+    const [gx, gy] = a.goal;
+    if (sx < 0 || sx >= instance.width || sy < 0 || sy >= instance.height) {
+      return { ok: false, reason: 'agent start out of bounds' };
+    }
+    if (gx < 0 || gx >= instance.width || gy < 0 || gy >= instance.height) {
+      return { ok: false, reason: 'agent goal out of bounds' };
+    }
+    if (instance.rows[sy][sx] !== '.' || instance.rows[gy][gx] !== '.') {
+      return { ok: false, reason: 'agent start or goal on blocked cell' };
+    }
+    if (sx === gx && sy === gy) return { ok: false, reason: 'agent start equals goal' };
+    const sk = `${sx},${sy}`;
+    const gk = `${gx},${gy}`;
+    if (starts.has(sk) || goals.has(gk)) return { ok: false, reason: 'duplicate agent position' };
+    starts.add(sk);
+    goals.add(gk);
+  }
+  return { ok: true };
+}
+
+
 export function WorkspaceScreen({
   isOffline,
   reducedMotion,
@@ -92,6 +239,26 @@ export function WorkspaceScreen({
   const [solving, setSolving] = useState(false);
   const [apiErrorMessage, setApiErrorMessage] = useState<string | null>(null);
   const [tieBreak, setTieBreak] = useState<'fifo' | 'conflicts' | 'depth'>('fifo');
+
+  // Live solver capability caps (read from GET /api/health — never hardcoded)
+  const [healthCaps, setHealthCaps] = useState<{
+    maxGridCells: number;
+    maxAgents: number;
+    budgetMs: number;
+  } | null>(null);
+
+  // Custom grid editor state
+  const [customGridMode, setCustomGridMode] = useState<boolean>(false);
+  const [customGridWidth, setCustomGridWidth] = useState<number>(10);
+  const [customGridHeight, setCustomGridHeight] = useState<number>(10);
+  const [customGridRows, setCustomGridRows] = useState<string[]>(
+    Array(10).fill('..........')
+  );
+  const [customPendingStartCell, setCustomPendingStartCell] = useState<
+    GridPoint | null
+  >(null);
+  const [shareTooLarge, setShareTooLarge] = useState<boolean>(false);
+  const [hashError, setHashError] = useState<string | null>(null);
 
   // Playback & 3D interaction state (React state holds integer timestep only)
   const [playbackStep, setPlaybackStep] = useState<number>(0);
@@ -248,7 +415,23 @@ export function WorkspaceScreen({
     return () => {
       active = false;
     };
-  }, [isOffline, selectedMapId]);
+  }, [isOffline, selectedMapId])
+
+  // Read solver capability caps from the health endpoint; fall back to documented defaults
+  useEffect(() => {
+    if (isOffline) return;
+    let active = true;
+    checkSolverHealth().then((health) => {
+      if (!active || !health) return;
+      const caps = health.caps ?? {};
+      setHealthCaps({
+        maxGridCells: Number(caps['max_grid_cells'] ?? 262144) || 262144,
+        maxAgents: Number(caps['max_agents'] ?? 60) || 60,
+        budgetMs: Number(caps['solve_budget_ms'] ?? 10000) || 10000,
+      });
+    });
+    return () => { active = false; };
+  }, [isOffline]);;
 
   // Fetch selected map detail when online
   useEffect(() => {
@@ -328,8 +511,19 @@ export function WorkspaceScreen({
         makespan: 0,
       };
     }
+    if (customGridMode) {
+      return {
+        width: customGridWidth,
+        height: customGridHeight,
+        rows: customGridRows,
+        name: STRINGS.workspace.customGrid,
+        agents: customAgents,
+        paths: customAgents.map((a) => [a.start]),
+        makespan: 0,
+      };
+    }
     return null;
-  }, [activeTrace, liveMapDetail, setupMode, customAgents, presetAgents]);
+  }, [activeTrace, liveMapDetail, setupMode, customAgents, presetAgents, customGridMode, customGridWidth, customGridHeight, customGridRows]);
 
   const makespan = boardSource?.makespan ?? 0;
 
@@ -604,22 +798,33 @@ export function WorkspaceScreen({
 
   // Execute live API solve
   const handleRunLiveSolve = async (mode: 'cbs' | 'prioritized' | 'compare') => {
-    if (isOffline || !selectedMapId) return;
-
     let instance: SolveInstance;
-    if (setupMode === 'preset') {
-      instance = { map_id: selectedMapId, scenario, agents: agentCount };
-    } else {
-      if (!liveMapDetail || liveMapDetail.id !== selectedMapId || customAgents.length === 0) {
-        return;
-      }
+    if (customGridMode) {
+      if (customGridRows.length === 0 || customAgents.length === 0) return;
       instance = {
-        name: liveMapDetail.name,
-        width: liveMapDetail.width,
-        height: liveMapDetail.height,
-        rows: liveMapDetail.rows,
+        name: 'custom-grid',
+        width: customGridWidth,
+        height: customGridHeight,
+        rows: customGridRows,
         agents: customAgents,
       };
+    } else {
+      if (isOffline || !selectedMapId) return;
+
+      if (setupMode === 'preset') {
+        instance = { map_id: selectedMapId, scenario, agents: agentCount };
+      } else {
+        if (!liveMapDetail || liveMapDetail.id !== selectedMapId || customAgents.length === 0) {
+          return;
+        }
+        instance = {
+          name: liveMapDetail.name,
+          width: liveMapDetail.width,
+          height: liveMapDetail.height,
+          rows: liveMapDetail.rows,
+          agents: customAgents,
+        };
+      }
     }
 
     setSolving(true);
@@ -664,8 +869,23 @@ export function WorkspaceScreen({
         triggerSolveRevealAndPlay(cbsRes, !reducedMotion);
       }
     } catch (err) {
+      let detailText = '';
       if (err instanceof SolverApiError) {
-        setApiErrorMessage(`${err.code}: ${err.message}`);
+        const d = err.details;
+        if (
+          d &&
+          typeof d === 'object' &&
+          'field' in d && 'limit' in d && 'received' in d
+        ) {
+          const field = String((d as { field: unknown }).field);
+          const limit = String((d as { limit: unknown }).limit);
+          const received = String((d as { received: unknown }).received);
+          detailText = STRINGS.workspace.errorDetailLine
+            .replace('{field}', field)
+            .replace('{limit}', limit)
+            .replace('{received}', received);
+        }
+        setApiErrorMessage(`${err.code}: ${err.message}${detailText ? ' — ' + detailText : ''}`);
       } else {
         setApiErrorMessage(err instanceof Error ? err.message : 'Solver request failed');
       }
@@ -689,6 +909,70 @@ export function WorkspaceScreen({
       setApiErrorMessage(err instanceof Error ? err.message : 'Failed to load comparison trace');
     }
   };
+
+  // URL-hash sharing for custom grid instances (rows RLE + base64url, size-bounded)
+  useEffect(() => {
+    let source: { width: number; height: number; rows: string[]; agents: AgentSpec[] } | null = null;
+    const hash = window.location.hash;
+    if (hash.startsWith('#grid=')) {
+      source = decodeShareLink(hash.slice('#grid='.length));
+    } else {
+      try {
+        const raw = localStorage.getItem('swarmway:editor:custom-grid');
+        if (raw) {
+          const parsed = JSON.parse(raw) as
+            | { width: number; height: number; rows: string[]; agents: AgentSpec[] }
+            | undefined;
+          if (parsed && parsed.rows && parsed.agents) source = parsed;
+        }
+      } catch {
+        // Ignore unreadable draft
+      }
+    }
+    if (!source) return;
+    const check = validateCustomInstance(source, healthCaps);
+    if (!check.ok) {
+      if (hash.startsWith('#grid=')) setHashError(STRINGS.workspace.customGridInvalidLink);
+      return;
+    }
+    setCustomGridRows(source.rows);
+    setCustomGridWidth(source.width);
+    setCustomGridHeight(source.height);
+    setCustomAgents(source.agents);
+    setCustomGridMode(true);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Persist editor draft to localStorage (works alongside URL-hash sharing, Section 11.2)
+  useEffect(() => {
+    if (!customGridMode) return;
+    try {
+      localStorage.setItem('swarmway:editor:custom-grid', JSON.stringify({
+        width: customGridWidth,
+        height: customGridHeight,
+        rows: customGridRows,
+        agents: customAgents,
+      }));
+    } catch {
+      // Storage unavailable or quota exceeded — draft is session-only
+    }
+  }, [customGridMode, customGridWidth, customGridHeight, customGridRows, customAgents]);
+
+  // Write size-bounded share link; honest message when over the bound
+  useEffect(() => {
+    if (!customGridMode) return;
+    const encoded = encodeShareLink({
+      width: customGridWidth,
+      height: customGridHeight,
+      rows: customGridRows,
+      agents: customAgents,
+    });
+    if (encoded.length > SHARE_MAX_CHARS) {
+      setShareTooLarge(true);
+      return;
+    }
+    setShareTooLarge(false);
+    window.location.hash = `#grid=${encoded}`;
+  }, [customGridMode, customGridWidth, customGridHeight, customGridRows, customAgents]);
 
   const currentReplayMeta = BUNDLED_REPLAYS.find((r) => r.id === selectedReplayId);
   const selectedMapSummary = maps.find((m) => m.id === selectedMapId);
@@ -1072,6 +1356,116 @@ export function WorkspaceScreen({
                 )}
               </section>
 
+              {/* Custom grid editor mode toggle */}
+              <section className="p-5 bg-[#FAF9F6] border border-[#DCD7CC] rounded-xl space-y-2.5">
+                <div className="flex items-center justify-between gap-2">
+                  <h2 className="text-sm font-semibold text-[#171614]">
+                    {STRINGS.workspace.customGrid}
+                  </h2>
+                  <button
+                    type="button"
+                    onClick={() => setCustomGridMode((m) => !m)}
+                    className={`px-2.5 py-1 text-xs font-medium rounded transition-colors cursor-pointer ${customGridMode ? 'bg-[#1E40AF] text-white' : 'text-[#171614] bg-white border border-[#D4CFC5]'}`}
+                  >
+                    {customGridMode ? STRINGS.workspace.customGridUseMap : STRINGS.workspace.customGridUseCustom}
+                  </button>
+                </div>
+
+                {customGridMode && (
+                  <>
+                    
+
+                    <GridEditor
+                      width={customGridWidth}
+                      height={customGridHeight}
+                      maxCells={healthCaps?.maxGridCells ?? 262144}
+                      rows={customGridRows}
+                      agents={customAgents}
+                      pendingStartCell={customPendingStartCell}
+                      onSizeChange={(w, h) => {
+                        setCustomGridWidth(w);
+                        setCustomGridHeight(h);
+                      }}
+                      onGridChange={setCustomGridRows}
+                      onAgentPlace={(agent) => {
+                        // Replace or add agent
+                        const existingIdx = customAgents.findIndex((a) => a.id === agent.id);
+                        if (existingIdx >= 0) {
+                          const next = [...customAgents];
+                          next[existingIdx] = agent;
+                          setCustomAgents(next);
+                        } else {
+                          setCustomAgents([...customAgents, agent]);
+                        }
+                      }}
+                      onClearAgents={() => {
+                        setCustomAgents([]);
+                        setCustomPendingStartCell(null);
+                      }}
+                      onAgentRemove={(id) => {
+                        setCustomAgents((prev) => prev.filter((a) => a.id !== id));
+                        setCustomPendingStartCell(null);
+                      }}
+                      onClearGrid={() => {
+                        setCustomGridRows(Array(customGridHeight).fill('.'.repeat(customGridWidth)));
+                        setCustomAgents([]);
+                        setCustomPendingStartCell(null);
+                      }}
+                      onPendingStartChange={setCustomPendingStartCell}
+                    />
+
+                    {shareTooLarge && (
+                      <p className="text-[11px] text-[#92400E]">
+                        {STRINGS.workspace.customGridShareTooLong}
+                      </p>
+                    )}
+                    {hashError && (
+                      <p className="text-[11px] text-[#9F1239]" role="alert">
+                        {STRINGS.workspace.customGridInvalidLink}
+                      </p>
+                    )}
+
+                    <div className="flex items-center justify-between text-xs font-mono tabular-nums text-[#524F49]">
+                      <span>
+                        {STRINGS.workspace.placedAgentsCount}:{' '}
+                        <strong className="text-[#171614]">{customAgents.length}</strong>
+                      </span>
+                      <div className="flex items-center gap-2 font-sans">
+                        {customAgents.length > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setCustomAgents((prev) => prev.slice(0, -1));
+                              setCustomPendingStartCell(null);
+                            }}
+                            className="px-2 py-1 text-xs text-[#44413C] hover:text-[#171614] border border-[#D4CFC5] rounded cursor-pointer"
+                          >
+                            {STRINGS.workspace.undoLastAgent}
+                          </button>
+                        )}
+                        {(customAgents.length > 0 || customPendingStartCell) && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setCustomAgents([]);
+                              setCustomPendingStartCell(null);
+                            }}
+                            className="px-2 py-1 text-xs text-[#9F1239] hover:bg-[#FFF1F2] rounded cursor-pointer"
+                          >
+                            {STRINGS.workspace.clearAgents}
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                    {customAgents.length === 0 && (
+                      <p className="text-[11px] text-[#92400E]">
+                        {STRINGS.workspace.minOneAgentHint}
+                      </p>
+                    )}
+                  </>
+                )}
+              </section>
+
               {/* Live Solve Buttons */}
               <section className="p-5 bg-[#FAF9F6] border border-[#DCD7CC] rounded-xl space-y-2.5">
                 <h2 className="text-sm font-semibold text-[#171614]">
@@ -1147,12 +1541,11 @@ export function WorkspaceScreen({
                   className="w-full px-4 py-2 text-xs font-semibold text-[#1E40AF] bg-[#1E40AF]/8 border border-[#1E40AF]/25 rounded-lg hover:bg-[#1E40AF]/15 disabled:opacity-50 transition-colors whitespace-nowrap cursor-pointer"
                 >
                   {STRINGS.workspace.solveCompare}
-                </button>
+                  </button>
               </section>
             </>
           )}
 
-          {/* Active Trace Outcome & Stats Summary Panel */}
           {activeTrace && (
             <section className="p-5 bg-[#FAF9F6] border border-[#DCD7CC] rounded-xl space-y-3">
               {/* Honest Outcome Banners for timeout / unsat / error */}
@@ -1195,13 +1588,13 @@ export function WorkspaceScreen({
                   </span>
                 </div>
                 <div>
-                  <span className="text-[#524F49] block">{STRINGS.workspace.stats.soc}</span>
+                  <Tooltip description={STRINGS.tooltips.sumOfCosts}>{STRINGS.workspace.stats.soc}</Tooltip>
                   <span className="font-mono font-semibold tabular-nums text-[#171614]">
                     {activeTrace.result.status === 'solved' ? activeTrace.result.soc : '—'}
                   </span>
                 </div>
                 <div>
-                  <span className="text-[#524F49] block">{STRINGS.workspace.stats.makespan}</span>
+                  <Tooltip description={STRINGS.tooltips.makespan}>{STRINGS.workspace.stats.makespan}</Tooltip>
                   <span className="font-mono font-semibold tabular-nums text-[#171614]">
                     {activeTrace.result.status === 'solved' ? activeTrace.result.makespan : '—'}
                   </span>

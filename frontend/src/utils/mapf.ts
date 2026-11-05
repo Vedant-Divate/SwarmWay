@@ -371,6 +371,13 @@ export const BUNDLED_REPLAYS: ReadonlyArray<BundledReplayMeta> = [
     story:
       'Agent 0 reaches its goal early at the mouth of a 1-wide cul-de-sac, sealing Agent 1 out when planned sequentially (UNSAT). Comparing with CBS shows how delaying Agent 0 unlocks an optimal plan.',
   },
+  {
+    id: 'perf-100-agent-empty-16-16',
+    file: '/traces/perf-100-agent-empty-16-16.json',
+    title: '100-Agent Performance Scene (empty 16×16)',
+    story:
+      'Performance demonstration: 100 fulfillment robots stepping one tile right in parallel on an empty 16×16 floor. Solved by CBS in under budget with sum-of-costs 100 and makespan 1. Bundle only — used for the integrated-GPU performance pass (Section 11.6).',
+  },
 ];
 
 /**

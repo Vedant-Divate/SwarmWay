@@ -29,6 +29,22 @@ export const STRINGS = {
     offlineReplay: 'Pre-computed example — generated offline.',
   },
 
+  tooltips: {
+    sumOfCosts:
+      'Sum of costs — the sum, over every agent, of the timestep at which it permanently reaches its goal. Lower is better; CBS guarantees the minimum possible sum-of-costs.',
+    makespan:
+      'Makespan — the timestep at which the last agent reaches its goal (total elapsed time of the plan).',
+    conflict: 'Conflict — a vertex or edge collision detected between two agents at the same timestep.',
+    constraint:
+      'Constraint — a forbidden cell or transition imposed on one branch of the Constraint Tree to resolve a conflict.',
+    constraintTree:
+      'Constraint tree — CBS branches on spacetime constraints; each node adds one constraint and re-plans the affected agent until a collision-free plan emerges.',
+    optimal:
+      'Optimal — proven to minimize sum-of-costs. CBS is optimal under 4-connected unit-time movement with wait actions and stay-at-goal semantics.',
+    stayAtGoal:
+      'Stay-at-goal — an agent remains physically present at its goal after arrival, so parked agents still block pass-through traffic.',
+  },
+
   encodings: {
     sectionTitle: 'Visual Encodings',
     conflictLabel: 'Conflict',
@@ -93,6 +109,25 @@ export const STRINGS = {
     tieBreakFifo: 'FIFO (insertion order)',
     tieBreakConflicts: 'Conflicts first',
     tieBreakDepth: 'Depth first',
+
+    customGrid: 'Custom Grid Editor',
+    customGridUseMap: 'Use map picker',
+    customGridUseCustom: 'Use custom grid',
+    customGridClear: 'Clear grid',
+    customGridWidth: 'Width',
+    customGridHeight: 'Height',
+    customGridHelp: 'Click cells to toggle obstacles. Click an agent start/goal to remove it.',
+
+    customGridShareTooLong:
+      'Instance too large to share as a link — try a smaller grid or fewer agents.',
+    customGridInvalidLink: 'Shared grid link could not be restored — invalid or expired instance.',
+    errorDetailLine: '{field}: received {received} (limit {limit})',
+
+    gridEditor: {
+      placeAgents: 'Place agents',
+      paintObstacles: 'Paint obstacles',
+      capHint: 'of {maxCells} cells',
+    },
 
     tabs: {
       paths: 'Paths',
