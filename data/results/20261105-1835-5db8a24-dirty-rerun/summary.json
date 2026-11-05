@@ -1,0 +1,1472 @@
+{
+  "run_id": "20261105-1835-5db8a24-dirty-rerun",
+  "label": "rerun",
+  "aborted": false,
+  "config": {
+    "label": "rerun",
+    "budget_ms": 60000,
+    "scenario": "even",
+    "arms": [
+      {
+        "name": "cbs",
+        "options": {
+          "tie_break": "fifo"
+        },
+        "seed": null
+      },
+      {
+        "name": "pp-fixed",
+        "options": {},
+        "seed": null
+      },
+      {
+        "name": "pp-best-of-n",
+        "options": {
+          "orderings": 8
+        },
+        "seed": 42
+      }
+    ],
+    "cells": [
+      {
+        "map": "empty-16-16",
+        "agents": [
+          5,
+          10,
+          20,
+          40
+        ]
+      },
+      {
+        "map": "random-32-32-10",
+        "agents": [
+          5,
+          10,
+          20,
+          40
+        ]
+      },
+      {
+        "map": "random-32-32-20",
+        "agents": [
+          5,
+          10,
+          20
+        ]
+      },
+      {
+        "map": "maze-32-32-2",
+        "agents": [
+          5,
+          10,
+          20
+        ]
+      },
+      {
+        "map": "room-32-32-4",
+        "agents": [
+          5,
+          10,
+          20
+        ]
+      },
+      {
+        "map": "warehouse-10-20-10-2-1",
+        "agents": [
+          5,
+          10,
+          20,
+          40
+        ]
+      },
+      {
+        "map": "ht_chantry",
+        "agents": [
+          5,
+          10,
+          20
+        ]
+      }
+    ]
+  },
+  "environment": {
+    "python_implementation": "CPython",
+    "python_version": "3.12.15",
+    "platform": "Windows-11-10.0.26300-SP0",
+    "cpu": "Intel64 Family 6 Model 197 Stepping 2, GenuineIntel",
+    "ram_gb": "16.5 GB",
+    "git_describe": "5db8a24-dirty",
+    "date_utc": "2026-11-05T18:35:10+00:00",
+    "command_line": "C:\\Users\\Vedant\\Desktop\\Github\\SwarmWay\\.venv\\Scripts\\swarmway bench --config bench/default.yaml --label rerun"
+  },
+  "cells": [
+    {
+      "map": "empty-16-16",
+      "agents": 5,
+      "arms": {
+        "cbs": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 66.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 1.2755999923683703,
+          "median_runtime_solved_count": 1
+        },
+        "pp-fixed": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 66.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 14.204600010998547,
+          "median_runtime_solved_count": 1
+        },
+        "pp-best-of-n": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 66.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 113.64629998570308,
+          "median_runtime_solved_count": 1
+        }
+      }
+    },
+    {
+      "map": "empty-16-16",
+      "agents": 10,
+      "arms": {
+        "cbs": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 125.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 10.611000005155802,
+          "median_runtime_solved_count": 1
+        },
+        "pp-fixed": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 125.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 113.41559997526929,
+          "median_runtime_solved_count": 1
+        },
+        "pp-best-of-n": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 126.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 909.2181999585591,
+          "median_runtime_solved_count": 1
+        }
+      }
+    },
+    {
+      "map": "empty-16-16",
+      "agents": 20,
+      "arms": {
+        "cbs": {
+          "status_counts": {
+            "timeout": 1
+          },
+          "solved": 0,
+          "unsat": 0,
+          "timeout": 1,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 0.0,
+          "median_soc": null,
+          "median_soc_solved_count": 0,
+          "median_runtime_ms": null,
+          "median_runtime_solved_count": 0
+        },
+        "pp-fixed": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 255.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 1753.9346999838017,
+          "median_runtime_solved_count": 1
+        },
+        "pp-best-of-n": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 246.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 16505.1056999946,
+          "median_runtime_solved_count": 1
+        }
+      }
+    },
+    {
+      "map": "empty-16-16",
+      "agents": 40,
+      "arms": {
+        "cbs": {
+          "status_counts": {
+            "timeout": 1
+          },
+          "solved": 0,
+          "unsat": 0,
+          "timeout": 1,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 0.0,
+          "median_soc": null,
+          "median_soc_solved_count": 0,
+          "median_runtime_ms": null,
+          "median_runtime_solved_count": 0
+        },
+        "pp-fixed": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 563.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 9170.684600016102,
+          "median_runtime_solved_count": 1
+        },
+        "pp-best-of-n": {
+          "status_counts": {
+            "timeout": 1
+          },
+          "solved": 0,
+          "unsat": 0,
+          "timeout": 1,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 0.0,
+          "median_soc": null,
+          "median_soc_solved_count": 0,
+          "median_runtime_ms": null,
+          "median_runtime_solved_count": 0
+        }
+      }
+    },
+    {
+      "map": "ht_chantry",
+      "agents": 5,
+      "arms": {
+        "cbs": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 619.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 38.32370002055541,
+          "median_runtime_solved_count": 1
+        },
+        "pp-fixed": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 621.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 1380.3848000243306,
+          "median_runtime_solved_count": 1
+        },
+        "pp-best-of-n": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 619.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 9913.041700026952,
+          "median_runtime_solved_count": 1
+        }
+      }
+    },
+    {
+      "map": "ht_chantry",
+      "agents": 10,
+      "arms": {
+        "cbs": {
+          "status_counts": {
+            "timeout": 1
+          },
+          "solved": 0,
+          "unsat": 0,
+          "timeout": 1,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 0.0,
+          "median_soc": null,
+          "median_soc_solved_count": 0,
+          "median_runtime_ms": null,
+          "median_runtime_solved_count": 0
+        },
+        "pp-fixed": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 1258.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 12513.738100009505,
+          "median_runtime_solved_count": 1
+        },
+        "pp-best-of-n": {
+          "status_counts": {
+            "timeout": 1
+          },
+          "solved": 0,
+          "unsat": 0,
+          "timeout": 1,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 0.0,
+          "median_soc": null,
+          "median_soc_solved_count": 0,
+          "median_runtime_ms": null,
+          "median_runtime_solved_count": 0
+        }
+      }
+    },
+    {
+      "map": "ht_chantry",
+      "agents": 20,
+      "arms": {
+        "cbs": {
+          "status_counts": {
+            "timeout": 1
+          },
+          "solved": 0,
+          "unsat": 0,
+          "timeout": 1,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 0.0,
+          "median_soc": null,
+          "median_soc_solved_count": 0,
+          "median_runtime_ms": null,
+          "median_runtime_solved_count": 0
+        },
+        "pp-fixed": {
+          "status_counts": {
+            "timeout": 1
+          },
+          "solved": 0,
+          "unsat": 0,
+          "timeout": 1,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 0.0,
+          "median_soc": null,
+          "median_soc_solved_count": 0,
+          "median_runtime_ms": null,
+          "median_runtime_solved_count": 0
+        },
+        "pp-best-of-n": {
+          "status_counts": {
+            "timeout": 1
+          },
+          "solved": 0,
+          "unsat": 0,
+          "timeout": 1,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 0.0,
+          "median_soc": null,
+          "median_soc_solved_count": 0,
+          "median_runtime_ms": null,
+          "median_runtime_solved_count": 0
+        }
+      }
+    },
+    {
+      "map": "maze-32-32-2",
+      "agents": 5,
+      "arms": {
+        "cbs": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 226.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 3.6581000313162804,
+          "median_runtime_solved_count": 1
+        },
+        "pp-fixed": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 226.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 106.6761999973096,
+          "median_runtime_solved_count": 1
+        },
+        "pp-best-of-n": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 226.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 1353.054900013376,
+          "median_runtime_solved_count": 1
+        }
+      }
+    },
+    {
+      "map": "maze-32-32-2",
+      "agents": 10,
+      "arms": {
+        "cbs": {
+          "status_counts": {
+            "timeout": 1
+          },
+          "solved": 0,
+          "unsat": 0,
+          "timeout": 1,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 0.0,
+          "median_soc": null,
+          "median_soc_solved_count": 0,
+          "median_runtime_ms": null,
+          "median_runtime_solved_count": 0
+        },
+        "pp-fixed": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 468.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 2506.9533999776468,
+          "median_runtime_solved_count": 1
+        },
+        "pp-best-of-n": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 467.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 18787.313300010283,
+          "median_runtime_solved_count": 1
+        }
+      }
+    },
+    {
+      "map": "maze-32-32-2",
+      "agents": 20,
+      "arms": {
+        "cbs": {
+          "status_counts": {
+            "timeout": 1
+          },
+          "solved": 0,
+          "unsat": 0,
+          "timeout": 1,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 0.0,
+          "median_soc": null,
+          "median_soc_solved_count": 0,
+          "median_runtime_ms": null,
+          "median_runtime_solved_count": 0
+        },
+        "pp-fixed": {
+          "status_counts": {
+            "unsat": 1
+          },
+          "solved": 0,
+          "unsat": 1,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 0.0,
+          "median_soc": null,
+          "median_soc_solved_count": 0,
+          "median_runtime_ms": null,
+          "median_runtime_solved_count": 0
+        },
+        "pp-best-of-n": {
+          "status_counts": {
+            "timeout": 1
+          },
+          "solved": 0,
+          "unsat": 0,
+          "timeout": 1,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 0.0,
+          "median_soc": null,
+          "median_soc_solved_count": 0,
+          "median_runtime_ms": null,
+          "median_runtime_solved_count": 0
+        }
+      }
+    },
+    {
+      "map": "random-32-32-10",
+      "agents": 5,
+      "arms": {
+        "cbs": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 97.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 4.065599991008639,
+          "median_runtime_solved_count": 1
+        },
+        "pp-fixed": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 97.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 41.047000035177916,
+          "median_runtime_solved_count": 1
+        },
+        "pp-best-of-n": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 97.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 366.33920000167564,
+          "median_runtime_solved_count": 1
+        }
+      }
+    },
+    {
+      "map": "random-32-32-10",
+      "agents": 10,
+      "arms": {
+        "cbs": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 242.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 43.37730002589524,
+          "median_runtime_solved_count": 1
+        },
+        "pp-fixed": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 242.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 553.6624999949709,
+          "median_runtime_solved_count": 1
+        },
+        "pp-best-of-n": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 242.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 7433.29229997471,
+          "median_runtime_solved_count": 1
+        }
+      }
+    },
+    {
+      "map": "random-32-32-10",
+      "agents": 20,
+      "arms": {
+        "cbs": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 436.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 840.447100054007,
+          "median_runtime_solved_count": 1
+        },
+        "pp-fixed": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 436.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 5512.151199975051,
+          "median_runtime_solved_count": 1
+        },
+        "pp-best-of-n": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 436.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 48450.78160002595,
+          "median_runtime_solved_count": 1
+        }
+      }
+    },
+    {
+      "map": "random-32-32-10",
+      "agents": 40,
+      "arms": {
+        "cbs": {
+          "status_counts": {
+            "timeout": 1
+          },
+          "solved": 0,
+          "unsat": 0,
+          "timeout": 1,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 0.0,
+          "median_soc": null,
+          "median_soc_solved_count": 0,
+          "median_runtime_ms": null,
+          "median_runtime_solved_count": 0
+        },
+        "pp-fixed": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 903.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 58145.44459996978,
+          "median_runtime_solved_count": 1
+        },
+        "pp-best-of-n": {
+          "status_counts": {
+            "timeout": 1
+          },
+          "solved": 0,
+          "unsat": 0,
+          "timeout": 1,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 0.0,
+          "median_soc": null,
+          "median_soc_solved_count": 0,
+          "median_runtime_ms": null,
+          "median_runtime_solved_count": 0
+        }
+      }
+    },
+    {
+      "map": "random-32-32-20",
+      "agents": 5,
+      "arms": {
+        "cbs": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 102.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 3.978299966547638,
+          "median_runtime_solved_count": 1
+        },
+        "pp-fixed": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 102.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 67.10970000131056,
+          "median_runtime_solved_count": 1
+        },
+        "pp-best-of-n": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 102.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 690.1937999646179,
+          "median_runtime_solved_count": 1
+        }
+      }
+    },
+    {
+      "map": "random-32-32-20",
+      "agents": 10,
+      "arms": {
+        "cbs": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 200.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 21.298699954058975,
+          "median_runtime_solved_count": 1
+        },
+        "pp-fixed": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 200.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 644.9093000264838,
+          "median_runtime_solved_count": 1
+        },
+        "pp-best-of-n": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 200.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 6499.076100008097,
+          "median_runtime_solved_count": 1
+        }
+      }
+    },
+    {
+      "map": "random-32-32-20",
+      "agents": 20,
+      "arms": {
+        "cbs": {
+          "status_counts": {
+            "timeout": 1
+          },
+          "solved": 0,
+          "unsat": 0,
+          "timeout": 1,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 0.0,
+          "median_soc": null,
+          "median_soc_solved_count": 0,
+          "median_runtime_ms": null,
+          "median_runtime_solved_count": 0
+        },
+        "pp-fixed": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 415.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 6504.375499964226,
+          "median_runtime_solved_count": 1
+        },
+        "pp-best-of-n": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 411.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 50993.14959999174,
+          "median_runtime_solved_count": 1
+        }
+      }
+    },
+    {
+      "map": "room-32-32-4",
+      "agents": 5,
+      "arms": {
+        "cbs": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 159.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 3.073600004427135,
+          "median_runtime_solved_count": 1
+        },
+        "pp-fixed": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 159.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 115.48099998617545,
+          "median_runtime_solved_count": 1
+        },
+        "pp-best-of-n": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 159.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 1119.9061999795958,
+          "median_runtime_solved_count": 1
+        }
+      }
+    },
+    {
+      "map": "room-32-32-4",
+      "agents": 10,
+      "arms": {
+        "cbs": {
+          "status_counts": {
+            "timeout": 1
+          },
+          "solved": 0,
+          "unsat": 0,
+          "timeout": 1,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 0.0,
+          "median_soc": null,
+          "median_soc_solved_count": 0,
+          "median_runtime_ms": null,
+          "median_runtime_solved_count": 0
+        },
+        "pp-fixed": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 258.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 1065.9481000038795,
+          "median_runtime_solved_count": 1
+        },
+        "pp-best-of-n": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 256.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 7710.7007000013255,
+          "median_runtime_solved_count": 1
+        }
+      }
+    },
+    {
+      "map": "room-32-32-4",
+      "agents": 20,
+      "arms": {
+        "cbs": {
+          "status_counts": {
+            "timeout": 1
+          },
+          "solved": 0,
+          "unsat": 0,
+          "timeout": 1,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 0.0,
+          "median_soc": null,
+          "median_soc_solved_count": 0,
+          "median_runtime_ms": null,
+          "median_runtime_solved_count": 0
+        },
+        "pp-fixed": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 574.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 6815.82309998339,
+          "median_runtime_solved_count": 1
+        },
+        "pp-best-of-n": {
+          "status_counts": {
+            "timeout": 1
+          },
+          "solved": 0,
+          "unsat": 0,
+          "timeout": 1,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 0.0,
+          "median_soc": null,
+          "median_soc_solved_count": 0,
+          "median_runtime_ms": null,
+          "median_runtime_solved_count": 0
+        }
+      }
+    },
+    {
+      "map": "warehouse-10-20-10-2-1",
+      "agents": 5,
+      "arms": {
+        "cbs": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 456.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 32.64819999458268,
+          "median_runtime_solved_count": 1
+        },
+        "pp-fixed": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 456.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 760.3149999631569,
+          "median_runtime_solved_count": 1
+        },
+        "pp-best-of-n": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 456.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 6388.068000029307,
+          "median_runtime_solved_count": 1
+        }
+      }
+    },
+    {
+      "map": "warehouse-10-20-10-2-1",
+      "agents": 10,
+      "arms": {
+        "cbs": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 869.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 88.72820000397041,
+          "median_runtime_solved_count": 1
+        },
+        "pp-fixed": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 869.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 7190.639200038277,
+          "median_runtime_solved_count": 1
+        },
+        "pp-best-of-n": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 869.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 57205.13099996606,
+          "median_runtime_solved_count": 1
+        }
+      }
+    },
+    {
+      "map": "warehouse-10-20-10-2-1",
+      "agents": 20,
+      "arms": {
+        "cbs": {
+          "status_counts": {
+            "solved": 1
+          },
+          "solved": 1,
+          "unsat": 0,
+          "timeout": 0,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 1.0,
+          "median_soc": 1697.0,
+          "median_soc_solved_count": 1,
+          "median_runtime_ms": 1680.0707000074908,
+          "median_runtime_solved_count": 1
+        },
+        "pp-fixed": {
+          "status_counts": {
+            "timeout": 1
+          },
+          "solved": 0,
+          "unsat": 0,
+          "timeout": 1,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 0.0,
+          "median_soc": null,
+          "median_soc_solved_count": 0,
+          "median_runtime_ms": null,
+          "median_runtime_solved_count": 0
+        },
+        "pp-best-of-n": {
+          "status_counts": {
+            "timeout": 1
+          },
+          "solved": 0,
+          "unsat": 0,
+          "timeout": 1,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 0.0,
+          "median_soc": null,
+          "median_soc_solved_count": 0,
+          "median_runtime_ms": null,
+          "median_runtime_solved_count": 0
+        }
+      }
+    },
+    {
+      "map": "warehouse-10-20-10-2-1",
+      "agents": 40,
+      "arms": {
+        "cbs": {
+          "status_counts": {
+            "timeout": 1
+          },
+          "solved": 0,
+          "unsat": 0,
+          "timeout": 1,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 0.0,
+          "median_soc": null,
+          "median_soc_solved_count": 0,
+          "median_runtime_ms": null,
+          "median_runtime_solved_count": 0
+        },
+        "pp-fixed": {
+          "status_counts": {
+            "timeout": 1
+          },
+          "solved": 0,
+          "unsat": 0,
+          "timeout": 1,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 0.0,
+          "median_soc": null,
+          "median_soc_solved_count": 0,
+          "median_runtime_ms": null,
+          "median_runtime_solved_count": 0
+        },
+        "pp-best-of-n": {
+          "status_counts": {
+            "timeout": 1
+          },
+          "solved": 0,
+          "unsat": 0,
+          "timeout": 1,
+          "error": 0,
+          "skipped": 0,
+          "aborted": 0,
+          "total": 1,
+          "success_rate": 0.0,
+          "median_soc": null,
+          "median_soc_solved_count": 0,
+          "median_runtime_ms": null,
+          "median_runtime_solved_count": 0
+        }
+      }
+    }
+  ]
+}

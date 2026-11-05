@@ -1,0 +1,10 @@
+{
+  "python_implementation": "CPython",
+  "python_version": "3.12.15",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "cpu": "Intel64 Family 6 Model 197 Stepping 2, GenuineIntel",
+  "ram_gb": "16.5 GB",
+  "git_describe": "5db8a24-dirty",
+  "date_utc": "2026-11-05T18:35:10+00:00",
+  "command_line": "C:\\Users\\Vedant\\Desktop\\Github\\SwarmWay\\.venv\\Scripts\\swarmway bench --config bench/default.yaml --label rerun"
+}
