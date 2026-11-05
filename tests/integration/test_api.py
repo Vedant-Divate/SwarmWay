@@ -8,6 +8,7 @@ IS the contract.
 from __future__ import annotations
 
 import warnings
+from typing import Any
 
 import pytest
 from fastapi.testclient import TestClient
@@ -390,3 +391,200 @@ def test_cors_no_wildcard() -> None:
     )
     assert r.status_code == 200
     assert r.headers.get('access-control-allow-origin') != '*'
+
+
+def _custom_instance_body(
+    rows: list[str],
+    agents: list[dict[str, Any]],
+    width: int | None = None,
+    height: int | None = None,
+) -> dict[str, Any]:
+    instance: dict[str, Any] = {
+        'name': 'custom-cap-test',
+        'rows': rows,
+        'agents': agents,
+    }
+    if width is not None:
+        instance['width'] = width
+    if height is not None:
+        instance['height'] = height
+    return {'instance': instance, 'solver': 'cbs', 'budget_ms': 10000}
+
+
+def test_solve_custom_grid_cell_cap_exact() -> None:
+    """Custom grid exactly at cell cap (512x512 = 262144) -> 200."""
+    size = 512
+    rows = ['.' * size] * size
+    body = _custom_instance_body(
+        rows, [{'start': [0, 0], 'goal': [size - 1, size - 1]}], width=size, height=size
+    )
+    r = client.post('/api/solve', json=body)
+    assert r.status_code == 200, r.text
+
+
+def test_solve_custom_grid_cell_cap_over() -> None:
+    """Custom grid over cell cap (512x513 > 262144) -> 422 with details."""
+    size = 512
+    rows = ['.' * size] * (size + 1)
+    body = _custom_instance_body(
+        rows, [{'start': [0, 0], 'goal': [size - 1, size]}], width=size, height=size + 1
+    )
+    r = client.post('/api/solve', json=body)
+    assert r.status_code == 422, r.text
+    body_json = r.json()
+    assert body_json['error']['code'] == 'grid_cap_exceeded'
+    details = body_json['error']['details']
+    assert details['field'] == 'grid_cells'
+    assert details['limit'] == 262144
+    assert details['received'] == size * (size + 1)
+
+
+def test_solve_custom_agents_over_cap_custom() -> None:
+    """Custom instance with 61 agents (> 60 cap) -> 422 with details."""
+    rows = ['.' * 10] * 10
+    agents = [{'start': [i % 10, i // 10], 'goal': [(i + 1) % 10, (i // 10)]} for i in range(61)]
+    body = _custom_instance_body(rows, agents)
+    r = client.post('/api/solve', json=body)
+    assert r.status_code == 422, r.text
+    body_json = r.json()
+    assert body_json['error']['code'] == 'agent_cap_exceeded'
+    details = body_json['error']['details']
+    assert details['field'] == 'agents'
+    assert details['limit'] == 60
+    assert details['received'] == 61
+
+
+def test_solve_custom_grid_width_mismatch() -> None:
+    """Declared width != row length -> 422 grid_width_mismatch with details."""
+    rows = ['......', '......', '......']  # each row length 6
+    body = _custom_instance_body(rows, [{'start': [0, 0], 'goal': [2, 2]}], width=3, height=3)
+    r = client.post('/api/solve', json=body)
+    assert r.status_code == 422, r.text
+    body_json = r.json()
+    assert body_json['error']['code'] == 'grid_width_mismatch'
+    details = body_json['error']['details']
+    assert details['field'] == 'width'
+    assert details['limit'] == 'row length (6)'
+    assert details['received'] == 3
+
+
+def test_solve_custom_grid_height_mismatch() -> None:
+    """Declared height != row count -> 422 grid_height_mismatch with details."""
+    rows = ['...', '...', '...', '...']  # 4 rows
+    body = _custom_instance_body(rows, [{'start': [0, 0], 'goal': [2, 2]}], width=3, height=3)
+    r = client.post('/api/solve', json=body)
+    assert r.status_code == 422, r.text
+    body_json = r.json()
+    assert body_json['error']['code'] == 'grid_height_mismatch'
+    details = body_json['error']['details']
+    assert details['field'] == 'height'
+    assert details['limit'] == 'row count (4)'
+    assert details['received'] == 3
+
+
+def test_solve_custom_start_out_of_bounds() -> None:
+    """Start off-grid -> 422 agent_start_out_of_bounds with details."""
+    rows = ['...', '...', '...']
+    body = _custom_instance_body(rows, [{'start': [5, 5], 'goal': [2, 2]}], width=3, height=3)
+    r = client.post('/api/solve', json=body)
+    assert r.status_code == 422, r.text
+    body_json = r.json()
+    assert body_json['error']['code'] == 'agent_start_out_of_bounds'
+    details = body_json['error']['details']
+    assert details['field'] == 'agents[0].start'
+    assert details['limit'] == '3x3'
+    assert details['received'] == [5, 5]
+
+
+def test_solve_custom_start_blocked() -> None:
+    """Start on blocked cell -> 422 agent_start_blocked with details."""
+    rows = ['.@.', '...', '...']
+    body = _custom_instance_body(rows, [{'start': [1, 0], 'goal': [2, 2]}], width=3, height=3)
+    r = client.post('/api/solve', json=body)
+    assert r.status_code == 422, r.text
+    body_json = r.json()
+    assert body_json['error']['code'] == 'agent_start_blocked'
+    details = body_json['error']['details']
+    assert details['field'] == 'agents[0].start'
+    assert details['limit'] == 'passable cell'
+    assert details['received'] == [1, 0]
+
+
+def test_solve_custom_goal_blocked() -> None:
+    """Goal on blocked cell -> 422 agent_goal_blocked with details."""
+    rows = ['...', '...', '.@.']
+    body = _custom_instance_body(rows, [{'start': [0, 0], 'goal': [1, 2]}], width=3, height=3)
+    r = client.post('/api/solve', json=body)
+    assert r.status_code == 422, r.text
+    body_json = r.json()
+    assert body_json['error']['code'] == 'agent_goal_blocked'
+    details = body_json['error']['details']
+    assert details['field'] == 'agents[0].goal'
+    assert details['limit'] == 'passable cell'
+    assert details['received'] == [1, 2]
+
+
+def test_solve_custom_goal_out_of_bounds() -> None:
+    """Goal off-grid -> 422 agent_goal_out_of_bounds with details."""
+    rows = ['...', '...', '...']
+    body = _custom_instance_body(rows, [{'start': [0, 0], 'goal': [5, 5]}], width=3, height=3)
+    r = client.post('/api/solve', json=body)
+    assert r.status_code == 422, r.text
+    body_json = r.json()
+    assert body_json['error']['code'] == 'agent_goal_out_of_bounds'
+    details = body_json['error']['details']
+    assert details['field'] == 'agents[0].goal'
+    assert details['limit'] == '3x3'
+    assert details['received'] == [5, 5]
+
+
+def test_solve_custom_start_equals_goal() -> None:
+    """Start equals goal -> 422 agent_start_equals_goal with details."""
+    rows = ['...', '...', '...']
+    body = _custom_instance_body(rows, [{'start': [1, 1], 'goal': [1, 1]}], width=3, height=3)
+    r = client.post('/api/solve', json=body)
+    assert r.status_code == 422, r.text
+    body_json = r.json()
+    assert body_json['error']['code'] == 'agent_start_equals_goal'
+    details = body_json['error']['details']
+    assert details['field'] == 'agents[0]'
+    assert details['limit'] == 'start != goal'
+    assert details['received'] == [1, 1]
+
+
+def test_solve_custom_duplicate_start() -> None:
+    """Duplicate start positions -> 422 agent_duplicate_start with details."""
+    rows = ['...', '...', '...']
+    body = _custom_instance_body(
+        rows,
+        [{'start': [1, 1], 'goal': [0, 0]}, {'start': [1, 1], 'goal': [2, 2]}],
+        width=3,
+        height=3,
+    )
+    r = client.post('/api/solve', json=body)
+    assert r.status_code == 422, r.text
+    body_json = r.json()
+    assert body_json['error']['code'] == 'agent_duplicate_start'
+    details = body_json['error']['details']
+    assert details['field'] == 'agents[1].start'
+    assert details['limit'] == 'distinct start cells'
+    assert details['received'] == [1, 1]
+
+
+def test_solve_custom_duplicate_goal() -> None:
+    """Duplicate goal positions -> 422 agent_duplicate_goal with details."""
+    rows = ['...', '...', '...']
+    body = _custom_instance_body(
+        rows,
+        [{'start': [0, 0], 'goal': [2, 2]}, {'start': [2, 0], 'goal': [2, 2]}],
+        width=3,
+        height=3,
+    )
+    r = client.post('/api/solve', json=body)
+    assert r.status_code == 422, r.text
+    body_json = r.json()
+    assert body_json['error']['code'] == 'agent_duplicate_goal'
+    details = body_json['error']['details']
+    assert details['field'] == 'agents[1].goal'
+    assert details['limit'] == 'distinct goal cells'
+    assert details['received'] == [2, 2]

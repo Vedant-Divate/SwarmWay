@@ -15,7 +15,7 @@ from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field
 
 from swarmway.api.settings import load_settings
-from swarmway.domain.grid import Grid
+from swarmway.domain.grid import Grid, Position
 from swarmway.domain.instance import Agent, Instance
 from swarmway.domain.mapfile import MapError, parse_map
 from swarmway.domain.scenfile import parse_scen
@@ -144,15 +144,10 @@ def get_presets(
             },
         )
     if k > settings.max_agents:
-        raise HTTPException(
-            status_code=422,
-            detail={
-                'error': {
-                    'code': 'agent_cap_exceeded',
-                    'message': f'agents {k} exceed cap {settings.max_agents}',
-                    'details': {'max_agents': settings.max_agents},
-                }
-            },
+        raise _error(
+            'agent_cap_exceeded',
+            f'agents {k} exceed cap {settings.max_agents}',
+            {'field': 'agents', 'limit': settings.max_agents, 'received': k},
         )
     selected = scen_lines[:k]
     agents_list = [
@@ -163,19 +158,121 @@ def get_presets(
 
 
 def _build_instance_from_dict(grid: Grid, inst: dict[str, Any], map_id: str | None) -> Instance:
-    """Build an :class:`Instance` from a custom-instance dict."""
+    """Build an :class:`Instance` from a custom-instance dict.
+
+    Validates every agent: starts/goals in bounds, on passable cells,
+    distinct across agents, and start != goal (stay-at-goal means an
+    occupied goal blocks every other agent). Every rejection carries
+    per-error details: which field, which limit, what was received.
+    """
     agent_refs = inst.get('agents', [])
     if len(agent_refs) > settings.max_agents:
         raise _error(
             'agent_cap_exceeded',
             f'agents {len(agent_refs)} exceed cap {settings.max_agents}',
-            {'max_agents': settings.max_agents},
+            {
+                'field': 'agents',
+                'limit': settings.max_agents,
+                'received': len(agent_refs),
+            },
         )
+
+    starts: set[Position] = set()
+    goals: set[Position] = set()
     agents: list[Agent] = []
+    width = grid.width
+    height = grid.height
+
     for i, a in enumerate(agent_refs):
         start = tuple(a.get('start', [0, 0]))
         goal = tuple(a.get('goal', [0, 0]))
+        field_prefix = f'agents[{i}]'
+
+        if len(start) != 2 or len(goal) != 2:
+            raise _error(
+                'agent_position_malformed',
+                f'{field_prefix} start/goal must be a 2-element [x, y]',
+                {
+                    'field': f'{field_prefix}',
+                    'limit': '2-element [x, y]',
+                    'received': {'start': list(start), 'goal': list(goal)},
+                },
+            )
+
+        # start bounds
+        if not (0 <= start[0] < width and 0 <= start[1] < height):
+            raise _error(
+                'agent_start_out_of_bounds',
+                f'agent {i} start {start} is out of bounds for {width}x{height} grid',
+                {
+                    'field': f'{field_prefix}.start',
+                    'limit': f'{width}x{height}',
+                    'received': list(start),
+                },
+            )
+        # start passable
+        if not grid.passable(start):
+            raise _error(
+                'agent_start_blocked',
+                f'agent {i} start {start} is on a blocked cell',
+                {
+                    'field': f'{field_prefix}.start',
+                    'limit': 'passable cell',
+                    'received': list(start),
+                },
+            )
+        # goal bounds
+        if not (0 <= goal[0] < width and 0 <= goal[1] < height):
+            raise _error(
+                'agent_goal_out_of_bounds',
+                f'agent {i} goal {goal} is out of bounds for {width}x{height} grid',
+                {
+                    'field': f'{field_prefix}.goal',
+                    'limit': f'{width}x{height}',
+                    'received': list(goal),
+                },
+            )
+        # goal passable
+        if not grid.passable(goal):
+            raise _error(
+                'agent_goal_blocked',
+                f'agent {i} goal {goal} is on a blocked cell',
+                {'field': f'{field_prefix}.goal', 'limit': 'passable cell', 'received': list(goal)},
+            )
+        # start != goal (stay-at-goal means an occupied goal blocks others)
+        if start == goal:
+            raise _error(
+                'agent_start_equals_goal',
+                f'agent {i} start {start} equals its goal',
+                {'field': f'{field_prefix}', 'limit': 'start != goal', 'received': list(start)},
+            )
+        # distinct start cells
+        if start in starts:
+            raise _error(
+                'agent_duplicate_start',
+                f'agent {i} start {start} duplicates another agent start',
+                {
+                    'field': f'{field_prefix}.start',
+                    'limit': 'distinct start cells',
+                    'received': list(start),
+                },
+            )
+        starts.add(start)
+        # distinct goal cells
+        if goal in goals:
+            raise _error(
+                'agent_duplicate_goal',
+                f'agent {i} goal {goal} duplicates another agent goal',
+                {
+                    'field': f'{field_prefix}.goal',
+                    'limit': 'distinct goal cells',
+                    'received': list(goal),
+                },
+            )
+        goals.add(goal)
+
         agents.append(Agent(id=i, start=start, goal=goal))
+
     return Instance(grid=grid, agents=tuple(agents))
 
 
@@ -212,7 +309,7 @@ def solve_route(request: SolveRequest) -> dict[str, Any]:
             raise _error(
                 'agent_cap_exceeded',
                 f'agents {k} exceed cap {settings.max_agents}',
-                {'max_agents': settings.max_agents},
+                {'field': 'agents', 'limit': settings.max_agents, 'received': k},
             )
         domain_instance = Instance(
             grid=grid,
@@ -225,9 +322,28 @@ def solve_route(request: SolveRequest) -> dict[str, Any]:
         # custom instance
         grid_rows = inst.get('rows', [])
         if not grid_rows:
-            raise _error('invalid_instance', 'rows required')
+            raise _error(
+                'invalid_instance',
+                'rows required',
+                {'field': 'rows', 'limit': '>= 1', 'received': 0},
+            )
         width = inst.get('width') or (len(grid_rows[0]) if grid_rows else 0)
         height = inst.get('height') or len(grid_rows)
+
+        # Validate declared dimensions match the actual rows before parsing.
+        row_width = len(grid_rows[0]) if grid_rows else 0
+        if width != row_width:
+            raise _error(
+                'grid_width_mismatch',
+                f'declared width {width} does not match row length {row_width}',
+                {'field': 'width', 'limit': f'row length ({row_width})', 'received': width},
+            )
+        if height != len(grid_rows):
+            raise _error(
+                'grid_height_mismatch',
+                f'declared height {height} does not match row count {len(grid_rows)}',
+                {'field': 'height', 'limit': f'row count ({len(grid_rows)})', 'received': height},
+            )
         try:
             grid = parse_map(
                 f'type octile\nheight {height}\nwidth {width}\nmap\n' + '\n'.join(grid_rows) + '\n'
@@ -240,7 +356,11 @@ def solve_route(request: SolveRequest) -> dict[str, Any]:
             raise _error(
                 'grid_cap_exceeded',
                 f'grid {width}x{height} exceeds cap {settings.max_grid_cells} cells',
-                {'max_cells': settings.max_grid_cells},
+                {
+                    'field': 'grid_cells',
+                    'limit': settings.max_grid_cells,
+                    'received': width * height,
+                },
             )
         domain_instance = _build_instance_from_dict(grid, inst, map_id)
 
