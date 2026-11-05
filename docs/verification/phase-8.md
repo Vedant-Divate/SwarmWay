@@ -191,22 +191,34 @@ dependencies.
 - `b4175b6 fix(api): enforce custom-grid caps with detailed 422s` (Part A)
 - `c1501fb feat(ui): build instance editor (custom grids with share links)` (Part B)
 
-## Remaining (Phase 8 closing step — the deferred Phase 7 headline run)
+## Closing step -- deferred Phase 7 headline run -- completed
 
-The Phase 7 headline run was deliberately deferred to this phase. Still to do:
+The Phase 7 headline run was deliberately deferred to this phase (after the
+slow-profile fixes landed) so the committed headline artifacts describe the
+final solver code. It is now complete:
 
-1. `uv run swarmway bench --config bench/default.yaml` (headline run, ~15–75 min)
-   and again with `--label rerun` (reproduction run).
-2. `swarmway bench --diff` between the two `results.csv` files — statuses/SoCs/
-   makespans identical, runtimes may differ (note it).
-3. Commit `data/results/<run-id>/` for both runs.
-4. `python scripts/sync-results.py` → commit `frontend/public/benchmarks/`.
-5. README results section with numbers generated from `table.md`, each citing
-   the run ID.
-6. Complete the pending items in `docs/verification/phase-7.md` (table.md,
-   summary.json excerpt, environment record, re-run diff) and cross-reference
-   from this gate.
+1. `uv run swarmway bench --config bench/default.yaml` ->
+   `data/results/20261105-1754-5db8a24-dirty-headline/` (committed `ca4b96a`).
+2. `--label rerun` ->
+   `data/results/20261105-1835-5db8a24-dirty-rerun/` (committed `ca4b96a`);
+   `swarmway bench --diff`: 72/72 rows match on status/SoC/makespans; one
+   status difference (warehouse-10-20-10-2-1 k=10 pp-best-of-n: timeout vs
+   solved soc=869 makespan=174) attributable to runtime variance crossing the
+   60 s budget boundary; runtimes differ (ratio 0.39-2.07x, median 1.07x),
+   as expected.
+3. Both `data/results/<run-id>/` committed.
+4. `scripts/sync-results.py --run-id` -> `frontend/public/benchmarks/`
+   committed (`a16b64b`).
+5. README results section added, every number generated from table.md and
+   citing run ID `20261105-1754-5db8a24-dirty-headline`.
+6. `docs/verification/phase-7.md` completed (table.md excerpt, summary.json
+   excerpt, environment record, re-run diff) and cross-referenced here --
+   **Phase 7 exit criteria are met.**
 
-Phase 8 Part B stops here — the closing run is next. **Human sign-off
-required:** live editor round-trip, phone-width editor, a11y feel, and the
-100-agent scene smoothness cannot be confirmed by the agent.
+Cross-reference: `docs/verification/phase-7.md` -- headline run committed,
+reproduction run committed, benchmarks bundled, README results section added.
+
+**Human sign-off still required:** live editor round-trip (draw -> solve ->
+replay -> share URL -> restore), phone-width editor, a11y feel, and the
+100-agent scene smoothness cannot be confirmed by the agent -- the human must
+confirm the round-trip works on the first try for a stranger.

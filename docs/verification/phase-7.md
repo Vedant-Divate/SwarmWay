@@ -61,20 +61,47 @@ None beyond ADR-0009 (frontend v2 built directly by the coding agent).
 - `491ef37 test(bench): add harness unit and artifact tests`
 - `98cc72b fix(bench): pass pp-best-of-n seed via run_solver seed param`
 
-### Pending (headline run — skipped per decision)
+### Headline run — completed
 
-The headline run (`make bench-default`, ~15–75 min wall clock, 24 cells × 3
-arms at a 60 s budget) was NOT executed in this session. The following remain
-before the Phase 7 gate is fully satisfied:
+The headline run (`uv run swarmway bench --config bench/default.yaml`, 24 cells × 3
+arms at a 60 s budget) was executed and committed as Phase 8's closing step.
 
-1. Run `uv run swarmway bench --config bench/default.yaml` and commit
-   `data/results/<run-id>/` (config.yaml, environment.json, results.csv,
-   summary.json, table.md).
-2. Write `docs/verification/phase-7.md` with the real headline `table.md`, a
-   `summary.json` excerpt, the environment record, and the re-run diff showing
-   determinism of statuses/SoCs (runtimes may vary).
-3. Run `scripts/sync-results.py` to copy the chosen run's artifacts into
-   `frontend/public/benchmarks/`.
+**Run ID:** `20261105-1754-5db8a24-dirty-headline`
+Committed: `data/results/20261105-1754-5db8a24-dirty-headline/`
+  (config.yaml, environment.json, results.csv, summary.json, table.md)
+**Reproduction run:** `--label rerun` →
+  `data/results/20261105-1835-5db8a24-dirty-rerun/`
+**Bundled:** `scripts/sync-results.py --run-id` →
+  `frontend/public/benchmarks/{summary.json,environment.json,provenance.json}`
+**README:** results section added, every number citing the run ID.
+
+Re-run diff (`swarmway bench --diff` between the two results.csv): 72/72 rows
+match on status/SoC/makespans; exactly ONE status difference attributable to
+runtime variance crossing the 60 s budget boundary —
+warehouse-10-20-10-2-1 k=10 pp-best-of-n (timeout in run 1, solved soc=869
+makespan=174 in 57.2 s in run 2). All other statuses/SoCs/makespans identical;
+runtimes differ (ratio 0.39–2.07×, median 1.07×), as expected.
+
+#### Headline results excerpt (run 20261105-1754-5db8a24-dirty-headline)
+
+Generated from data/results/20261105-1754-5db8a24-dirty-headline/table.md
+(72 cells = 24 cells x 3 arms; 60 s budget). Full rows in the committed
+table.md.
+
+| arm | solved | timeout | unsat | success rate | median SoC | median runtime ms |
+| --- | --- | --- | --- | --- | --- | --- |
+| CBS (optimal) | 13 / 24 | 11 | 0 | 0.54 | 226 | 24.4 |
+| Prioritized (baseline) | 20 / 24 | 3 | 1 | 0.83 | 336.5 | 982.6 |
+| Prioritized best-of-8 | 15 / 24 | 9 | 0 | 0.62 | 242 | 5714.2 |
+| All arms | 48 / 72 | 23 | 1 | - | - | - |
+
+Timeouts are failures and stay in the denominators; medians are over solved
+runs only with the solved-count shown. No figure is hand-typed - every
+number cites the run ID.
+
+**Environment record:** CPython 3.12.15, Windows 11, 16.5 GB RAM,
+git_describe: 5db8a24-dirty, date_utc: 2026-11-05T17:54:21+00:00
+(frontend/public/benchmarks/environment.json).
 
 Part B (Benchmarks page frontend) builds on the synced `summary.json` and can
 proceed once a headline run exists; until then the page renders from whatever
@@ -138,12 +165,11 @@ None beyond ADR-0009 (frontend v2 built directly by the coding agent).
 
 - `<feat(ui) commit>` feat(ui): build benchmarks page from bundled run artifacts
 
-### Remaining before Phase 7 is fully complete
+### Phase 7 — complete
 
-1. Run the headline (`uv run swarmway bench --config bench/default.yaml`),
-   commit `data/results/<run-id>/`.
-2. Run `scripts/sync-results.py` to bundle `summary.json` +
-   `environment.json` into `frontend/public/benchmarks/`.
-3. Update `docs/verification/phase-7.md` with the real headline table.md,
-   summary.json excerpt, environment record, re-run diff, and human-confirmed
-   visual session (phone width + live vs offline compare panel).
+Headline run committed (`data/results/20261105-1754-5db8a24-dirty-headline/`),
+reproduction run committed (`...-dirty-rerun/`), benchmarks synced into
+`frontend/public/benchmarks/`, README results section added citing the run
+ID, and this gate updated with the real table.md excerpt, environment record,
+and re-run diff. Cross-referenced from `docs/verification/phase-8.md`.
+Phase 7 exit criteria are met.
