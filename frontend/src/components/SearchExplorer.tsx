@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { STRINGS } from '../strings';
 import type { SearchEvent } from '../types';
 import { ConflictEncodingTag, ConstraintEncodingTag } from './VisualEncodings';
+import { Tooltip } from './Tooltip';
 
 interface SearchExplorerProps {
   searchEvents: SearchEvent[];
