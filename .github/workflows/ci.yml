@@ -14,8 +14,6 @@ jobs:
 
   frontend:
     runs-on: ubuntu-latest
-    # Skips gracefully while frontend/ has no package.json (i.e. before the
-    # Google AI Studio spike lands); un-skips automatically once one appears.
     steps:
       - uses: actions/checkout@v4
       - id: check-frontend
@@ -31,6 +29,10 @@ jobs:
       - run: corepack enable && corepack prepare pnpm@12.6.0 --activate
         if: steps.check-frontend.outputs.HAS_FRONTEND == 'true'
       - run: pnpm -C frontend install --frozen-lockfile
+        if: steps.check-frontend.outputs.HAS_FRONTEND == 'true'
+      - run: pnpm -C frontend typecheck
+        if: steps.check-frontend.outputs.HAS_FRONTEND == 'true'
+      - run: pnpm -C frontend test
         if: steps.check-frontend.outputs.HAS_FRONTEND == 'true'
       - run: pnpm -C frontend build
         if: steps.check-frontend.outputs.HAS_FRONTEND == 'true'

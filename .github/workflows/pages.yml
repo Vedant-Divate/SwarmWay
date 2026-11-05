@@ -1,0 +1,54 @@
+name: Pages
+
+on:
+  push:
+    branches: ['main']
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: corepack enable && corepack prepare pnpm@12.6.0 --activate
+      # Repo name derived from the remote origin URL; project pages live under
+      # https://<user>.github.io/<repo>/, so the Vite base and router basename
+      # must match that subpath. VITE_BASE_PATH is empty for local dev ('/').
+      - run: |
+          REPO_NAME="$(git remote get-url origin | sed -n 's#.*/\([^/]*\)\.git#\1#p')"
+          echo "VITE_BASE_PATH=/$REPO_NAME/" >> "$GITHUB_ENV"
+          echo "BASE_PATH=/$REPO_NAME/" >> "$GITHUB_ENV"
+      - run: pnpm -C frontend install --frozen-lockfile
+        env:
+          VITE_BASE_PATH: ${{ env.VITE_BASE_PATH }}
+      - run: pnpm -C frontend typecheck
+        env:
+          VITE_BASE_PATH: ${{ env.VITE_BASE_PATH }}
+      - run: pnpm -C frontend test
+        env:
+          VITE_BASE_PATH: ${{ env.VITE_BASE_PATH }}
+      - run: pnpm -C frontend build
+        env:
+          VITE_BASE_PATH: ${{ env.VITE_BASE_PATH }}
+      # SPA fallback: hard-refreshed deep links (e.g. /workspace) hit GitHub
+      # Pages' 404, so serve the built SPA there too; the router reads the
+      # preserved pathname and renders the right route.
+      - run: cp frontend/dist/index.html frontend/dist/404.html
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: frontend/dist
+      - uses: actions/deploy-pages@v4
+        id: deployment

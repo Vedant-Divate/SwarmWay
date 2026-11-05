@@ -7,6 +7,7 @@ import { LandingScreen } from './screens/LandingScreen';
 import { ReplaysScreen } from './screens/ReplaysScreen';
 import { WorkspaceScreen } from './screens/WorkspaceScreen';
 import type { BundledReplayMeta, RoutePath } from './types';
+import { BASE_PATH, stripBase, toHref } from './utils/base';
 import { normalizeRoutePath } from './utils/mapf';
 import { useReducedMotion } from './utils/prefs';
 
@@ -17,7 +18,7 @@ export default function App() {
     if (params.get('autostart') === '1') {
       return '/workspace';
     }
-    return normalizeRoutePath(window.location.pathname);
+    return normalizeRoutePath(stripBase(window.location.pathname));
   });
 
   const [checkingHealth, setCheckingHealth] = useState<boolean>(true);
@@ -43,15 +44,16 @@ export default function App() {
 
   useEffect(() => {
     const onPopState = () => {
-      setRoute(normalizeRoutePath(window.location.pathname));
+      setRoute(normalizeRoutePath(stripBase(window.location.pathname)));
     };
     window.addEventListener('popstate', onPopState);
     return () => window.removeEventListener('popstate', onPopState);
   }, []);
 
   const navigate = useCallback((nextRoute: RoutePath) => {
-    if (window.location.pathname !== nextRoute) {
-      window.history.pushState(null, '', nextRoute);
+    const href = toHref(nextRoute);
+    if (window.location.pathname !== href) {
+      window.history.pushState(null, '', href);
     }
     setRoute(nextRoute);
     window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
