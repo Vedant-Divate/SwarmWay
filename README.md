@@ -5,8 +5,10 @@ Conflict-Based Search (CBS) resolve collisions constraint by constraint, then
 compare against the Prioritized Planning baseline. Pure-Python solver, FastAPI
 API, React/TypeScript + Vite frontend, config-driven benchmarking.
 
-**Deployed site:** https://Vedant-Divate.github.io/SwarmWay/ (offline-first —
-works with no backend; bundled traces + benchmarks play immediately).
+**Deployed site:** <vercel-url> (offline-first — works with no backend;
+bundled traces + benchmarks play immediately). Connect this repo to Vercel
+(Vercel dashboard → Add New Project → import `Vedant-Divate/SwarmWay`, root
+directory `frontend/`) to deploy.
 
 ---
 
@@ -141,7 +143,7 @@ backend required.
   `@react-three/fiber`, `@react-three/drei`) | User-chosen 3D path for generated code |
 | Frontend styling | Tailwind CSS | Low-friction for generated code |
 | CI | GitHub Actions (backend + frontend jobs) | Free for public repos |
-| Hosting | GitHub Pages (frontend, static); backend local/tunnel | Zero cost, works offline |
+| Hosting | Vercel (frontend, static); backend local/tunnel | Zero cost, works offline |
 
 Versions are latest stable at build time, recorded in
 `docs/decisions/ADR-0002-versions.md`. Decisions are recorded as ADRs in

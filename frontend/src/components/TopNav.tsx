@@ -1,6 +1,5 @@
 import { STRINGS } from '../strings';
 import type { RoutePath } from '../types';
-import { toHref } from '../utils/base';
 
 interface TopNavProps {
   currentRoute: RoutePath;
@@ -20,7 +19,7 @@ export function TopNav({ currentRoute, onNavigate }: TopNavProps) {
     <header className="flex items-center justify-between gap-8 px-6 py-3.5 bg-[#FAF9F6] border-b border-[#E3DFD7]">
       {/* Zone 1: Single text element wordmark */}
       <a
-        href={toHref('/')}
+        href="/"
         onClick={(e) => {
           e.preventDefault();
           onNavigate('/');
@@ -35,10 +34,10 @@ export function TopNav({ currentRoute, onNavigate }: TopNavProps) {
         {navItems.map((item) => {
           const active = currentRoute === item.path;
           return (
-              <a
-                key={item.path}
-                href={toHref(item.path)}
-                aria-current={active ? 'page' : undefined}
+            <a
+              key={item.path}
+              href={item.path}
+              aria-current={active ? 'page' : undefined}
               onClick={(e) => {
                 e.preventDefault();
                 onNavigate(item.path);

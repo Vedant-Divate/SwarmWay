@@ -6,7 +6,7 @@
 
 ## Context
 
-Phase 9 deploys the Swarmway frontend to GitHub Pages (Section 14 task 1).
+Phase 9 deploys the Swarmway frontend to Vercel (Section 14 task 1).
 The static site is offline-first: `VITE_API_BASE_URL` is empty on Pages, so
 the public experience uses bundled traces and bundled benchmarks with an
 honest offline badge (Section 11.5). No solver backend runs on Pages.
@@ -18,7 +18,7 @@ provides a hosted backend as part of the public demo.
 
 ## Decision
 
-Default stands — the public demo is the static GitHub Pages site only.
+Default stands — the public demo is the static Vercel site only.
 There is no hosted Swarmway backend. A live solver runs locally
 (`uv run uvicorn swarmway.api.app:app`, port 8000) or behind a temporary
 tunnel (e.g. cloudflared/ngrok) for interviews. The README documents

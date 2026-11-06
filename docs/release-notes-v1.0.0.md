@@ -22,7 +22,7 @@ linked; then confirm CI green on the tag.
   (`20261105-1754-5db8a24-dirty-headline`, 24 cells × 3 arms, 60 s budget)
   plus reproduction rerun; benchmarks synced to `frontend/public/benchmarks/`;
   README results section citing the run ID.
-- **Phase 9 (this release):** GitHub Pages deployment (offline-first,
+- **Phase 9 (this release):** Vercel deployment (offline-first,
   `VITE_API_BASE_URL` empty; 404.html SPA fallback; `/SwarmWay/` subpath
   routing), ADR-0010 (static site is the public demo; backend local/tunnel),
   final README (12 sections, verified claims), results write-up
@@ -73,4 +73,4 @@ uv run uvicorn swarmway.api.app:app  # :8000 (or use offline mode)
 cd frontend && pnpm run dev          # VITE_API_BASE_URL=http://localhost:8000
 ```
 
-Deployed site: https://Vedant-Divate.github.io/SwarmWay/
+Deployed site: <vercel-url>
