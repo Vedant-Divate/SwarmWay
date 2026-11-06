@@ -5,7 +5,7 @@ Conflict-Based Search (CBS) resolve collisions constraint by constraint, then
 compare against the Prioritized Planning baseline. Pure-Python solver, FastAPI
 API, React/TypeScript + Vite frontend, config-driven benchmarking.
 
-**Deployed site:** <vercel-url> (offline-first — works with no backend;
+**Deployed site:** https://swarm-way.vercel.app/ (offline-first — works with no backend;
 bundled traces + benchmarks play immediately). Connect this repo to Vercel
 (Vercel dashboard → Add New Project → import `Vedant-Divate/SwarmWay`, root
 directory `frontend/`) to deploy.

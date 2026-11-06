@@ -73,4 +73,4 @@ uv run uvicorn swarmway.api.app:app  # :8000 (or use offline mode)
 cd frontend && pnpm run dev          # VITE_API_BASE_URL=http://localhost:8000
 ```
 
-Deployed site: <vercel-url>
+Deployed site: https://swarm-way.vercel.app/
