@@ -10,6 +10,7 @@ RUN pip install uv
 
 # Copy project metadata + source so uv can build/install the swarmway package
 COPY pyproject.toml uv.lock ./
+COPY README.md ./
 COPY src ./src
 COPY data ./data
 
