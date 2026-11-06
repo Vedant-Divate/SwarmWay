@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: swarmway-backend
+    env: docker
+    dockerContext: .
+    dockerfile: Dockerfile
+    envVars:
+      - key: SWARMWAY_API_HOST
+        value: 0.0.0.0
+      - key: SWARMWAY_API_PORT
+        value: 8000
+      - key: SWARMWAY_MAX_AGENTS
+        value: 60
+      - key: SWARMWAY_MAX_GRID_CELLS
+        value: 262144
+      - key: SWARMWAY_SOLVE_BUDGET_MS
+        value: 10000
+      - key: SWARMWAY_TRACE_EVENT_CAP
+        value: 20000

@@ -1,4 +1,4 @@
-# ADR-0010: Backend hosting — static site is the public demo; backend runs locally or via tunnel
+# ADR-0010: Backend hosting — hosted backend + static Vercel frontend
 
 - Status: accepted
 - Date: 2026-11-06
@@ -7,37 +7,43 @@
 ## Context
 
 Phase 9 deploys the Swarmway frontend to Vercel (Section 14 task 1).
-The static site is offline-first: `VITE_API_BASE_URL` is empty on Pages, so
-the public experience uses bundled traces and bundled benchmarks with an
-honest offline badge (Section 11.5). No solver backend runs on Pages.
+Originally the plan was a static-only public demo with the backend running
+locally or via a tunnel. The human decided to **host the backend** so the
+deployed site can do live solves without the user starting anything.
 
-Recruiters, interviewers, and the human may still want to run a live solve
-against their own backend (the Phase 8 frontend talks to
-`VITE_API_BASE_URL=http://localhost:8000`). The question is whether Swarmway
-provides a hosted backend as part of the public demo.
+Recruiters, interviewers, and the human can now do a live solve against the
+hosted backend. The frontend talks to `VITE_API_BASE_URL=<backend-url>`,
+configured in the Vercel project settings. When no backend is reachable, the
+frontend falls back to bundled traces with an honest offline badge
+(Section 11.5).
 
 ## Decision
 
-Default stands — the public demo is the static Vercel site only.
-There is no hosted Swarmway backend. A live solver runs locally
-(`uv run uvicorn swarmway.api.app:app`, port 8000) or behind a temporary
-tunnel (e.g. cloudflared/ngrok) for interviews. The README documents
-"run the solver yourself in 3 commands":
+Host the FastAPI backend on **Render** (`render.yaml` + `Dockerfile` at repo
+root), and point the Vercel frontend's `VITE_API_BASE_URL` at the Render
+service URL.
 
-1. `uv sync` (or `pip install .`)
-2. `uv run uvicorn swarmway.api.app:app`
-3. point the frontend at `VITE_API_BASE_URL=http://localhost:8000` (or use
-   the bundled offline mode with no backend at all)
+Steps:
+1. Push this repo to GitHub (done).
+2. In Render: "New Web Service" → connect this repo → it auto-detects
+   `render.yaml` → deploy (`Dockerfile` builds the image).
+3. Note the Render service URL (e.g. `https://swarmway-backend.onrender.com`).
+4. In Vercel project settings: add env var
+   `VITE_API_BASE_URL=https://swarmway-backend.onrender.com`.
+5. Redeploy the Vercel frontend so it picks up the backend URL.
+
+Local development still works with the 3-command quickstart:
+`uv sync` → `uv run uvicorn swarmway.api.app:app` →
+`VITE_API_BASE_URL=http://localhost:8000 cd frontend && pnpm run dev`.
 
 ## Consequences
 
-- Zero hosting cost and zero ongoing ops for the public demo; the deployed
-  URL works with the backend OFF (recruiter experience: phone, no backend,
-  bundled traces + benchmarks play fine).
-- Live-solving demos require the human to start a local backend or a tunnel;
-  this is documented, not automatic.
-- No change to the API contract (Section 7.4) or caps (`.env.example`):
-  `SWARMWAY_MAX_GRID_CELLS=262144`, `SWARMWAY_MAX_AGENTS=60`,
-  `SWARMWAY_SOLVE_BUDGET_MS=10000` remain server-side defaults.
-- The deployed frontend gracefully degrades to bundled traces when no
-  backend is reachable (honest offline badge, never a spinner).
+- The deployed Vercel site does live solves against the hosted backend when
+  `VITE_API_BASE_URL` is set; falls back to bundled traces + honest offline
+  badge when the backend is unreachable (never a spinner).
+- Backend caps enforced server-side (`SWARMWAY_MAX_GRID_CELLS=262144`,
+  `SWARMWAY_MAX_AGENTS=60`, `SWARMWAY_SOLVE_BUDGET_MS=10000` from
+  `.env.example`), with detailed 422s (Phase 8).
+- Render free tier may spin down after inactivity; first request after
+  spin-down can take ~30–60 s (cold start) — normal, not a bug.
+- No change to the API contract (Section 7.4) or caps.
