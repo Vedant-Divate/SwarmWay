@@ -102,6 +102,7 @@ export const STRINGS = {
     solvePrioritized: 'Solve — Prioritized (baseline)',
     solveCompare: 'Compare both',
     solvingLabel: 'Solving…',
+    solvingWakingUp: 'Waking up backend…',
 
     tieBreakLabel: 'Tie-break order (CBS)',
     tieBreakHint:

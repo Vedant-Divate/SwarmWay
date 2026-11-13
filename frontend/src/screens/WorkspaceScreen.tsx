@@ -237,6 +237,15 @@ export function WorkspaceScreen({
   const [customAgents, setCustomAgents] = useState<AgentSpec[]>([]);
   const [pendingStartCell, setPendingStartCell] = useState<GridPoint | null>(null);
   const [solving, setSolving] = useState(false);
+  const [solvingSlow, setSolvingSlow] = useState(false);
+
+  // Show 'waking up backend' hint when a solve takes more than 3s (Render cold start)
+  useEffect(() => {
+    if (!solving) { setSolvingSlow(false); return; }
+    const timer = window.setTimeout(() => setSolvingSlow(true), 3000);
+    return () => window.clearTimeout(timer);
+  }, [solving]);
+
   const [apiErrorMessage, setApiErrorMessage] = useState<string | null>(null);
   const [tieBreak, setTieBreak] = useState<'fifo' | 'conflicts' | 'depth'>('fifo');
 
@@ -1510,7 +1519,7 @@ export function WorkspaceScreen({
                   onClick={() => void handleRunLiveSolve('cbs')}
                   className="w-full px-4 py-2.5 text-xs font-semibold text-white bg-[#1E40AF] rounded-lg hover:bg-[#1E3A8A] disabled:opacity-50 transition-colors whitespace-nowrap cursor-pointer"
                 >
-                  {solving ? STRINGS.workspace.solvingLabel : STRINGS.workspace.solveCbs}
+                  {solving ? (solvingSlow ? STRINGS.workspace.solvingWakingUp : STRINGS.workspace.solvingLabel) : STRINGS.workspace.solveCbs}
                 </button>
                 <button
                   type="button"
