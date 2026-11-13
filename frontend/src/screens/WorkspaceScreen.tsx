@@ -1306,15 +1306,29 @@ export function WorkspaceScreen({
                           {agentCount} agents
                         </span>
                       </div>
-                      <input
-                        id="agent-count-slider"
-                        type="range"
-                        min={1}
-                        max={Math.min(100, maxPresetAgents)}
-                        value={agentCount}
-                        onChange={(e) => setAgentCount(Number(e.target.value))}
-                        className="mt-1.5 w-full accent-[#1E40AF]"
-                      />
+                      <div className="mt-1.5 flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setAgentCount((c) => Math.max(1, c - 1))}
+                          disabled={agentCount <= 1}
+                          className="px-3 py-1.5 text-xs font-semibold text-[#171614] bg-white border border-[#D4CFC5] rounded-lg hover:bg-[#EFECE4] disabled:opacity-40 cursor-pointer"
+                          aria-label="Decrease agent count"
+                        >
+                          −
+                        </button>
+                        <span className="flex-1 text-center font-mono font-semibold tabular-nums text-[#171614]">
+                          {agentCount}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => setAgentCount((c) => Math.min(Math.min(100, maxPresetAgents), c + 1))}
+                          disabled={agentCount >= Math.min(100, maxPresetAgents)}
+                          className="px-3 py-1.5 text-xs font-semibold text-[#171614] bg-white border border-[#D4CFC5] rounded-lg hover:bg-[#EFECE4] disabled:opacity-40 cursor-pointer"
+                          aria-label="Increase agent count"
+                        >
+                          +
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ) : (
