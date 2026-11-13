@@ -46,12 +46,12 @@ Full table: `data/results/20261105-1754-5db8a24-dirty-headline/table.md`.
 Placeholder — human records and publishes (unlisted YouTube or equivalent),
 then links here:
 
-**[Demo video: LINK_TBD]** — deployed site, warehouse-10-20-10-2-1 @ 20
+**[Demo video: https://youtu.be/No3Ur-CroiA]** — deployed site, warehouse-10-20-10-2-1 @ 20
 agents, Solve (CBS) → play/scrub → Search tab conflict branching → Compare
 with Prioritized → Benchmarks page with run ID. One live solve against a
 locally running backend, clearly labelled on screen.
 
-**[GIF: `docs/assets/demo.gif`]** — 10–20 s clip captured during recording.
+**[GIF: `docs/assets/demo.gif`]** — 10–20 s clip of the warehouse solve (captured alongside the demo video).
 
 ## Honest claims (everything here is inside what the artifacts support)
 
