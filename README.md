@@ -112,14 +112,14 @@ flowchart LR
 
 ```mermaid
 flowchart TD
-  Root[Root node: unconstrained paths] --> Check{First conflict?}
-  Check -->|None| Leaf[Conflict-free solution (leaf)]
-  Check -->|Vertex/edge conflict| Branch[Branch: two children]
-  Branch --> C1[Child A: constrain agent 1]
-  Branch --> C2[Child B: constrain agent 2]
+  Root["Root node: unconstrained paths"] --> Check{"First conflict?"}
+  Check -->|"None (no conflict)"| Leaf["Conflict-free solution (leaf)"]
+  Check -->|"Conflict found"| Branch["Branch: two children"]
+  Branch --> C1["Child A: constrain agent 1"]
+  Branch --> C2["Child B: constrain agent 2"]
   C1 --> Check
   C2 --> Check
-  Leaf --> Pop[Best-first pops min-SoC leaf]
+  Leaf --> Pop["Best-first pops min-SoC leaf"]
 ```
 
 ### Runtime responsibilities
